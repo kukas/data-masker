@@ -51,6 +51,17 @@ public class MaskerSettings extends Exception {
 				return new ReplaceRule(arrParams[1]);
 			case "PhoneNumberRule":
 				return new PhoneNumberRule();
+
+				
+			case "ReplaceWithRandomDigits" : 
+				if(numOfParams == 0){
+					return new RandomDigitRule(true);
+				}else {if(numOfParams == 1){
+					return new RandomDigitRule(0,Integer.parseInt(arrParams[1]));
+				} else {
+					return new RandomDigitRule(Integer.parseInt(arrParams[1]), Integer.parseInt(arrParams[2]));
+				}}
+			
 			default:
 				Logger.log("Bad format line in masking settings file. / "+s);
 		}
