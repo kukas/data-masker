@@ -1,18 +1,29 @@
 package masking.rules;
 
 public class StarsRule implements MaskingRule {
-
-	public static void main(String[] args){
-		System.out.println(new RandomNumberRule(10, 20).mask("testaaaa"));
+	int start;
+	int end;
+	boolean all;
+	public StarsRule(int start, int end) {
+		this.start = start;
+		this.end = end;
 	}
-	
+
+	public StarsRule() {
+		this.all = true;
+	}
 	@Override
 	public String mask(String in) {
 
 		String out = new String("");
 
-		for (int i = 0; i < in.length(); i++) {
-			out += "*";
+		for (int i = 0; i < in.length(); i++) {	
+			if ((i >= start && i <= end) || all){
+				out += "*";
+			}
+			else {
+				out += in.charAt(i);
+			}
 		}
 
 		return out;
