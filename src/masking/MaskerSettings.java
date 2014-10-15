@@ -49,6 +49,8 @@ public class MaskerSettings extends Exception {
 				
 			case "ReplaceFromSeedsFile" :
 				return new ReplaceRule(arrParams[1]);
+			case "PhoneNumberRule":
+				return new PhoneNumberRule();
 			default:
 				Logger.log("Bad format line in masking settings file. / "+s);
 		}
