@@ -128,13 +128,14 @@ public class GUIFrame extends JFrame {
 		// run button
 		JButton runButton = new JButton("Run");
 		placeComponent(runButton, 0, 5, 5, 1, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0.5, 0.2);
-		outputButton.addActionListener(new ActionListener() {
+		runButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				int lines = 3;
 				FileReader fReader = new FileReader(inputField.getText());
 				DatabaseReader dReader = new DatabaseReader(fReader.readNLines(3)); //header
-				DatabaseWriter writer = new DatabaseWriter("output/out.txt", dReader.getHeader());
-				Masker masker = new Masker("output/maskingsetting.txt");
+				DatabaseWriter writer = new DatabaseWriter(outputField.getText(), dReader.getHeader());
+				Masker masker = new Masker(rulesField.getText());
 				String[] input;
 				String[][] database;
 				while((input = fReader.readNLines(lines))[0] != null){System.out.println("Masking "+input.length+" lines");
