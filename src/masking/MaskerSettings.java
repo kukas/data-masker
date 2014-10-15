@@ -49,6 +49,9 @@ public class MaskerSettings extends Exception {
 				
 			case "ReplaceFromSeedsFile" :
 				return new ReplaceRule(arrParams[1]);
+				
+			case "random_rc":
+				return new RandomRCRule();
 			default:
 				Logger.log("Bad format line in masking settings file. / "+s);
 		}
