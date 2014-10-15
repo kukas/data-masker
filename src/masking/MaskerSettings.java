@@ -59,6 +59,10 @@ public class MaskerSettings extends Exception {
 				
 			case "ReplaceFromSeedsFile" :
 				return new ReplaceRule(arrParams[1]);
+	
+			case "random_rc":
+				return new RandomRCRule();
+				
 			case "PhoneNumberRule":
 				return new PhoneNumberRule();
 
