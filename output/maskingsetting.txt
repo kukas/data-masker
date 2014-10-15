@@ -1,4 +1,4 @@
-nahodna_cisla(0,2)
+ReplaceWithRandomCyphers(0,2)
 star
 nahodna_cisla
 ReplaceFromSeedsFile(output/firstNameSeeds.txt)

@@ -1,0 +1,40 @@
+package masking.rules;
+
+import java.util.Random;
+
+public class RandomCyphersRule implements MaskingRule {
+
+	public int start = 0;
+	public int end = 0;
+	
+	public int length = 0;
+	
+	public boolean all = false;
+	
+	Random random = new Random();
+	
+	public RandomCyphersRule(int start, int end){
+		this.start = start;
+		this.end = end;
+		length = end-start+1;
+	}
+	
+	public RandomCyphersRule(boolean all){
+		this.all = true;
+	}
+	
+	@Override
+	public String mask(String in) {
+		if(all){
+			start = 0;
+			end = in.length()-1;
+		}
+			
+		String randomCyphers = "";
+		for(int i = 0; i < length; i++){
+			randomCyphers += random.nextInt(10);
+		};
+		return in.substring(0, start)+randomCyphers+in.substring(end, in.length());
+	}
+
+}

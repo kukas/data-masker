@@ -42,6 +42,15 @@ public class MaskerSettings extends Exception {
 				
 			case "ReplaceFromSeedsFile" :
 				return new ReplaceRule(arrParams[1]);
+				
+			case "ReplaceWithRandomCyphers" : 
+				if(numOfParams == 0){
+					return new RandomCyphersRule(true);
+				}else {if(numOfParams == 1){
+					return new RandomCyphersRule(0,Integer.parseInt(arrParams[1]));
+				} else {
+					return new RandomCyphersRule(Integer.parseInt(arrParams[1]), Integer.parseInt(arrParams[2]));
+				}}
 		}
 		return null;
 	}
