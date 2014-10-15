@@ -16,6 +16,7 @@ public class MaskerSettings extends Exception {
 	public MaskingRule[] getRules(){
 		MaskingRule[] mRules = new MaskingRule[this.settingStrings.length];
 		for(int i = 0; i < this.settingStrings.length;i++){
+			Logger.debug("radek "+(i+1));
 			mRules[i] = getRuleByString(this.settingStrings[i]);
 		}
 		return mRules;
@@ -29,7 +30,16 @@ public class MaskerSettings extends Exception {
 				return new NothingRule();
 
 			case "star":
-				return new StarsRule();
+				if (numOfParams == 0){
+					return new StarsRule();
+				}
+				else {
+					if(numOfParams == 1){
+						return new StarsRule(0,Integer.parseInt(arrParams[1]));
+					} else {
+						return new StarsRule(Integer.parseInt(arrParams[1]), Integer.parseInt(arrParams[2]));
+					}
+				}
 				
 
 			case "random_number":
