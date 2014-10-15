@@ -46,7 +46,7 @@ public class Logic {
 		} catch (Exception e) {
 			Logger.log(e.getMessage());
 		}*/
-		int lines = 9;
+		int lines = 1000000;
 		int header = 3;
 		
 		FileReader fReader = new FileReader(inputFile);
@@ -55,7 +55,8 @@ public class Logic {
 		Masker masker = new Masker(maskingSettingsFile);
 		String[] input;
 		String[][] database;
-		while((input = fReader.readNLines(lines))[0] != null){System.out.println("Masking "+input.length+" lines");
+		while((input = fReader.readNLines(lines))[0] != null){
+			Logger.debug("Masking "+input.length+" lines");
 			dReader.input = input;
 			database = dReader.read();
 			database = masker.mask(database);
