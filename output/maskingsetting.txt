@@ -1,6 +1,5 @@
-nahodna_cisla(0,2)
+ReplaceWithRandomDigits(0,2)
 star
-nahodna_cisla
 ReplaceFromSeedsFile(output/firstNameSeeds.txt)
 do_nothing
 do_nothing
@@ -8,4 +7,5 @@ do_nothing
 do_nothing
 do_nothing
 do_nothing
-nahodna_cisla
+do_nothing
+do_nothing

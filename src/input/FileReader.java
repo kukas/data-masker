@@ -93,12 +93,12 @@ public class FileReader {
 			lines[i] = line;
 		};
 		int celkem = 0;
-		for(int i = 0; i < lines.length; i++){
-			celkem = i;
-			if(lines[i] == null){
+		while(celkem < lines.length){
+			if(lines[celkem] == null){
 				break;
 			}
-		}
+			celkem++;
+		};
 		String[] finalArray;
 		if(celkem == 0){
 			finalArray = new String[1];
