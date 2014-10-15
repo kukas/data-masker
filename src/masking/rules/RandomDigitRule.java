@@ -30,8 +30,6 @@ public class RandomDigitRule implements MaskingRule {
 			end = in.length()-1;
 			length = end-start+1;
 		}
-		System.out.print(start);
-		System.out.println(end);
 		String randomCyphers = "";
 		for(int i = 0; i < length; i++){
 			randomCyphers += random.nextInt(10);

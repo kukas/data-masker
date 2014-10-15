@@ -1,6 +1,5 @@
 ReplaceWithRandomDigits(0,2)
 star
-do_nothing
 ReplaceFromSeedsFile(output/firstNameSeeds.txt)
 do_nothing
 do_nothing
@@ -8,4 +7,5 @@ do_nothing
 do_nothing
 do_nothing
 do_nothing
-ReplaceWithRandomDigits
+do_nothing
+do_nothing

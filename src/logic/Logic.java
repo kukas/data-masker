@@ -11,7 +11,7 @@ import output.DatabaseWriter;
 
 public class Logic {
 	public static void main(String[] args) {
-		// defaultní nastavení - pozdeji nebude potreba diky GUI
+		// defaultnï¿½ nastavenï¿½ - pozdeji nebude potreba diky GUI
 		String inputFile = "output/ExampleData.txt";
 		String outputFile = "output/out.txt";
 		String maskingSettingsFile = "output/maskingsetting.txt";
@@ -46,7 +46,7 @@ public class Logic {
 		} catch (Exception e) {
 			Logger.log(e.getMessage());
 		}*/
-		int lines = 100;
+		int lines = 9;
 		int header = 3;
 		
 		FileReader fReader = new FileReader(inputFile);
