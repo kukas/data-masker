@@ -1,7 +1,7 @@
 do_nothing
 star
 nahodna_cisla
-do_nothing
+ReplaceFromSeedsFile(firstNameSeeds.txt)
 do_nothing
 do_nothing
 do_nothing

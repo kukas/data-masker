@@ -40,6 +40,8 @@ public class MaskerSettings extends Exception {
 					return new RandomNumberRule();
 				}
 				
+			case "ReplaceFromSeedsFile" :
+				return new ReplaceRule(arrParams[1]);
 		}
 		return null;
 	}
