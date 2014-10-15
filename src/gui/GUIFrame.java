@@ -10,11 +10,13 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import log.Logger;
@@ -30,7 +32,8 @@ public class GUIFrame extends JFrame {
 	}
 
 	private static final Insets DEFAULT_INSETS = new Insets(10, 10, 10, 10);
-
+	private static final double INPUT_HEIGHT = 0.1;
+	
 	private void placeComponent(Component c, int x, int y, int w, int h, int fill, int anchor, double xWeight,
 			double yWeight) {
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -47,7 +50,7 @@ public class GUIFrame extends JFrame {
 	}
 
 	public GUIFrame() {
-		setSize(800, 600);
+		setSize(800, 400);
 		setTitle("Data masking");
 		Container pane = this.getContentPane();
 		pane.setLayout(new GridBagLayout());
@@ -58,15 +61,15 @@ public class GUIFrame extends JFrame {
 
 		// input label
 		JLabel inputLabel = new JLabel("Input file");
-		placeComponent(inputLabel, 0, 0, 1, 1, GridBagConstraints.NONE, GridBagConstraints.LINE_END, 0.5, 0.5);
+		placeComponent(inputLabel, 0, 0, 1, 1, GridBagConstraints.NONE, GridBagConstraints.LINE_END, 0.5, INPUT_HEIGHT);
 
 		// input field
 		final JTextField inputField = new JTextField("");
-		placeComponent(inputField, 1, 0, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 0.5, 0.5);
+		placeComponent(inputField, 1, 0, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 0.5, INPUT_HEIGHT);
 
 		// input button
 		JButton inputButton = new JButton("Select file");
-		placeComponent(inputButton, 3, 0, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 0.5, 0.5);
+		placeComponent(inputButton, 3, 0, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 0.5, INPUT_HEIGHT);
 		inputButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -80,15 +83,15 @@ public class GUIFrame extends JFrame {
 
 		// output label
 		JLabel outputLabel = new JLabel("Output file");
-		placeComponent(outputLabel, 0, 1, 1, 1, GridBagConstraints.NONE, GridBagConstraints.LINE_END, 0.5, 0.5);
+		placeComponent(outputLabel, 0, 1, 1, 1, GridBagConstraints.NONE, GridBagConstraints.LINE_END, 0.5, INPUT_HEIGHT);
 
 		// output field
 		final JTextField outputField = new JTextField("");
-		placeComponent(outputField, 1, 1, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 0.5, 0.5);
+		placeComponent(outputField, 1, 1, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 1, INPUT_HEIGHT);
 
 		// output button
 		JButton outputButton = new JButton("Select file");
-		placeComponent(outputButton, 3, 1, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 0.5, 0.5);
+		placeComponent(outputButton, 3, 1, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 0.5, INPUT_HEIGHT);
 		outputButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -103,15 +106,15 @@ public class GUIFrame extends JFrame {
 		
 		// rules label
 		JLabel rulesLabel = new JLabel("Rules");
-		placeComponent(rulesLabel, 0, 2, 1, 1, GridBagConstraints.NONE, GridBagConstraints.LINE_END, 0.5, 0.5);
+		placeComponent(rulesLabel, 0, 2, 1, 1, GridBagConstraints.NONE, GridBagConstraints.LINE_END, 0.5, INPUT_HEIGHT);
 
 		// rules field
 		final JTextField rulesField = new JTextField("");
-		placeComponent(rulesField, 1, 2, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 0.5, 0.5);
+		placeComponent(rulesField, 1, 2, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 0.8, INPUT_HEIGHT);
 
 		// rules button
 		JButton rulesButton = new JButton("Select file");
-		placeComponent(rulesButton, 3, 2, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 0.5, 0.5);
+		placeComponent(rulesButton, 3, 2, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 0.5, INPUT_HEIGHT);
 		rulesButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -123,14 +126,32 @@ public class GUIFrame extends JFrame {
 			}
 		});
 		
+		//big table
+		//JTable table = new JTable(4, 4);
+		//placeComponent(table, 0, 3, 5, 1, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0.5, 0.8);
 		
 		
 		// run button
 		JButton runButton = new JButton("Run");
-		placeComponent(runButton, 0, 5, 5, 1, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0.5, 0.2);
+		placeComponent(runButton, 0, 5, 5, 1, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0.5, 0.1);
 		runButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				File inFile = new File(inputField.getText());
+				File rulesFile = new File(rulesField.getText());
+				
+				if(!inFile.exists()){
+					JOptionPane.showMessageDialog(GUIFrame.this, "Input file doesn't exist.");
+					return;
+				}
+				if(outputField.getText().equals("")){
+					JOptionPane.showMessageDialog(GUIFrame.this, "Output file not set.");
+					return;
+				}
+				if(!rulesFile.exists()){
+					JOptionPane.showMessageDialog(GUIFrame.this, "Rules file doesn't exist.");
+					return;
+				}
 				int lines = 3;
 				FileReader fReader = new FileReader(inputField.getText());
 				DatabaseReader dReader = new DatabaseReader(fReader.readNLines(3)); //header
