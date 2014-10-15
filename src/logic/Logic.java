@@ -46,7 +46,7 @@ public class Logic {
 		} catch (Exception e) {
 			Logger.log(e.getMessage());
 		}*/
-		int lines = 9;
+		int lines = 1000000;
 		int header = 3;
 		
 		FileReader fReader = new FileReader(inputFile);
