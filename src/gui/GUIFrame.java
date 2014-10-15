@@ -152,7 +152,7 @@ public class GUIFrame extends JFrame {
 					JOptionPane.showMessageDialog(GUIFrame.this, "Rules file doesn't exist.");
 					return;
 				}
-				int lines = 3;
+				int lines = 10000000;
 				FileReader fReader = new FileReader(inputField.getText());
 				DatabaseReader dReader = new DatabaseReader(fReader.readNLines(3)); //header
 				DatabaseWriter writer = new DatabaseWriter(outputField.getText(), dReader.getHeader());
