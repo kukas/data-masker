@@ -14,7 +14,7 @@ public class Logic {
 		// defaultní nastavení - pozdeji nebude potreba diky GUI
 		String inputFile = "output/ExampleData.txt";
 		String outputFile = "output/out.txt";
-		String maskingSettingsFile = "output/maskingsettings.txt";
+		String maskingSettingsFile = "output/maskingsetting.txt";
 		if (args.length > 0) {
 			List<String> list = java.util.Arrays.asList(args);
 			if (list.indexOf("--help") > -1 || list.indexOf("-h") > -1 || args.length < 2) {

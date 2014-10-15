@@ -1,6 +1,7 @@
 package masking;
 
 import input.FileReader;
+import log.Logger;
 import masking.rules.*;
 //import masking.rules.NothingRule;
 
@@ -31,17 +32,27 @@ public class MaskerSettings extends Exception {
 				return new StarsRule();
 				
 
-			case "nahodna_cisla":
+			case "random_number":
 				if(numOfParams==2){
-					int min = Integer.parseInt(arrParams[1]);
-					int max = Integer.parseInt(arrParams[2]);
+					int min = 0;
+					int max = 0;
+					try{
+						min = Integer.parseInt(arrParams[1]);
+						max = Integer.parseInt(arrParams[2]);
+					}catch(Exception e){
+						Logger.log("Bad parametrs for random number");
+					}
 					return new RandomNumberRule(min,max);
 				}else{
 					return new RandomNumberRule();
 				}
 				
+			case "ReplaceFromSeedsFile" :
+				return new ReplaceRule(arrParams[1]);
+			default:
+				Logger.log("Bad format line in masking settings file. / "+s);
 		}
-		return null;
+		return new NothingRule();
 	}
 	
 	//rozdeli radek na jednotlive parametry (napr. random_number;4;9 => array("random_number","4","9"))
