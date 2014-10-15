@@ -23,13 +23,13 @@ public class Logic {
 		int lines = 100;
 		int header = 3;
 		
-		FileReader fReader = new FileReader("../raw_data/out/jmenoprijmeniGB.txt");
+		FileReader fReader = new FileReader("ExampleData.txt");
 		DatabaseReader dReader = new DatabaseReader(fReader.readNLines(header));
 		DatabaseWriter writer = new DatabaseWriter("out.txt", dReader.getHeader());
 		Masker masker = new Masker("maskingsetting.txt");
 		String[] input;
 		String[][] database;
-		while((input = fReader.readNLines(lines))[0] != null){System.out.println("Hell");
+		while((input = fReader.readNLines(lines))[0] != null){System.out.println("Masking "+input.length+" lines");
 			dReader.input = input;
 			database = dReader.read();
 			database = masker.mask(database);

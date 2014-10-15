@@ -99,9 +99,17 @@ public class FileReader {
 				break;
 			}
 		}
-		String[] finalArray = new String[celkem];
+		String[] finalArray;
+		if(celkem == 0){
+			finalArray = new String[1];
+			finalArray[0] = null;
+		}
+		else{
+			finalArray = new String[celkem];
+		}
 		System.arraycopy(lines, 0, finalArray, 0, celkem);
 		
+			
 		return finalArray;
 	}
 	
