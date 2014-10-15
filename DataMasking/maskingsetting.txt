@@ -1,0 +1,11 @@
+do_nothing
+star
+nahodna_cisla
+do_nothing
+do_nothing
+do_nothing
+do_nothing
+do_nothing
+do_nothing
+do_nothing
+nahodna_cisla
