@@ -22,6 +22,14 @@ public class MaskerSettings extends Exception {
 		return mRules;
 	}
 	
+	public MaskingRule[] newGetRules(){
+		MaskingRule[] mRules = new MaskingRule[this.settingStrings.length];
+		for(int i = 0; i < this.settingStrings.length;i++){
+			mRules[i] = newGetRuleByString(this.settingStrings[i]);
+		}
+		return mRules;
+	}
+	
 	public MaskingRule getRuleByString(String s){
 		String[] arrParams = getArrayParams(s);//to vrati v prvnim  prvku jmeno funkce a dalsi prvky jsou parametry
 		int numOfParams = arrParams.length-1;
@@ -65,7 +73,16 @@ public class MaskerSettings extends Exception {
 				
 			case "PhoneNumberRule":
 				return new PhoneNumberRule();
-
+				
+			case "IBAN":
+				if(numOfParams == 0){
+					return new IbanRule();
+				}else if(numOfParams == 1){
+					return new IbanRule(arrParams[1]);
+				}
+				return new IbanRule();
+			
+				
 				
 			case "ReplaceWithRandomDigits" : 
 				if(numOfParams == 0){
@@ -80,6 +97,69 @@ public class MaskerSettings extends Exception {
 				Logger.log("Bad format line in masking settings file. / "+s);
 		}
 		return new NothingRule();
+	}
+	
+	public MaskingRule newGetRuleByString(String s){
+		String[] pole = s.split(";");
+		String ruleName = pole[4];
+		String[] arguments = pole[5].split(",");
+		int numOfParams = arguments.length;
+		
+		switch(ruleName){
+		case "do_nothing":
+			return new NothingRule();
+
+		case "star":
+			if (numOfParams == 0){
+				return new StarsRule();
+			}
+			else {
+				if(numOfParams == 1){
+					return new StarsRule(0,Integer.parseInt(arguments[0]));
+				} else {
+					return new StarsRule(Integer.parseInt(arguments[0]), Integer.parseInt(arguments[1]));
+				}
+			}
+			
+
+		case "random_number":
+			if(numOfParams==2){
+				int min = 0;
+				int max = 0;
+				try{
+					min = Integer.parseInt(arguments[0]);
+					max = Integer.parseInt(arguments[1]);
+				}catch(Exception e){
+					Logger.log("Bad parametrs for random number");
+				}
+				return new RandomNumberRule(min,max);
+			}else{
+				return new RandomNumberRule();
+			}
+			
+		case "ReplaceFromSeedsFile" :
+			return new ReplaceRule(arguments[0]);
+
+		case "random_rc":
+			return new RandomRCRule();
+			
+		case "PhoneNumberRule":
+			return new PhoneNumberRule();
+
+			
+		case "ReplaceWithRandomDigits" : 
+			if(numOfParams == 0){
+				return new RandomDigitRule(true);
+			}else {if(numOfParams == 1){
+				return new RandomDigitRule(0,Integer.parseInt(arguments[0]));
+			} else {
+				return new RandomDigitRule(Integer.parseInt(arguments[0]), Integer.parseInt(arguments[1]));
+			}}
+		
+		default:
+			Logger.log("Bad format line in masking settings file. / "+s);
+	}
+	return new NothingRule();
 	}
 	
 	//rozdeli radek na jednotlive parametry (napr. random_number;4;9 => array("random_number","4","9"))
