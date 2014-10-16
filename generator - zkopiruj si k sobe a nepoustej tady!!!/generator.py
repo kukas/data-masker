@@ -5,8 +5,8 @@ print("Supr cupr madafaka generator pseudotajnych dat")
 print()
 print("Ze zadanych argumentu vygeneruje soubor.txt s daty a soubor_meta.txt s informacemi o jmenu sloupce, typu, delce a offsetu, masking rules si pak dopiste rucne, tomu nerozumim.")
 print()
-print("Syntax: datovyTyp(delka),datovyTyp(delka)")
-print("Priklad: jmeno(20),prijmeni(20)")
+print("Syntax: datovyTyp(delka);datovyTyp(delka)")
+print("Priklad: jmeno(20);prijmeni(20)")
 print()
 print("Moznosti: jmeno, prijmeni, rcislo, iban, telefon")
 print()
@@ -23,7 +23,10 @@ print()
 
 
 vstup = raw_input("data v tabulce (to co je popsano vyse): ")
-vstup = vstup.split(",")
+vstup = vstup.split(";")
+
+jmenasloupcu = raw_input("zleva pojmenujte sloupce, oddelit strednikem: ")
+jmenasloupcu = jmenasloupcu.split(";")
 
 pravidla = raw_input("maskovaci pravidla (po sloupcich, oddelit strednikem): ")
 pravidla = pravidla.split(";")
@@ -33,12 +36,18 @@ parametry = parametry.split(";")
 
 rules = []
 params = []
+colnames = []
 
 for i in pravidla:
     rules.append(i)
 
 for i in parametry:
     params.append(i)
+
+for i in jmenasloupcu:
+    colnames.append(i)
+
+
     
 
 radky = int(raw_input("pocet radku: "))
@@ -59,7 +68,7 @@ filename = raw_input("jmeno souboru: ")
 meta = open("out\\"+filename+"_meta.txt","w")
 
 for i in range(0,len(jmena),1):
-    meta.write(jmena[i]+";"+"text"+";"+str(delky[i])+";"+str(offset)+";"+str(rules[i])+";"+params[i]+"\n")
+    meta.write(colnames[i]+";"+"text"+";"+str(delky[i])+";"+str(offset)+";"+str(rules[i])+";"+params[i]+"\n")
     offset = offset + delky[i]
 
 meta.close()
