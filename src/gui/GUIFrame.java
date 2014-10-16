@@ -11,6 +11,8 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.Arrays;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -24,6 +26,7 @@ import javax.swing.UIManager;
 import log.Logger;
 import masking.Masker;
 import output.DatabaseWriter;
+import exception.MaskingException;
 
 public class GUIFrame extends JFrame {
 	public static void main(String[] args) {
@@ -152,9 +155,20 @@ public class GUIFrame extends JFrame {
 					rulesField.setText(path);
 					FileReader fr = new FileReader(path);
 					String[] popisySloupcu = fr.read();
+					Vector<Vector<Object>> doTabulky = new Vector<Vector<Object>>(popisySloupcu.length);
+					System.out.println(doTabulky.size());
+					for(int i = 0; i < popisySloupcu.length; i++){
+						doTabulky.add( new Vector<Object>(Arrays.asList(popisySloupcu[i].split(";"))));
+					};
+					table.setData(doTabulky);
 				}
+				try{
 				Masker masker = new Masker(rulesField.getText());
-				table.setData(masker.getData());
+				//table.setData(masker.getData());
+				}catch(MaskingException e){
+					JOptionPane.showMessageDialog(GUIFrame.this, e.getMessage());
+					
+				}
 			}
 		});
 		Masker masker = new Masker();
@@ -249,34 +263,46 @@ public class GUIFrame extends JFrame {
 				FileReader fReader = new FileReader(inputFile);
 				DatabaseReader dReader = new DatabaseReader(fReader.readNLines(header));
 				DatabaseWriter writer = new DatabaseWriter(outputFile, dReader.getHeader());
-				Masker masker = new Masker(maskingSettingsFile);
 
-				/*
+
+				try{
+					Masker masker = new Masker(maskingSettingsFile);
+					if(!masker.setData(table.getData())){
+						JOptionPane.showMessageDialog(GUIFrame.this, "Invalid data.");
+						return;
+					}
+					/*
 				 * Masker masker = new Masker(); if(!masker.setData(table.getData())){
 				 * JOptionPane.showMessageDialog(GUIFrame.this, "Invalid data."); return; }
 				 */
-				String[] input;
-				String[][] database;
-				try {
-					writer.prepareFile();
-				} catch (Exception e) {
-					Logger.log(e.getMessage());
-				}
+					String[] input;
+					String[][] database;
 
-				while ((input = fReader.readNLines(lines))[0] != null) {
-					Logger.debug("Masking " + input.length + " lines");
-					dReader.input = input;
-					database = dReader.read();
-					database = masker.mask(database);
 					try {
-						writer.append(database);
-					} catch (Exception e) {
+						writer.prepareFile();
+					}
+					catch (Exception e) {
 						Logger.log(e.getMessage());
 					}
+					
+					while((input = fReader.readNLines(lines))[0] != null){
+						Logger.debug("Masking "+input.length+" lines");
+						dReader.input = input;
+						database = dReader.read();
+						database = masker.mask(database);
+						try {
+							writer.append(database);
+						} catch (Exception e) {
+							Logger.log(e.getMessage());
+						}
+					}
+					
+					writer.closeFile();
+					displayMessage("Done.");
+				}catch(MaskingException e){
+					JOptionPane.showMessageDialog(GUIFrame.this, e.getMessage());
+					return;
 				}
-
-				writer.closeFile();
-				displayMessage("Done.");
 			}
 		});
 
