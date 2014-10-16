@@ -26,8 +26,8 @@ public class DatabaseReader {
 		for (int i = 0; i < input.length; i++) {
 			curPos = offsets[0];
 			for (int j = 0; j < offsets.length; j++) {
+				curPos = offsets[j];
 				result[i][j] = input[i].substring(curPos, curPos + lengths[j]);
-				curPos = offsets[j+1];
 			}
 		}
 		return result;

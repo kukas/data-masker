@@ -305,7 +305,7 @@ public class GUIFrame extends JFrame {
 					while((input = fReader.readNLines(lines))[0] != null){System.out.println("Hello");
 						Logger.debug("Masking "+input.length+" lines");
 						dReader.input = input;
-						database = dReader.read();
+						database = dReader.read();System.out.println(database[0][0]);
 						database = masker.mask(database);
 						try {
 							writer.append(database);
