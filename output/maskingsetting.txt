@@ -1,8 +1,8 @@
-ReplaceWithRandomDigits(0,2)
+replace_with_random_digits(0,2)
 star
-ReplaceFromSeedsFile(output/firstNameSeeds.txt)
+replace_from_seeds_file(output/firstNameSeeds.txt)
 do_nothing
-PhoneNumberRule
+random_phone_number
 do_nothing
 do_nothing
 do_nothing

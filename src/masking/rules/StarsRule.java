@@ -3,7 +3,7 @@ package masking.rules;
 public class StarsRule implements MaskingRule {
 	int start;
 	int end;
-	boolean all;
+	boolean all = false;
 	public StarsRule(int start, int end) {
 		this.start = start;
 		this.end = end;
