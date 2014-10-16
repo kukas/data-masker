@@ -140,9 +140,15 @@ public class GUIFrame extends JFrame {
 					rulesField.setText(path);
 					FileReader fr = new FileReader(path);
 					String[] popisySloupcu = fr.read();
+					Vector<Vector<Object>> doTabulky = new Vector<Vector<Object>>(popisySloupcu.length);
+					System.out.println(doTabulky.size());
+					for(int i = 0; i < popisySloupcu.length; i++){
+						doTabulky.add( new Vector<Object>(Arrays.asList(popisySloupcu[i].split(";"))));
+					};
+					table.setData(doTabulky);
 				}
 				Masker masker = new Masker(rulesField.getText());
-				table.setData(masker.getData());
+				//table.setData(masker.getData());
 			}
 		});
 
