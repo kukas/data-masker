@@ -26,6 +26,7 @@ import javax.swing.UIManager;
 import log.Logger;
 import masking.Masker;
 import output.DatabaseWriter;
+import output.SettingsWriter;
 import exception.MaskingException;
 
 public class GUIFrame extends JFrame {
@@ -226,13 +227,26 @@ public class GUIFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				//prikazy pri ulozeni
+				SettingsWriter writ = new SettingsWriter();
+				
+				JFileChooser chooser = new JFileChooser();
+				int res = chooser.showSaveDialog(GUIFrame.this);
+				if (res == JFileChooser.APPROVE_OPTION) {
+					String address = chooser.getSelectedFile().getAbsolutePath();
+					if(!address.endsWith(".txt")){
+						address+= ".txt";
+					}
+					writ.write(address, table.getData());
+				}
+				
+				
 			}
 		});
 		
 		
 		// run button
 		runButton = new JButton("Run");
-		placeComponent(runButton, 1, 7, 4, 1, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0.5, 0.05);
+		placeComponent(runButton, 1, 7, 5, 1, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0.5, 0.05);
 		runButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
