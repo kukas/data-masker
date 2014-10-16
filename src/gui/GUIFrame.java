@@ -163,16 +163,15 @@ public class GUIFrame extends JFrame {
 					table.setData(doTabulky);
 				}
 				try{
-				Masker masker = new Masker(rulesField.getText());
-				//table.setData(masker.getData());
+					Masker masker = new Masker(rulesField.getText());
 				}catch(MaskingException e){
 					JOptionPane.showMessageDialog(GUIFrame.this, e.getMessage());
 					
 				}
 			}
 		});
-		Masker masker = new Masker();
-		table.setData(masker.getData());
+		//Masker masker = new Masker();
+		//table.setData(masker.getData());
 
 		// big table
 
@@ -266,11 +265,11 @@ public class GUIFrame extends JFrame {
 
 
 				try{
-					Masker masker = new Masker(maskingSettingsFile);
-					if(!masker.setData(table.getData())){
+					Masker masker = new Masker(table.getData());
+					/*if(!masker.setData()){
 						JOptionPane.showMessageDialog(GUIFrame.this, "Invalid data.");
 						return;
-					}
+					}*/
 					/*
 				 * Masker masker = new Masker(); if(!masker.setData(table.getData())){
 				 * JOptionPane.showMessageDialog(GUIFrame.this, "Invalid data."); return; }
