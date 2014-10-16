@@ -168,12 +168,12 @@ public class GUIFrame extends JFrame {
 				FileReader fReader = new FileReader(inputField.getText());
 				DatabaseReader dReader = new DatabaseReader(fReader.readNLines(3)); // header
 				DatabaseWriter writer = new DatabaseWriter(outputField.getText(), dReader.getHeader());
-				//Masker masker = new Masker(rulesField.getText());
-				Masker masker = new Masker();
+				Masker masker = new Masker(rulesField.getText());
+				/*Masker masker = new Masker();
 				if(!masker.setData(table.getData())){
 					JOptionPane.showMessageDialog(GUIFrame.this, "Invalid data.");
 					return;
-				}
+				}*/
 				String[] input;
 				String[][] database;
 				while ((input = fReader.readNLines(lines))[0] != null) {
