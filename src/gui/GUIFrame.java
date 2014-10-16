@@ -124,11 +124,7 @@ public class GUIFrame extends JFrame {
 				JFileChooser chooser = new JFileChooser();
 				int res = chooser.showOpenDialog(GUIFrame.this);
 				if (res == JFileChooser.APPROVE_OPTION) {
-					String path = chooser.getSelectedFile().getAbsolutePath();
-					outputField.setText(path);
-
-					FileReader fr = new FileReader(path);
-
+					outputField.setText(chooser.getSelectedFile().getAbsolutePath());
 				}
 			}
 		});
@@ -270,11 +266,19 @@ public class GUIFrame extends JFrame {
 				String outputFile = outputField.getText();
 				String maskingSettingsFile = rulesField.getText();
 
+				Vector<Vector<Object>> tableDATA = table.getData();
+				int[] lengths = new int[tableDATA.size()];
+				int[] offsets = new int[tableDATA.size()];
+				for(int i = 0; i < tableDATA.size(); i++){
+					lengths[i] = Integer.parseInt((String) tableDATA.get(i).get(2));
+					offsets[i] = Integer.parseInt((String) tableDATA.get(i).get(3));
+				};
+				
 				int lines = 100000;
-				int header = 3;
 
 				FileReader fReader = new FileReader(inputFile);
-				DatabaseReader dReader = new DatabaseReader(fReader.readNLines(header));
+				//DatabaseReader dReader = new DatabaseReader(fReader.readNLines(3));
+				DatabaseReader dReader = new DatabaseReader(lengths, offsets);
 				DatabaseWriter writer = new DatabaseWriter(outputFile, dReader.getHeader());
 
 
@@ -298,13 +302,14 @@ public class GUIFrame extends JFrame {
 						Logger.log(e.getMessage());
 					}
 					
-					while((input = fReader.readNLines(lines))[0] != null){
+					while((input = fReader.readNLines(lines))[0] != null){System.out.println("Hello");
 						Logger.debug("Masking "+input.length+" lines");
 						dReader.input = input;
-						database = dReader.read();
+						database = dReader.read();System.out.println(database[0][0]);
 						database = masker.mask(database);
 						try {
 							writer.append(database);
+							//writer.append(input, database);
 						} catch (Exception e) {
 							Logger.log(e.getMessage());
 						}

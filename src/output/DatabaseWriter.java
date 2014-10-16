@@ -17,17 +17,17 @@ public class DatabaseWriter {
 	}
 	
 	public void write(String[][] data) throws IOException{
-		String[] headerString = header.getLines();
+		//String[] headerString = header.getLines();
 		int[] headerLengths = header.getLengths();
 
-		PrintWriter writer = new PrintWriter(path);
+		/*PrintWriter writer = new PrintWriter(path);
 		
 		for (int i=0; i<headerString.length; i++) {
 			writer.println(headerString[i]);
 		}
 		
 		writer.println("");
-		
+		*/
 		int colCount = data[0].length;
 		for (int i=0; i<data.length; i++) {
 			String newLine = "";
