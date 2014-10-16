@@ -1,2 +1,1 @@
-name;text;20;0;star;1
-surname;text;20;20;star;2
+name;text;20;0;star;1,2
