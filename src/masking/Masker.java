@@ -21,6 +21,10 @@ public class Masker {
 		maskingRules = maskerSettings.getRules();
 	}
 
+	public Masker(Vector<Vector<Object>> data) throws MaskingException {
+		setData(data);
+	}
+
 	public String[][] mask(String[][] input, String maskingsSettingFile) throws MaskingException{
 		MaskerSettings mSetting = new MaskerSettings(maskingsSettingFile);
 		MaskingRule[] rules = mSetting.getRules();
@@ -60,7 +64,7 @@ public class Masker {
 		String[] settingStrings = maskerSettings.getSettingStrings();
 		Vector<Vector<Object>> vB = new Vector<>();
 		for (int i=0; i<settingStrings.length; i++){
-			String[] settingLine = settingStrings[i].split("-");
+			String[] settingLine = settingStrings[i].split(";");
 			Vector<Object> vA = new Vector(Arrays.asList(settingLine));
 			vB.add(vA);
 		}
@@ -78,18 +82,28 @@ public class Masker {
 		
 		
 		int size = data.size();
+		Logger.debug(""+size);
 		String[] settingStrings;
-		if(size >= 4){
-			int size2 = data.get(4).size();
-			settingStrings = new String[size2];
+		if(size >= 6){
+			
+			settingStrings = new String[size];
 			for (int i=0; i<size; i++){
+				int size2 = data.get(i).size();
+				System.out.println(i+","+size2);
 				String delimiter = "";
 				settingStrings[i] = "";
 				for (int j=0; j<size2; j++){
-					settingStrings[i] += delimiter + data.get(j).get(i).toString();
+					String whitespace = " ";
+					if(j == size2-1){
+						whitespace = "";
+					}
+					settingStrings[i] += delimiter + ((data.get(i).get(j)==null)?whitespace:data.get(i).get(j).toString());
 					delimiter = ";";
 				}
+				// settingStrings[i] = "a;a;3;4;do_nothing;";
 			}
+			
+			
 		}
 		else {
 			return false;
@@ -97,9 +111,7 @@ public class Masker {
 		
 		
 		maskerSettings = new MaskerSettings(settingStrings);
-		
-		maskingRules = maskerSettings.getRules();
-		
+		maskingRules = maskerSettings.newGetRules();
 		
 		return true;
 	}
