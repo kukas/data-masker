@@ -67,7 +67,7 @@ public class Masker {
 		return vB;
 	}
 	
-	public boolean setData(Vector<Vector<Object>> data){ //vraci, zda se jedna o validni data
+	public boolean setData(Vector<Vector<Object>> data) throws MaskingException{ //vraci, zda se jedna o validni data
 		//TODO: doplnit metodu, aby se MaskingRules nastavily podle dat (na MaskerSettings nezalezi)
 		/*
 		 * Ukazka vectoru:
@@ -97,7 +97,9 @@ public class Masker {
 		
 		
 		maskerSettings = new MaskerSettings(settingStrings);
+		
 		maskingRules = maskerSettings.getRules();
+		
 		
 		return true;
 	}
