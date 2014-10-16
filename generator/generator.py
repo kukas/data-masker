@@ -202,3 +202,4 @@ for i in range(radky):
 db.close()
 
 print("hotovo")
+x = raw_input("stiskni enter pro ukonceni")
