@@ -13,7 +13,7 @@ public class Logic {
 	public static void main(String[] args) {
 		// defaultn� nastaven� - pozdeji nebude potreba diky GUI
 		String inputFile = "output/ExampleData.txt";
-		String outputFile = "output/out.txt";
+		String outputFile = "output/out2.txt";
 		String maskingSettingsFile = "output/maskingsetting.txt";
 		if (args.length > 0) {
 			List<String> list = java.util.Arrays.asList(args);
@@ -35,18 +35,7 @@ public class Logic {
 			}
 		}
 		
-		/*FileReader fReader = new FileReader("ExampleData.txt");
-		DatabaseReader dReader = new DatabaseReader(fReader.read());
-		String[][] database = dReader.read();
-		Masker masker = new Masker();
-		database = masker.mask(database, "maskingsetting.txt");
-		DatabaseWriter writer = new DatabaseWriter("out.txt", dReader.getHeader());
-		try {
-			writer.write(database);
-		} catch (Exception e) {
-			Logger.log(e.getMessage());
-		}*/
-		int lines = 1000000;
+		int lines = 100000;
 		int header = 3;
 		
 		FileReader fReader = new FileReader(inputFile);
@@ -55,17 +44,26 @@ public class Logic {
 		Masker masker = new Masker(maskingSettingsFile);
 		String[] input;
 		String[][] database;
+		try {
+			writer.prepareFile();
+		}
+		catch (Exception e) {
+			Logger.log(e.getMessage());
+		}
+		
 		while((input = fReader.readNLines(lines))[0] != null){
 			Logger.debug("Masking "+input.length+" lines");
 			dReader.input = input;
 			database = dReader.read();
 			database = masker.mask(database);
 			try {
-				writer.write(database);
+				writer.append(database);
 			} catch (Exception e) {
 				Logger.log(e.getMessage());
 			}
 		}
+		
+		writer.closeFile();
 	}
 	
 	public static void printHelp() {

@@ -73,7 +73,9 @@ public class MaskerSettings extends Exception {
 				
 			case "PhoneNumberRule":
 				return new PhoneNumberRule();
-
+				
+			case "IBAN":
+				return new IbanRule();
 				
 			case "ReplaceWithRandomDigits" : 
 				if(numOfParams == 0){
