@@ -45,7 +45,7 @@ public class RulesTable extends JTable {
 		if (tableModel.getRowCount() > 0) {
 			try {
 				offset = Integer.parseInt(tableModel.getValueAt(tableModel.getRowCount() - 1, 2).toString())
-						+ Integer.parseInt(tableModel.getValueAt(tableModel.getRowCount() - 1, 3).toString()) + 1;
+						+ Integer.parseInt(tableModel.getValueAt(tableModel.getRowCount() - 1, 3).toString());
 			} catch (Exception e) {
 			}
 		}
