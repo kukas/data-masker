@@ -23,8 +23,8 @@ public class Masker {
 			Logger.log("Warning: the number of rules is greater than the number of columns.");
 		}
 
-		for (int i = 0; i < input.length; i++) {
 			for (int j = 0; j < input[0].length; j++) {
+		for (int i = 0; i < input.length; i++) {
 				input[i][j] = rules[j].mask(input[i][j]);
 			}
 		}
@@ -37,9 +37,9 @@ public class Masker {
 			Logger.log("Warning: the number of rules is greater than the number of columns.");
 		}
 		
-		for (int i = 0; i < input.length; i++) {
+		for (int i = 0; i < maskingRules.length; i++) {
 			for (int j = 0; j < input[0].length; j++) {
-				input[i][j] = maskingRules[j].mask(input[i][j]);
+				input[i][j] = maskingRules[i].mask(input[i][j]);
 			}
 		}
 
