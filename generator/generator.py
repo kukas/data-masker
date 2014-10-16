@@ -17,6 +17,7 @@ print("Nehledejte v tom bugy, je jich tam plno (a vzdycky bude). Neopravim je.")
 print()
 print("pro Python 2")
 print()
+print("!!STAHNETE SI TO K SOBE A NEGENERUJTE TO NA SERVERU, NEBO SE TO CELY POS...!!")
 
 
 
@@ -202,4 +203,5 @@ for i in range(radky):
 db.close()
 
 print("hotovo")
+print("soubor najdes ve slozce out/"+filename+".txt")
 x = raw_input("stiskni enter pro ukonceni")
