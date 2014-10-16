@@ -1,11 +1,15 @@
 package masking;
 
+import java.util.Arrays;
+import java.util.Vector;
+
 import log.Logger;
 import masking.rules.MaskingRule;
 
 public class Masker {
 	public MaskerSettings maskerSettings;
 	public MaskingRule[] maskingRules;
+	
 	
 	public Masker() {
 
@@ -48,5 +52,21 @@ public class Masker {
 		}
 
 		return input;
+	}
+	
+	public Vector<Vector<Object>> getData(){
+		//TODO: doplnit metodu, aby vracela data (formát viz RulesTable - 6 slopcu, pravidlo na radek)
+		return null;
+	}
+	
+	public boolean setData(Vector<Vector<Object>> data){ //vraci, zda se jedna o validni data
+		//TODO: doplnit metodu, aby se MaskingRules nastavily podle dat (na MaskerSettings nezalezi)
+		/*
+		 * Ukazka vectoru:
+		 * Vector<Object> vA = new Vector(Arrays.asList(new String[] { "a", "z", "d", "o", "x", "c" }));
+		 * Vector<Vector<Object>> vB = new Vector<>();
+		 * vB.add(vA);
+		*/
+		return false;
 	}
 }
