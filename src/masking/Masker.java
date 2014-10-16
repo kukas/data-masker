@@ -37,9 +37,13 @@ public class Masker {
 			Logger.log("Warning: the number of rules is greater than the number of columns.");
 		}
 		
-		for (int i = 0; i < maskingRules.length; i++) {
-			for (int j = 0; j < input[0].length; j++) {
-				input[i][j] = maskingRules[i].mask(input[i][j]);
+		//database.length -> pocet radku
+		
+		for (int i = 0; i < maskingRules.length; i++) //bere 1 maskingRules a zmeni podle neho cely sloupec
+		{
+			for (int j = 0; j < input.length; j++) //prochazi cely sloupec
+			{
+				input[j][i] = maskingRules[i].mask(input[j][i]);
 			}
 		}
 
