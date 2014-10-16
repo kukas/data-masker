@@ -87,7 +87,7 @@ public class GUIFrame extends JFrame {
 				}
 			}
 		});
-
+		
 		// output label
 		JLabel outputLabel = new JLabel("Output file");
 		placeComponent(outputLabel, 0, 1, 1, 1, GridBagConstraints.NONE, GridBagConstraints.LINE_END, 0.5, INPUT_HEIGHT);
@@ -107,7 +107,12 @@ public class GUIFrame extends JFrame {
 				JFileChooser chooser = new JFileChooser();
 				int res = chooser.showOpenDialog(GUIFrame.this);
 				if (res == JFileChooser.APPROVE_OPTION) {
-					outputField.setText(chooser.getSelectedFile().getAbsolutePath());
+					String path = chooser.getSelectedFile().getAbsolutePath();
+					outputField.setText(path);
+					
+					FileReader fr = new FileReader(path);
+					
+					
 				}
 			}
 		});
@@ -131,18 +136,24 @@ public class GUIFrame extends JFrame {
 				JFileChooser chooser = new JFileChooser();
 				int res = chooser.showOpenDialog(GUIFrame.this);
 				if (res == JFileChooser.APPROVE_OPTION) {
-					rulesField.setText(chooser.getSelectedFile().getAbsolutePath());
+					String path = chooser.getSelectedFile().getAbsolutePath();
+					rulesField.setText(path);
+					FileReader fr = new FileReader(path);
+					String[] popisySloupcu = fr.read();
 				}
 				Masker masker = new Masker(rulesField.getText());
 				table.setData(masker.getData());
 			}
 		});
-
+		Masker masker = new Masker();
+		table.setData(masker.getData());
+	
 		// big table
-		
-		JScrollPane tablePane = new JScrollPane(table);
-		placeComponent(tablePane, 0, 3, 5, 1, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0.5, 0.8);
 
+		JScrollPane tablePane = new JScrollPane(table);
+		
+		placeComponent(tablePane, 0, 3, 5, 1, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0.5, 0.8);
+		table.finishInit(); //graficke nastaveni tabulky se musi provest az po pridani dat
 		// run button
 		JButton runButton = new JButton("Run");
 		placeComponent(runButton, 0, 5, 5, 1, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0.5, 0.1);
@@ -168,29 +179,29 @@ public class GUIFrame extends JFrame {
 				String inputFile = inputField.getText();
 				String outputFile = outputField.getText();
 				String maskingSettingsFile = rulesField.getText();
-				
+
 				int lines = 100000;
 				int header = 3;
-				
+
 				FileReader fReader = new FileReader(inputFile);
 				DatabaseReader dReader = new DatabaseReader(fReader.readNLines(header));
 				DatabaseWriter writer = new DatabaseWriter(outputFile, dReader.getHeader());
 				Masker masker = new Masker(maskingSettingsFile);
-				if(!masker.setData(table.getData())){
-					JOptionPane.showMessageDialog(GUIFrame.this, "Invalid data.");
-					return;
-				}
+
+				/*
+				 * Masker masker = new Masker(); if(!masker.setData(table.getData())){
+				 * JOptionPane.showMessageDialog(GUIFrame.this, "Invalid data."); return; }
+				 */
 				String[] input;
 				String[][] database;
 				try {
 					writer.prepareFile();
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 					Logger.log(e.getMessage());
 				}
-				
-				while((input = fReader.readNLines(lines))[0] != null){
-					Logger.debug("Masking "+input.length+" lines");
+
+				while ((input = fReader.readNLines(lines))[0] != null) {
+					Logger.debug("Masking " + input.length + " lines");
 					dReader.input = input;
 					database = dReader.read();
 					database = masker.mask(database);
@@ -200,7 +211,7 @@ public class GUIFrame extends JFrame {
 						Logger.log(e.getMessage());
 					}
 				}
-				
+
 				writer.closeFile();
 			}
 		});
