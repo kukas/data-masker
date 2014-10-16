@@ -45,7 +45,7 @@ radky = int(raw_input("pocet radku: "))
 
 jmena = []
 delky = []
-offset = 1
+offset = 0
 
 for i in vstup:
     i = i.split("(")
