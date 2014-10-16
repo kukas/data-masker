@@ -11,12 +11,15 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.Arrays;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import log.Logger;
@@ -33,7 +36,7 @@ public class GUIFrame extends JFrame {
 
 	private static final Insets DEFAULT_INSETS = new Insets(10, 10, 10, 10);
 	private static final double INPUT_HEIGHT = 0.1;
-	
+
 	private void placeComponent(Component c, int x, int y, int w, int h, int fill, int anchor, double xWeight,
 			double yWeight) {
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -50,7 +53,9 @@ public class GUIFrame extends JFrame {
 	}
 
 	public GUIFrame() {
-		setSize(800, 400);
+		final RulesTable table = new RulesTable();
+
+		setSize(800, 600);
 		setTitle("Data masking");
 		Container pane = this.getContentPane();
 		pane.setLayout(new GridBagLayout());
@@ -65,17 +70,19 @@ public class GUIFrame extends JFrame {
 
 		// input field
 		final JTextField inputField = new JTextField("");
-		placeComponent(inputField, 1, 0, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 0.5, INPUT_HEIGHT);
+		placeComponent(inputField, 1, 0, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 0.5,
+				INPUT_HEIGHT);
 
 		// input button
 		JButton inputButton = new JButton("Select file");
-		placeComponent(inputButton, 3, 0, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 0.5, INPUT_HEIGHT);
+		placeComponent(inputButton, 3, 0, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 0.5,
+				INPUT_HEIGHT);
 		inputButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				JFileChooser chooser = new JFileChooser();
 				int res = chooser.showOpenDialog(GUIFrame.this);
-				if(res==JFileChooser.APPROVE_OPTION){
+				if (res == JFileChooser.APPROVE_OPTION) {
 					inputField.setText(chooser.getSelectedFile().getAbsolutePath());
 				}
 			}
@@ -87,50 +94,55 @@ public class GUIFrame extends JFrame {
 
 		// output field
 		final JTextField outputField = new JTextField("");
-		placeComponent(outputField, 1, 1, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 1, INPUT_HEIGHT);
+		placeComponent(outputField, 1, 1, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 1,
+				INPUT_HEIGHT);
 
 		// output button
 		JButton outputButton = new JButton("Select file");
-		placeComponent(outputButton, 3, 1, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 0.5, INPUT_HEIGHT);
+		placeComponent(outputButton, 3, 1, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 0.5,
+				INPUT_HEIGHT);
 		outputButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				JFileChooser chooser = new JFileChooser();
 				int res = chooser.showOpenDialog(GUIFrame.this);
-				if(res==JFileChooser.APPROVE_OPTION){
+				if (res == JFileChooser.APPROVE_OPTION) {
 					outputField.setText(chooser.getSelectedFile().getAbsolutePath());
 				}
 			}
 		});
 
-		
 		// rules label
 		JLabel rulesLabel = new JLabel("Rules");
 		placeComponent(rulesLabel, 0, 2, 1, 1, GridBagConstraints.NONE, GridBagConstraints.LINE_END, 0.5, INPUT_HEIGHT);
 
 		// rules field
 		final JTextField rulesField = new JTextField("");
-		placeComponent(rulesField, 1, 2, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 0.8, INPUT_HEIGHT);
+		placeComponent(rulesField, 1, 2, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 0.8,
+				INPUT_HEIGHT);
 
 		// rules button
 		JButton rulesButton = new JButton("Select file");
-		placeComponent(rulesButton, 3, 2, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 0.5, INPUT_HEIGHT);
+		placeComponent(rulesButton, 3, 2, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 0.5,
+				INPUT_HEIGHT);
 		rulesButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				JFileChooser chooser = new JFileChooser();
 				int res = chooser.showOpenDialog(GUIFrame.this);
-				if(res==JFileChooser.APPROVE_OPTION){
+				if (res == JFileChooser.APPROVE_OPTION) {
 					rulesField.setText(chooser.getSelectedFile().getAbsolutePath());
 				}
+				Masker masker = new Masker(rulesField.getText());
+				table.setData(masker.getData());
 			}
 		});
+
+		// big table
 		
-		//big table
-		//JTable table = new JTable(4, 4);
-		//placeComponent(table, 0, 3, 5, 1, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0.5, 0.8);
-		
-		
+		JScrollPane tablePane = new JScrollPane(table);
+		placeComponent(tablePane, 0, 3, 5, 1, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0.5, 0.8);
+
 		// run button
 		JButton runButton = new JButton("Run");
 		placeComponent(runButton, 0, 5, 5, 1, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0.5, 0.1);
@@ -139,20 +151,20 @@ public class GUIFrame extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				File inFile = new File(inputField.getText());
 				File rulesFile = new File(rulesField.getText());
-				
-				if(!inFile.exists()){
+
+				if (!inFile.exists()) {
 					JOptionPane.showMessageDialog(GUIFrame.this, "Input file doesn't exist.");
 					return;
 				}
-				if(outputField.getText().equals("")){
+				if (outputField.getText().equals("")) {
 					JOptionPane.showMessageDialog(GUIFrame.this, "Output file not set.");
 					return;
 				}
-				if(!rulesFile.exists()){
+				if (!rulesFile.exists()) {
 					JOptionPane.showMessageDialog(GUIFrame.this, "Rules file doesn't exist.");
 					return;
 				}
-				
+
 				String inputFile = inputField.getText();
 				String outputFile = outputField.getText();
 				String maskingSettingsFile = rulesField.getText();
@@ -164,6 +176,10 @@ public class GUIFrame extends JFrame {
 				DatabaseReader dReader = new DatabaseReader(fReader.readNLines(header));
 				DatabaseWriter writer = new DatabaseWriter(outputFile, dReader.getHeader());
 				Masker masker = new Masker(maskingSettingsFile);
+				if(!masker.setData(table.getData())){
+					JOptionPane.showMessageDialog(GUIFrame.this, "Invalid data.");
+					return;
+				}
 				String[] input;
 				String[][] database;
 				try {
