@@ -233,7 +233,7 @@ public class GUIFrame extends JFrame {
 		
 		// run button
 		runButton = new JButton("Run");
-		placeComponent(runButton, 1, 7, 4, 1, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0.5, 0.05);
+		placeComponent(runButton, 1, 7, 5, 1, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0.5, 0.05);
 		runButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
