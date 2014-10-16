@@ -21,6 +21,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
 
 import log.Logger;
 import masking.Masker;
@@ -29,14 +30,19 @@ import exception.MaskingException;
 
 public class GUIFrame extends JFrame {
 	public static void main(String[] args) {
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		GUIFrame frame = new GUIFrame();
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 	}
 
-	private static final Insets DEFAULT_INSETS = new Insets(10, 10, 10, 10);
-	private static final double INPUT_HEIGHT = 0.1;
+	private static final Insets DEFAULT_INSETS = new Insets(5, 5, 5, 5);
+	private static final double INPUT_HEIGHT = 0;
 
 	private void placeComponent(Component c, int x, int y, int w, int h, int fill, int anchor, double xWeight,
 			double yWeight) {
@@ -53,8 +59,17 @@ public class GUIFrame extends JFrame {
 		this.add(c, gbc);
 	}
 
+	private void displayMessage(String message) {
+		JOptionPane.showMessageDialog(GUIFrame.this, message);
+	}
+
 	public GUIFrame() {
 		final RulesTable table = new RulesTable();
+		JLabel inputLabel, outputLabel, rulesLabel;
+		final JTextField inputField, outputField, rulesField;
+		JButton inputButton, outputButton, rulesButton, runButton, saveButton;
+		// postranni
+		JButton addButton, removeButton, upButton, downButton;
 
 		setSize(800, 600);
 		setTitle("Data masking");
@@ -66,17 +81,17 @@ public class GUIFrame extends JFrame {
 		gbc.insets = new Insets(10, 10, 10, 10);
 
 		// input label
-		JLabel inputLabel = new JLabel("Input file");
-		placeComponent(inputLabel, 0, 0, 1, 1, GridBagConstraints.NONE, GridBagConstraints.LINE_END, 0.5, INPUT_HEIGHT);
+		inputLabel = new JLabel("Input file");
+		placeComponent(inputLabel, 0, 0, 1, 1, GridBagConstraints.NONE, GridBagConstraints.LINE_END, 0, INPUT_HEIGHT);
 
 		// input field
-		final JTextField inputField = new JTextField("");
+		inputField = new JTextField("");
 		placeComponent(inputField, 1, 0, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 0.5,
 				INPUT_HEIGHT);
 
 		// input button
-		JButton inputButton = new JButton("Select file");
-		placeComponent(inputButton, 3, 0, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 0.5,
+		inputButton = new JButton("Select file");
+		placeComponent(inputButton, 4, 0, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 0,
 				INPUT_HEIGHT);
 		inputButton.addActionListener(new ActionListener() {
 			@Override
@@ -88,19 +103,19 @@ public class GUIFrame extends JFrame {
 				}
 			}
 		});
-		
+
 		// output label
-		JLabel outputLabel = new JLabel("Output file");
-		placeComponent(outputLabel, 0, 1, 1, 1, GridBagConstraints.NONE, GridBagConstraints.LINE_END, 0.5, INPUT_HEIGHT);
+		outputLabel = new JLabel("Output file");
+		placeComponent(outputLabel, 0, 1, 1, 1, GridBagConstraints.NONE, GridBagConstraints.LINE_END, 0, INPUT_HEIGHT);
 
 		// output field
-		final JTextField outputField = new JTextField("");
+		outputField = new JTextField("");
 		placeComponent(outputField, 1, 1, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 1,
 				INPUT_HEIGHT);
 
 		// output button
-		JButton outputButton = new JButton("Select file");
-		placeComponent(outputButton, 3, 1, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 0.5,
+		outputButton = new JButton("Select file");
+		placeComponent(outputButton, 4, 1, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 0,
 				INPUT_HEIGHT);
 		outputButton.addActionListener(new ActionListener() {
 			@Override
@@ -110,26 +125,25 @@ public class GUIFrame extends JFrame {
 				if (res == JFileChooser.APPROVE_OPTION) {
 					String path = chooser.getSelectedFile().getAbsolutePath();
 					outputField.setText(path);
-					
+
 					FileReader fr = new FileReader(path);
-					
-					
+
 				}
 			}
 		});
 
 		// rules label
-		JLabel rulesLabel = new JLabel("Rules");
-		placeComponent(rulesLabel, 0, 2, 1, 1, GridBagConstraints.NONE, GridBagConstraints.LINE_END, 0.5, INPUT_HEIGHT);
+		rulesLabel = new JLabel("Rules");
+		placeComponent(rulesLabel, 0, 2, 1, 1, GridBagConstraints.NONE, GridBagConstraints.LINE_END, 0, INPUT_HEIGHT);
 
 		// rules field
-		final JTextField rulesField = new JTextField("");
+		rulesField = new JTextField("");
 		placeComponent(rulesField, 1, 2, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 0.8,
 				INPUT_HEIGHT);
 
 		// rules button
-		JButton rulesButton = new JButton("Select file");
-		placeComponent(rulesButton, 3, 2, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 0.5,
+		rulesButton = new JButton("Select file");
+		placeComponent(rulesButton, 4, 2, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 0,
 				INPUT_HEIGHT);
 		rulesButton.addActionListener(new ActionListener() {
 			@Override
@@ -159,16 +173,67 @@ public class GUIFrame extends JFrame {
 		});
 		Masker masker = new Masker();
 		table.setData(masker.getData());
-	
+
 		// big table
 
 		JScrollPane tablePane = new JScrollPane(table);
+
+		placeComponent(tablePane, 0, 3, 5, 4, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 1, 0.8);
+		table.finishInit(); // graficke nastaveni tabulky se musi provest az po pridani dat
+
+		// side buttons
+		addButton = new JButton("+");
+		placeComponent(addButton, 5, 3, 1, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_END, 0, 0);
+		addButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				table.addRow();
+			}
+		});
+		removeButton = new JButton("-");
+		placeComponent(removeButton, 5, 4, 1, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_END, 0, 0);
+		removeButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if (table.getSelectedRow() >= 0) {
+					table.removeRow(table.getSelectedRow());
+				}
+			}
+		});
+		upButton = new JButton("Up");
+		placeComponent(upButton, 5, 5, 1, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_END, 0, 0);
+		upButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if (table.moveRowBy(table.getSelectedRow(), -1)) {
+					table.setRowSelectionInterval(table.getSelectedRow() - 1, table.getSelectedRow() - 1);
+				}
+			}
+		});
+		downButton = new JButton("Down");
+		placeComponent(downButton, 5, 6, 1, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.FIRST_LINE_END, 0, 0);
+		downButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if (table.moveRowBy(table.getSelectedRow(), 1)) {
+					table.setRowSelectionInterval(table.getSelectedRow() + 1, table.getSelectedRow() + 1);
+				}}
+		});
+
+		// save button
+		saveButton = new JButton("Save");
+		placeComponent(saveButton, 0, 7, 1, 1, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0, 0.05);
+		saveButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				//prikazy pri ulozeni
+			}
+		});
 		
-		placeComponent(tablePane, 0, 3, 5, 1, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0.5, 0.8);
-		table.finishInit(); //graficke nastaveni tabulky se musi provest az po pridani dat
+		
 		// run button
-		JButton runButton = new JButton("Run");
-		placeComponent(runButton, 0, 5, 5, 1, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0.5, 0.1);
+		runButton = new JButton("Run");
+		placeComponent(runButton, 1, 7, 4, 1, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0.5, 0.05);
 		runButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -176,15 +241,15 @@ public class GUIFrame extends JFrame {
 				File rulesFile = new File(rulesField.getText());
 
 				if (!inFile.exists()) {
-					JOptionPane.showMessageDialog(GUIFrame.this, "Input file doesn't exist.");
+					displayMessage("Input file doesn't exists");
 					return;
 				}
 				if (outputField.getText().equals("")) {
-					JOptionPane.showMessageDialog(GUIFrame.this, "Output file not set.");
+					displayMessage("Output file not set.");
 					return;
 				}
 				if (!rulesFile.exists()) {
-					JOptionPane.showMessageDialog(GUIFrame.this, "Rules file doesn't exist.");
+					displayMessage("Rules file doesn't exist.");
 					return;
 				}
 
@@ -233,26 +298,13 @@ public class GUIFrame extends JFrame {
 					}
 					
 					writer.closeFile();
+					displayMessage("Done.");
 				}catch(MaskingException e){
 					JOptionPane.showMessageDialog(GUIFrame.this, e.getMessage());
 					return;
 				}
-
 			}
 		});
 
 	}
 }
-/*
- * JButton button; pane.setLayout(new GridBagLayout()); GridBagConstraints c = new GridBagConstraints(); if (shouldFill)
- * { //natural height, maximum width c.fill = GridBagConstraints.HORIZONTAL; } button = new JButton("Button 1"); if
- * (shouldWeightX) { c.weightx = 0.5; } c.fill = GridBagConstraints.HORIZONTAL; c.gridx = 0; c.gridy = 0;
- * pane.add(button, c); button = new JButton("Button 2"); c.fill = GridBagConstraints.HORIZONTAL; c.weightx = 0.5;
- * c.gridx = 1; c.gridy = 0; pane.add(button, c); button = new JButton("Button 3"); c.fill =
- * GridBagConstraints.HORIZONTAL; c.weightx = 0.5; c.gridx = 2; c.gridy = 0; pane.add(button, c); button = new
- * JButton("Long-Named Button 4"); c.fill = GridBagConstraints.HORIZONTAL; c.ipady = 40; //make this component tall
- * c.weightx = 0.0; c.gridwidth = 3; c.gridx = 0; c.gridy = 1; pane.add(button, c); button = new JButton("5"); c.fill =
- * GridBagConstraints.HORIZONTAL; c.ipady = 0; //reset to default c.weighty = 1.0; //request any extra vertical space
- * c.anchor = GridBagConstraints.PAGE_END; //bottom of space c.insets = new Insets(10,0,0,0); //top padding c.gridx = 1;
- * //aligned with button 2 c.gridwidth = 2; //2 columns wide c.gridy = 2; //third row pane.add(button, c);
- */
