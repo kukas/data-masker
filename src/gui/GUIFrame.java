@@ -164,11 +164,19 @@ public class GUIFrame extends JFrame {
 					JOptionPane.showMessageDialog(GUIFrame.this, "Rules file doesn't exist.");
 					return;
 				}
-				int lines = 10000000;
-				FileReader fReader = new FileReader(inputField.getText());
-				DatabaseReader dReader = new DatabaseReader(fReader.readNLines(3)); // header
-				DatabaseWriter writer = new DatabaseWriter(outputField.getText(), dReader.getHeader());
-				Masker masker = new Masker(rulesField.getText());
+
+				String inputFile = inputField.getText();
+				String outputFile = outputField.getText();
+				String maskingSettingsFile = rulesField.getText();
+				
+				int lines = 100000;
+				int header = 3;
+				
+				FileReader fReader = new FileReader(inputFile);
+				DatabaseReader dReader = new DatabaseReader(fReader.readNLines(header));
+				DatabaseWriter writer = new DatabaseWriter(outputFile, dReader.getHeader());
+				Masker masker = new Masker(maskingSettingsFile);
+
 				/*Masker masker = new Masker();
 				if(!masker.setData(table.getData())){
 					JOptionPane.showMessageDialog(GUIFrame.this, "Invalid data.");
@@ -176,17 +184,26 @@ public class GUIFrame extends JFrame {
 				}*/
 				String[] input;
 				String[][] database;
-				while ((input = fReader.readNLines(lines))[0] != null) {
-					System.out.println("Masking " + input.length + " lines");
+				try {
+					writer.prepareFile();
+				}
+				catch (Exception e) {
+					Logger.log(e.getMessage());
+				}
+				
+				while((input = fReader.readNLines(lines))[0] != null){
+					Logger.debug("Masking "+input.length+" lines");
 					dReader.input = input;
 					database = dReader.read();
 					database = masker.mask(database);
 					try {
-						writer.write(database);
+						writer.append(database);
 					} catch (Exception e) {
 						Logger.log(e.getMessage());
 					}
 				}
+				
+				writer.closeFile();
 			}
 		});
 
