@@ -62,7 +62,7 @@ public class RulesTable extends JTable {
 	public void setData(Vector<Vector<Object>> to) {
 		Vector<String> columnNames = new Vector<String>(Arrays.asList(COLUMNS));
 		tableModel.setDataVector(to, columnNames);
-		addRow();
+		//addRow();
 	}
 
 	private static class DropDownMenuEditor extends AbstractCellEditor implements TableCellEditor {
