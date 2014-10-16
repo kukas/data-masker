@@ -1,1 +1,4 @@
-jmeno;text;5;1
+rcislo;text;11;1;star;1
+jmeno;text;5;12;star;1
+prijmeni;text;20;17;star;1
+telefon;text;9;37;star;1
