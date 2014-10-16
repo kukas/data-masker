@@ -83,11 +83,11 @@ public class GUIFrame extends JFrame {
 				JFileChooser chooser = new JFileChooser();
 				int res = chooser.showOpenDialog(GUIFrame.this);
 				if (res == JFileChooser.APPROVE_OPTION) {
-					inputField.setText(chooser.getSelectedFile().getAbsolutePath());
+					String path = chooser.getSelectedFile().getAbsolutePath();
 				}
 			}
 		});
-
+		
 		// output label
 		JLabel outputLabel = new JLabel("Output file");
 		placeComponent(outputLabel, 0, 1, 1, 1, GridBagConstraints.NONE, GridBagConstraints.LINE_END, 0.5, INPUT_HEIGHT);
@@ -107,7 +107,12 @@ public class GUIFrame extends JFrame {
 				JFileChooser chooser = new JFileChooser();
 				int res = chooser.showOpenDialog(GUIFrame.this);
 				if (res == JFileChooser.APPROVE_OPTION) {
-					outputField.setText(chooser.getSelectedFile().getAbsolutePath());
+					String path = chooser.getSelectedFile().getAbsolutePath();
+					outputField.setText(path);
+					
+					FileReader fr = new FileReader(path);
+					
+					
 				}
 			}
 		});
