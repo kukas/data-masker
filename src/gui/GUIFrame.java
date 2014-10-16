@@ -11,6 +11,8 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.Arrays;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -139,10 +141,16 @@ public class GUIFrame extends JFrame {
 					rulesField.setText(path);
 					FileReader fr = new FileReader(path);
 					String[] popisySloupcu = fr.read();
+					Vector<Vector<Object>> doTabulky = new Vector<Vector<Object>>(popisySloupcu.length);
+					System.out.println(doTabulky.size());
+					for(int i = 0; i < popisySloupcu.length; i++){
+						doTabulky.add( new Vector<Object>(Arrays.asList(popisySloupcu[i].split(";"))));
+					};
+					table.setData(doTabulky);
 				}
 				try{
 				Masker masker = new Masker(rulesField.getText());
-				table.setData(masker.getData());
+				//table.setData(masker.getData());
 				}catch(MaskingException e){
 					JOptionPane.showMessageDialog(GUIFrame.this, e.getMessage());
 					
