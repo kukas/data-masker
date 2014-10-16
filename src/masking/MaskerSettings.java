@@ -74,7 +74,6 @@ public class MaskerSettings extends Exception {
 				
 			case "random_phone_number":
 				return new PhoneNumberRule();
-				
 			case "IBAN":
 				if(numOfParams == 0){
 					return new IbanRule();
@@ -82,7 +81,6 @@ public class MaskerSettings extends Exception {
 					return new IbanRule(arrParams[1]);
 				}
 				return new IbanRule();
-			
 				
 				
 			case "replace_with_random_digits" : 
