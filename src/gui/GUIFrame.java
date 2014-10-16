@@ -196,7 +196,7 @@ public class GUIFrame extends JFrame {
 				}
 			}
 		});
-		upButton = new JButton("Up");
+		upButton = new JButton("Move up");
 		placeComponent(upButton, 5, 5, 1, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_END, 0, 0);
 		upButton.addActionListener(new ActionListener() {
 			@Override
@@ -206,7 +206,7 @@ public class GUIFrame extends JFrame {
 				}
 			}
 		});
-		downButton = new JButton("Down");
+		downButton = new JButton("Move down");
 		placeComponent(downButton, 5, 6, 1, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.FIRST_LINE_END, 0, 0);
 		downButton.addActionListener(new ActionListener() {
 			@Override
