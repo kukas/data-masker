@@ -73,7 +73,7 @@ public class DatabaseWriter {
 						newLine += ' ';
 					}
 				}
-				delimiter = " ";
+				delimiter = "";
 			}
 			writer.println(newLine);
 		}
