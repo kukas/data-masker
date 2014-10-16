@@ -198,8 +198,8 @@ public class GUIFrame extends JFrame {
 				int lines = 100000;
 
 				FileReader fReader = new FileReader(inputFile);
-				DatabaseReader dReader = new DatabaseReader(fReader.readNLines(3));
-				//DatabaseReader dReader = new DatabaseReader(lengths, offsets);
+				//DatabaseReader dReader = new DatabaseReader(fReader.readNLines(3));
+				DatabaseReader dReader = new DatabaseReader(lengths, offsets);
 				DatabaseWriter writer = new DatabaseWriter(outputFile, dReader.getHeader());
 
 
@@ -223,7 +223,7 @@ public class GUIFrame extends JFrame {
 						Logger.log(e.getMessage());
 					}
 					
-					while((input = fReader.readNLines(lines))[0] != null){
+					while((input = fReader.readNLines(lines))[0] != null){System.out.println("Hello");
 						Logger.debug("Masking "+input.length+" lines");
 						dReader.input = input;
 						database = dReader.read();
