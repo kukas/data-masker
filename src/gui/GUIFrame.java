@@ -131,23 +131,39 @@ public class GUIFrame extends JFrame {
 		runButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				int lines = 3;
-				FileReader fReader = new FileReader(inputField.getText());
-				DatabaseReader dReader = new DatabaseReader(fReader.readNLines(3)); //header
-				DatabaseWriter writer = new DatabaseWriter(outputField.getText(), dReader.getHeader());
-				Masker masker = new Masker(rulesField.getText());
+				String inputFile = inputField.getText();
+				String outputFile = outputField.getText();
+				String maskingSettingsFile = rulesField.getText();
+				
+				int lines = 100000;
+				int header = 3;
+				
+				FileReader fReader = new FileReader(inputFile);
+				DatabaseReader dReader = new DatabaseReader(fReader.readNLines(header));
+				DatabaseWriter writer = new DatabaseWriter(outputFile, dReader.getHeader());
+				Masker masker = new Masker(maskingSettingsFile);
 				String[] input;
 				String[][] database;
-				while((input = fReader.readNLines(lines))[0] != null){System.out.println("Masking "+input.length+" lines");
+				try {
+					writer.prepareFile();
+				}
+				catch (Exception e) {
+					Logger.log(e.getMessage());
+				}
+				
+				while((input = fReader.readNLines(lines))[0] != null){
+					Logger.debug("Masking "+input.length+" lines");
 					dReader.input = input;
 					database = dReader.read();
 					database = masker.mask(database);
 					try {
-						writer.write(database);
+						writer.append(database);
 					} catch (Exception e) {
 						Logger.log(e.getMessage());
 					}
 				}
+				
+				writer.closeFile();
 			}
 		});
 
