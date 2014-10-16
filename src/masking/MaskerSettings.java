@@ -17,6 +17,10 @@ public class MaskerSettings extends Exception {
 		
 	}
 	
+	public String[] getSettingStrings() {
+		return settingStrings;
+	}
+	
 	public MaskingRule[] getRules(){
 		MaskingRule[] mRules = new MaskingRule[this.settingStrings.length];
 		for(int i = 0; i < this.settingStrings.length;i++){

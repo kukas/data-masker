@@ -56,7 +56,14 @@ public class Masker {
 	
 	public Vector<Vector<Object>> getData(){
 		//TODO: doplnit metodu, aby vracela data (formát viz RulesTable - 6 slopcu, pravidlo na radek)
-		return null;
+		String[] settingStrings = maskerSettings.getSettingStrings();
+		Vector<Vector<Object>> vB = new Vector<>();
+		for (int i=0; i<settingStrings.length; i++){
+			String[] settingLine = settingStrings[i].split("-");
+			Vector<Object> vA = new Vector(Arrays.asList(settingLine));
+			vB.add(vA);
+		}
+		return vB;
 	}
 	
 	public boolean setData(Vector<Vector<Object>> data){ //vraci, zda se jedna o validni data
@@ -74,8 +81,13 @@ public class Masker {
 		if(size >= 4){
 			int size2 = data.get(4).size();
 			settingStrings = new String[size2];
-			for (int i=0; i<size2; i++){
-				settingStrings[i] = data.get(4).get(i).toString();
+			for (int i=0; i<size; i++){
+				String delimiter = "";
+				settingStrings[i] = "";
+				for (int j=0; j<size2; j++){
+					settingStrings[i] += delimiter + data.get(j).get(i).toString();
+					delimiter = ";";
+				}
 			}
 		}
 		else {
