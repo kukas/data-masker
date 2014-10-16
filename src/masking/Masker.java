@@ -21,6 +21,10 @@ public class Masker {
 		maskingRules = maskerSettings.getRules();
 	}
 
+	public Masker(Vector<Vector<Object>> data) throws MaskingException {
+		setData(data);
+	}
+
 	public String[][] mask(String[][] input, String maskingsSettingFile) throws MaskingException{
 		MaskerSettings mSetting = new MaskerSettings(maskingsSettingFile);
 		MaskingRule[] rules = mSetting.getRules();
@@ -37,7 +41,7 @@ public class Masker {
 		return input;
 	}
 	
-	public String[][] mask(String[][] input){
+	public String[][] mask(String[][] input) throws MaskingException{
 		if (maskingRules.length > input[0].length) {
 			Logger.log("Warning: the number of rules is greater than the number of columns.");
 		}
@@ -57,10 +61,17 @@ public class Masker {
 	
 	public Vector<Vector<Object>> getData(){
 		//TODO: doplnit metodu, aby vracela data (formát viz RulesTable - 6 slopcu, pravidlo na radek)
-		return null;
+		String[] settingStrings = maskerSettings.getSettingStrings();
+		Vector<Vector<Object>> vB = new Vector<>();
+		for (int i=0; i<settingStrings.length; i++){
+			String[] settingLine = settingStrings[i].split(";");
+			Vector<Object> vA = new Vector(Arrays.asList(settingLine));
+			vB.add(vA);
+		}
+		return vB;
 	}
 	
-	public boolean setData(Vector<Vector<Object>> data){ //vraci, zda se jedna o validni data
+	public boolean setData(Vector<Vector<Object>> data) throws MaskingException{ //vraci, zda se jedna o validni data
 		//TODO: doplnit metodu, aby se MaskingRules nastavily podle dat (na MaskerSettings nezalezi)
 		/*
 		 * Ukazka vectoru:
@@ -68,6 +79,40 @@ public class Masker {
 		 * Vector<Vector<Object>> vB = new Vector<>();
 		 * vB.add(vA);
 		*/
-		return false;
+		
+		
+		int size = data.size();
+		Logger.debug(""+size);
+		String[] settingStrings;
+		if(size >= 6){
+			
+			settingStrings = new String[size];
+			for (int i=0; i<size; i++){
+				int size2 = data.get(i).size();
+				System.out.println(i+","+size2);
+				String delimiter = "";
+				settingStrings[i] = "";
+				for (int j=0; j<size2; j++){
+					String whitespace = " ";
+					if(j == size2-1){
+						whitespace = "";
+					}
+					settingStrings[i] += delimiter + ((data.get(i).get(j)==null)?whitespace:data.get(i).get(j).toString());
+					delimiter = ";";
+				}
+				// settingStrings[i] = "a;a;3;4;do_nothing;";
+			}
+			
+			
+		}
+		else {
+			return false;
+		}
+		
+		
+		maskerSettings = new MaskerSettings(settingStrings);
+		maskingRules = maskerSettings.newGetRules();
+		
+		return true;
 	}
 }

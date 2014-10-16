@@ -1,4 +1,5 @@
-rcislo;text;11;1;star;1
-jmeno;text;5;12;star;1
-prijmeni;text;20;17;star;1
-telefon;text;9;37;star;1
+jmeno;text;20;0;star;1
+prijmeni;text;20;20;star;2
+telefon;text;9;40;star;3
+IBAN;text;24;49;star;4
+rodnecislo;text;11;73;star;5
