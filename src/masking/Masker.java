@@ -37,7 +37,7 @@ public class Masker {
 		return input;
 	}
 	
-	public String[][] mask(String[][] input){
+	public String[][] mask(String[][] input) throws MaskingException{
 		if (maskingRules.length > input[0].length) {
 			Logger.log("Warning: the number of rules is greater than the number of columns.");
 		}
