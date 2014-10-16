@@ -132,8 +132,10 @@ public class MaskerSettings extends Exception {
 			}
 
 		default:
-			throw new MaskingException("Bad format line in masking settings file. Undefined rule: \"" + originalString
-					+ "\"");
+			/*throw new MaskingException("Bad format line in masking settings file. Undefined rule: \"" + originalString
+					+ "\"");*/
+			Logger.debug("chyab");
+			return null;
 		}
 	}
 
@@ -144,9 +146,9 @@ public class MaskerSettings extends Exception {
 		if (startPosition == -1 && endPosition == -1) {// nejsou zadne parametry
 			return new String[] { s };
 		}
-		if (startPosition == -1 || endPosition == -1) {// zde by se mela vyhodit chyba
+		/*if (startPosition == -1 || endPosition == -1) {// zde by se mela vyhodit chyba
 			throw new MaskingException("Bad format masking-settings file:\"" + s + "\"");
-		}
+		}*/
 		String funcName = s.substring(0, startPosition);
 		String parametersString = s.substring(startPosition + 1, endPosition);
 		String[] arrParameters = parametersString.split(",");
