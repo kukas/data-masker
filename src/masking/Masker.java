@@ -67,6 +67,25 @@ public class Masker {
 		 * Vector<Vector<Object>> vB = new Vector<>();
 		 * vB.add(vA);
 		*/
-		return false;
+		
+		
+		int size = data.size();
+		String[] settingStrings;
+		if(size >= 4){
+			int size2 = data.get(4).size();
+			settingStrings = new String[size2];
+			for (int i=0; i<size2; i++){
+				settingStrings[i] = data.get(4).get(i).toString();
+			}
+		}
+		else {
+			return false;
+		}
+		
+		
+		maskerSettings = new MaskerSettings(settingStrings);
+		maskingRules = maskerSettings.getRules();
+		
+		return true;
 	}
 }

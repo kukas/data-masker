@@ -12,6 +12,10 @@ public class MaskerSettings extends Exception {
 		this.settingStrings = fReader.read();
 		
 	}
+	public MaskerSettings(String[] settingStrings){
+		this.settingStrings = settingStrings;
+		
+	}
 	
 	public MaskingRule[] getRules(){
 		MaskingRule[] mRules = new MaskingRule[this.settingStrings.length];
