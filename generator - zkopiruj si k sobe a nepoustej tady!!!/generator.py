@@ -10,17 +10,35 @@ print("Priklad: jmeno(20),prijmeni(20)")
 print()
 print("Moznosti: jmeno, prijmeni, rcislo, iban, telefon")
 print()
+print("Pravidla a parametry je nutno psat v poradi zleva pro kazdy sloupec, jinak to spadne nebo udela neco, co nechcete.")
 print("Nic jineho tam nepiste, jinak to spadne.")
 print("pozor na preklepy, jinak to taky spadne.")
 print("Nehledejte v tom bugy, je jich tam plno (a vzdycky bude). Neopravim je.")
 print()
 print("pro Python 2")
 print()
+print("!!STAHNETE SI TO K SOBE A NEGENERUJTE TO NA SERVERU, NEBO SE TO CELY POS...!!")
 
 
 
-vstup = raw_input("piste: ")
+vstup = raw_input("data v tabulce (to co je popsano vyse): ")
 vstup = vstup.split(",")
+
+pravidla = raw_input("maskovaci pravidla (po sloupcich, oddelit strednikem): ")
+pravidla = pravidla.split(";")
+
+parametry = raw_input("parametry (doted netusim jak to ma fungovat, ale to je jedno; oddelit strednikem): ")
+parametry = parametry.split(";")
+
+rules = []
+params = []
+
+for i in pravidla:
+    rules.append(i)
+
+for i in parametry:
+    params.append(i)
+    
 
 radky = int(raw_input("pocet radku: "))
 
@@ -40,7 +58,7 @@ filename = raw_input("jmeno souboru: ")
 meta = open("out\\"+filename+"_meta.txt","w")
 
 for i in range(0,len(jmena),1):
-    meta.write(jmena[i]+";"+"text"+";"+str(delky[i])+";"+str(offset)+"\n")
+    meta.write(jmena[i]+";"+"text"+";"+str(delky[i])+";"+str(offset)+";"+str(rules[i])+";"+params[i]+"\n")
     offset = offset + delky[i]
 
 meta.close()
@@ -179,6 +197,11 @@ for i in range(radky):
 
     db.write(radek+"\n")
 
+    if float(i)/1000 == int(float(i)/1000):
+        print(str(i)+" radku z "+str(radky)+" zapsano.")
+
 db.close()
 
 print("hotovo")
+print("soubor najdes ve slozce out/"+filename+".txt")
+x = raw_input("stiskni enter pro ukonceni")

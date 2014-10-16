@@ -5,6 +5,7 @@ import java.util.Vector;
 
 import log.Logger;
 import masking.rules.MaskingRule;
+import exception.MaskingException;
 
 public class Masker {
 	public MaskerSettings maskerSettings;
@@ -15,12 +16,12 @@ public class Masker {
 
 	}
 	
-	public Masker(String maskingSettingFile){
+	public Masker(String maskingSettingFile) throws MaskingException{
 		maskerSettings = new MaskerSettings(maskingSettingFile);
 		maskingRules = maskerSettings.getRules();
 	}
 
-	public String[][] mask(String[][] input, String maskingsSettingFile) {
+	public String[][] mask(String[][] input, String maskingsSettingFile) throws MaskingException{
 		MaskerSettings mSetting = new MaskerSettings(maskingsSettingFile);
 		MaskingRule[] rules = mSetting.getRules();
 		if (rules.length > input[0].length) {
