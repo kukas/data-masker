@@ -83,7 +83,7 @@ public class GUIFrame extends JFrame {
 				JFileChooser chooser = new JFileChooser();
 				int res = chooser.showOpenDialog(GUIFrame.this);
 				if (res == JFileChooser.APPROVE_OPTION) {
-					String path = chooser.getSelectedFile().getAbsolutePath();
+					inputField.setText(chooser.getSelectedFile().getAbsolutePath());
 				}
 			}
 		});
@@ -136,7 +136,10 @@ public class GUIFrame extends JFrame {
 				JFileChooser chooser = new JFileChooser();
 				int res = chooser.showOpenDialog(GUIFrame.this);
 				if (res == JFileChooser.APPROVE_OPTION) {
-					rulesField.setText(chooser.getSelectedFile().getAbsolutePath());
+					String path = chooser.getSelectedFile().getAbsolutePath();
+					rulesField.setText(path);
+					FileReader fr = new FileReader(path);
+					String[] popisySloupcu = fr.read();
 				}
 				Masker masker = new Masker(rulesField.getText());
 				table.setData(masker.getData());
