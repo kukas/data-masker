@@ -2,7 +2,7 @@ ReplaceWithRandomDigits(0,2)
 star
 ReplaceFromSeedsFile(output/firstNameSeeds.txt)
 do_nothing
-do_nothing
+PhoneNumberRule
 do_nothing
 do_nothing
 do_nothing
