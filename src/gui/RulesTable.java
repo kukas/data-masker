@@ -13,8 +13,8 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
 public class RulesTable extends JTable {
-	final static String[] OPERATIONS = { "do_nothing", "star", "random_number", "ReplaceFromSeedsFile", "random_rc",
-			"PhoneNumberRule", "ReplaceWithRandomDigits" };
+	final static String[] OPERATIONS = { "do_nothing", "star", "random_number", "replace_from_seeds_file", "random_rc",
+			"random_phone_number", "replace_with_random_digits", "IBAN"};
 	final static String[] COLUMNS = { "Name", "Type", "Length", "Offset", "Operation", "Parameters" };
 	final static int ROW_HEIGHT = 20;
 	DefaultTableModel tableModel = new DefaultTableModel(new Object[0][COLUMNS.length], COLUMNS);
@@ -34,6 +34,8 @@ public class RulesTable extends JTable {
 		columnModel.getColumn(4).setCellEditor(new DropDownMenuEditor());
 		this.setRowHeight(ROW_HEIGHT);
 	}
+	
+	
 
 	private void addRow(int i) {
 		int offset = 0;
@@ -73,6 +75,8 @@ public class RulesTable extends JTable {
 	public void setData(Vector<Vector<Object>> to) {
 		Vector<String> columnNames = new Vector<String>(Arrays.asList(COLUMNS));
 		tableModel.setDataVector(to, columnNames);
+		columnModel.getColumn(4).setCellEditor(new DropDownMenuEditor());
+		
 		//addRow();
 	}
 

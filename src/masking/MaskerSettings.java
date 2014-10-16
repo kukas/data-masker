@@ -13,6 +13,14 @@ public class MaskerSettings extends Exception {
 		this.settingStrings = fReader.read();
 		
 	}
+	public MaskerSettings(String[] settingStrings){
+		this.settingStrings = settingStrings;
+		
+	}
+	
+	public String[] getSettingStrings() {
+		return settingStrings;
+	}
 	
 	public MaskingRule[] getRules() throws MaskingException{
 		MaskingRule[] mRules = new MaskingRule[this.settingStrings.length];
@@ -22,7 +30,7 @@ public class MaskerSettings extends Exception {
 		}
 		return mRules;
 	}
-/*
+
 	public MaskingRule[] newGetRules(){
 		MaskingRule[] mRules = new MaskingRule[this.settingStrings.length];
 		for(int i = 0; i < this.settingStrings.length;i++){
@@ -30,7 +38,7 @@ public class MaskerSettings extends Exception {
 		}
 		return mRules;
 	}
-	*/
+	
 	public MaskingRule getRuleByString(String s) throws MaskingException{
 		String[] arrParams = getArrayParams(s);//to vrati v prvnim  prvku jmeno funkce a dalsi prvky jsou parametry
 		int numOfParams = arrParams.length-1;
@@ -105,8 +113,13 @@ public class MaskerSettings extends Exception {
 	public MaskingRule newGetRuleByString(String s){
 		String[] pole = s.split(";");
 		String ruleName = pole[4];
-		String[] arguments = pole[5].split(",");
-		int numOfParams = arguments.length;
+		
+		String[] arguments = new String[0];
+		int numOfParams = 0;
+		if(pole.length > 5){
+			arguments = pole[5].split(",");
+			numOfParams = arguments.length;
+		}
 		
 		switch(ruleName){
 		case "do_nothing":

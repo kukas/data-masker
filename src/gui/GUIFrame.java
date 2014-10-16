@@ -164,16 +164,15 @@ public class GUIFrame extends JFrame {
 					table.setData(doTabulky);
 				}
 				try{
-				Masker masker = new Masker(rulesField.getText());
-				//table.setData(masker.getData());
+					Masker masker = new Masker(rulesField.getText());
 				}catch(MaskingException e){
 					JOptionPane.showMessageDialog(GUIFrame.this, e.getMessage());
 					
 				}
 			}
 		});
-		Masker masker = new Masker();
-		table.setData(masker.getData());
+		//Masker masker = new Masker();
+		//table.setData(masker.getData());
 
 		// big table
 
@@ -247,7 +246,7 @@ public class GUIFrame extends JFrame {
 		
 		// run button
 		runButton = new JButton("Run");
-		placeComponent(runButton, 1, 7, 4, 1, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0.5, 0.05);
+		placeComponent(runButton, 1, 7, 5, 1, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0.5, 0.05);
 		runButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -280,11 +279,11 @@ public class GUIFrame extends JFrame {
 
 
 				try{
-					Masker masker = new Masker(maskingSettingsFile);
-					if(!masker.setData(table.getData())){
+					Masker masker = new Masker(table.getData());
+					/*if(!masker.setData()){
 						JOptionPane.showMessageDialog(GUIFrame.this, "Invalid data.");
 						return;
-					}
+					}*/
 					/*
 				 * Masker masker = new Masker(); if(!masker.setData(table.getData())){
 				 * JOptionPane.showMessageDialog(GUIFrame.this, "Invalid data."); return; }
