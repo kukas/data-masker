@@ -13,10 +13,10 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
 public class RulesTable extends JTable {
-	final static String[] OPERATIONS = { "do_nothing", "star", "random_number", "ReplaceFromSeedsFile", "random_rc", "PhoneNumberRule",
-		"ReplaceWithRandomDigits"};
+	final static String[] OPERATIONS = { "do_nothing", "star", "random_number", "ReplaceFromSeedsFile", "random_rc",
+			"PhoneNumberRule", "ReplaceWithRandomDigits" };
 	final static String[] COLUMNS = { "Name", "Type", "Length", "Offset", "Operation", "Parameters" };
-
+	final static int ROW_HEIGHT = 20;
 	DefaultTableModel tableModel = new DefaultTableModel(new Object[0][COLUMNS.length], COLUMNS);
 	TableColumnModel columnModel;
 
@@ -32,7 +32,7 @@ public class RulesTable extends JTable {
 		columnModel.getColumn(2).setMaxWidth(50);
 		columnModel.getColumn(3).setMaxWidth(50);
 		columnModel.getColumn(4).setCellEditor(new DropDownMenuEditor());
-		this.setRowHeight(30);
+		this.setRowHeight(ROW_HEIGHT);
 	}
 
 	private void addRow(int i) {
@@ -47,12 +47,23 @@ public class RulesTable extends JTable {
 		tableModel.insertRow(i, new String[] { "", "text", "1", offset + "" });
 	}
 
-	private void addRow() {
+	public void addRow() {
 		addRow(tableModel.getRowCount());
 	}
 
-	private void removeRow(int i) {
+	public void removeRow(int i) {
 		tableModel.removeRow(i);
+	}
+
+	public boolean moveRowBy(int row, int by) { //vraci uspech
+		if (row < 0 || row >= tableModel.getRowCount()) {
+			return false;
+		}
+		if (row + by < 0 || row + by >= tableModel.getRowCount()) {
+			return false;
+		}
+		tableModel.moveRow(row, row, row + by);
+		return true;
 	}
 
 	public Vector<Vector<Object>> getData() {
@@ -62,7 +73,7 @@ public class RulesTable extends JTable {
 	public void setData(Vector<Vector<Object>> to) {
 		Vector<String> columnNames = new Vector<String>(Arrays.asList(COLUMNS));
 		tableModel.setDataVector(to, columnNames);
-		addRow();
+		//addRow();
 	}
 
 	private static class DropDownMenuEditor extends AbstractCellEditor implements TableCellEditor {
