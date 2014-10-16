@@ -2,7 +2,7 @@ package masking.rules;
 
 import java.math.BigInteger;
 
-import log.Logger;
+import exception.MaskingException;
 
 public class IbanRule implements MaskingRule{
 		
@@ -17,7 +17,7 @@ public class IbanRule implements MaskingRule{
 	}
 	
 	@Override
-	public String mask(String in) {
+	public String mask(String in) throws MaskingException{
 		String accNumber = in.substring(4);
 		RandomDigitRule randomizeAccNumber = new RandomDigitRule(true);
 		accNumber = randomizeAccNumber.mask(accNumber);

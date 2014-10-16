@@ -31,7 +31,7 @@ public class MaskerSettings extends Exception {
 		return mRules;
 	}
 
-	public MaskingRule[] newGetRules(){
+	public MaskingRule[] newGetRules() throws MaskingException{
 		MaskingRule[] mRules = new MaskingRule[this.settingStrings.length];
 		for(int i = 0; i < this.settingStrings.length;i++){
 			mRules[i] = newGetRuleByString(this.settingStrings[i]);
@@ -40,9 +40,29 @@ public class MaskerSettings extends Exception {
 	}
 	
 	public MaskingRule getRuleByString(String s) throws MaskingException{
-		String[] arrParams = getArrayParams(s);//to vrati v prvnim  prvku jmeno funkce a dalsi prvky jsou parametry
-		int numOfParams = arrParams.length-1;
-		switch(arrParams[0]){
+		String[] arrData = getArrayParams(s);//to vrati v prvnim  prvku jmeno funkce a dalsi prvky jsou parametry
+		String funcName = arrData[0];
+		String[] arrParams = new String[arrData.length-1];
+		for(int i = 0; i < arrParams.length; i++){
+			arrParams[i] = arrData[i+1];
+		}
+		return getRuleByRuleName(funcName,arrParams,s);
+		//return new NothingRule();
+	}
+	
+	public MaskingRule newGetRuleByString(String s) throws MaskingException {
+		String[] pole = s.split(";");
+		String ruleName = pole[4];
+		String[] arguments = pole[5].split(",");
+		int numOfParams = arguments.length;
+		
+		return getRuleByRuleName(ruleName,arguments,s);
+	}
+	
+	//originalString je jen pro moznost vyhodit chybu s popiskem...
+	public MaskingRule getRuleByRuleName(String funcName,String[] arrParams, String originalString) throws MaskingException{
+		int numOfParams = arrParams.length;
+		switch(funcName){
 			case "do_nothing":
 				return new NothingRule();
 
@@ -52,9 +72,9 @@ public class MaskerSettings extends Exception {
 				}
 				else {
 					if(numOfParams == 1){
-						return new StarsRule(0,Integer.parseInt(arrParams[1]));
+						return new StarsRule(0,Integer.parseInt(arrParams[0]));
 					} else {
-						return new StarsRule(Integer.parseInt(arrParams[1]), Integer.parseInt(arrParams[2]));
+						return new StarsRule(Integer.parseInt(arrParams[0]), Integer.parseInt(arrParams[1]));
 					}
 				}
 				
@@ -64,8 +84,8 @@ public class MaskerSettings extends Exception {
 					int min = 0;
 					int max = 0;
 					try{
-						min = Integer.parseInt(arrParams[1]);
-						max = Integer.parseInt(arrParams[2]);
+						min = Integer.parseInt(arrParams[0]);
+						max = Integer.parseInt(arrParams[1]);
 					}catch(Exception e){
 						throw new MaskingException("Bad parametrs for random number");
 					}
@@ -75,7 +95,7 @@ public class MaskerSettings extends Exception {
 				}
 				
 			case "replace_from_seeds_file" :
-				return new ReplaceRule(arrParams[1]);
+				return new ReplaceRule(arrParams[0]);
 	
 			case "random_rc":
 				return new RandomRCRule();
@@ -86,7 +106,7 @@ public class MaskerSettings extends Exception {
 				if(numOfParams == 0){
 					return new IbanRule();
 				}else if(numOfParams == 1){
-					return new IbanRule(arrParams[1]);
+					return new IbanRule(arrParams[0]);
 				}
 				return new IbanRule();
 				
@@ -96,87 +116,20 @@ public class MaskerSettings extends Exception {
 					if(numOfParams == 0){
 						return new RandomDigitRule(true);
 					}else {if(numOfParams == 1){
-						return new RandomDigitRule(0,Integer.parseInt(arrParams[1]));
+						return new RandomDigitRule(0,Integer.parseInt(arrParams[0]));
 					} else {
-						return new RandomDigitRule(Integer.parseInt(arrParams[1]), Integer.parseInt(arrParams[2]));
+						return new RandomDigitRule(Integer.parseInt(arrParams[0]), Integer.parseInt(arrParams[1]));
 					}}
 				}catch(Exception e){
 					throw new MaskingException("Bad format for replace_with_random_digits");
 				}
 			
 			default:
-				throw new MaskingException("Bad format line in masking settings file. Undefined rule: \""+s+"\"");
+				throw new MaskingException("Bad format line in masking settings file. Undefined rule: \""+originalString+"\"");
 		}
-		//return new NothingRule();
 	}
 	
-	public MaskingRule newGetRuleByString(String s){
-		String[] pole = s.split(";");
-		String ruleName = pole[4];
-		
-		String[] arguments = new String[0];
-		int numOfParams = 0;
-		if(pole.length > 5){
-			arguments = pole[5].split(",");
-			numOfParams = arguments.length;
-		}
-		
-		switch(ruleName){
-		case "do_nothing":
-			return new NothingRule();
-
-		case "star":
-			if (numOfParams == 0){
-				return new StarsRule();
-			}
-			else {
-				if(numOfParams == 1){
-					return new StarsRule(0,Integer.parseInt(arguments[0]));
-				} else {
-					return new StarsRule(Integer.parseInt(arguments[0]), Integer.parseInt(arguments[1]));
-				}
-			}
-			
-
-		case "random_number":
-			if(numOfParams==2){
-				int min = 0;
-				int max = 0;
-				try{
-					min = Integer.parseInt(arguments[0]);
-					max = Integer.parseInt(arguments[1]);
-				}catch(Exception e){
-					Logger.log("Bad parametrs for random number");
-				}
-				return new RandomNumberRule(min,max);
-			}else{
-				return new RandomNumberRule();
-			}
-			
-		case "ReplaceFromSeedsFile" :
-			return new ReplaceRule(arguments[0]);
-
-		case "random_rc":
-			return new RandomRCRule();
-			
-		case "PhoneNumberRule":
-			return new PhoneNumberRule();
-
-			
-		case "ReplaceWithRandomDigits" : 
-			if(numOfParams == 0){
-				return new RandomDigitRule(true);
-			}else {if(numOfParams == 1){
-				return new RandomDigitRule(0,Integer.parseInt(arguments[0]));
-			} else {
-				return new RandomDigitRule(Integer.parseInt(arguments[0]), Integer.parseInt(arguments[1]));
-			}}
-		
-		default:
-			Logger.log("Bad format line in masking settings file. / "+s);
-	}
-	return new NothingRule();
-	}
+	
 	
 	//rozdeli radek na jednotlive parametry (napr. random_number;4;9 => array("random_number","4","9"))
 	public static String[] getArrayParams(String s) throws MaskingException{

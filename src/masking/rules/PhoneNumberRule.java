@@ -1,9 +1,11 @@
 package masking.rules;
 
+import exception.MaskingException;
+
 public class PhoneNumberRule implements MaskingRule{
 	
 	@Override
-	public String mask(String in) {
+	public String mask(String in) throws MaskingException{
 		String noSpace = in.replaceAll(" ", "");
 		//System.out.println("nospace: " + noSpace);
 		String firstThreeDigits = noSpace.substring(0,3);
