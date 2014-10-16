@@ -13,6 +13,14 @@ public class MaskerSettings extends Exception {
 		this.settingStrings = fReader.read();
 		
 	}
+	public MaskerSettings(String[] settingStrings){
+		this.settingStrings = settingStrings;
+		
+	}
+	
+	public String[] getSettingStrings() {
+		return settingStrings;
+	}
 	
 	public MaskingRule[] getRules() throws MaskingException{
 		MaskingRule[] mRules = new MaskingRule[this.settingStrings.length];
@@ -22,15 +30,15 @@ public class MaskerSettings extends Exception {
 		}
 		return mRules;
 	}
-/*
-	public MaskingRule[] newGetRules(){
+
+	public MaskingRule[] newGetRules() throws MaskingException{
 		MaskingRule[] mRules = new MaskingRule[this.settingStrings.length];
 		for(int i = 0; i < this.settingStrings.length;i++){
 			mRules[i] = newGetRuleByString(this.settingStrings[i]);
 		}
 		return mRules;
 	}
-	*/
+	
 	public MaskingRule getRuleByString(String s) throws MaskingException{
 		String[] arrData = getArrayParams(s);//to vrati v prvnim  prvku jmeno funkce a dalsi prvky jsou parametry
 		String funcName = arrData[0];
@@ -38,7 +46,7 @@ public class MaskerSettings extends Exception {
 		for(int i = 0; i < arrParams.length; i++){
 			arrParams[i] = arrData[i+1];
 		}
-		return getRuleByRuleName(arrData[0],arrParams,s);
+		return getRuleByRuleName(funcName,arrParams,s);
 		//return new NothingRule();
 	}
 	
@@ -120,6 +128,8 @@ public class MaskerSettings extends Exception {
 				throw new MaskingException("Bad format line in masking settings file. Undefined rule: \""+originalString+"\"");
 		}
 	}
+	
+	
 	
 	//rozdeli radek na jednotlive parametry (napr. random_number;4;9 => array("random_number","4","9"))
 	public static String[] getArrayParams(String s) throws MaskingException{
