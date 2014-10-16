@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Vector;
 
 import javax.swing.AbstractCellEditor;
+import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -14,7 +15,7 @@ import javax.swing.table.TableModel;
 
 public class RulesTable extends JTable {
 	final static String[] OPERATIONS = { "do_nothing", "star", "random_number", "replace_from_seeds_file", "random_rc",
-			"random_phone_number", "replace_with_random_digits", "IBAN"};
+			"random_phone_number", "replace_with_random_digits", "IBAN" };
 	final static String[] COLUMNS = { "Name", "Type", "Length", "Offset", "Operation", "Parameters" };
 	final static int ROW_HEIGHT = 20;
 	DefaultTableModel tableModel = new DefaultTableModel(new Object[0][COLUMNS.length], COLUMNS);
@@ -31,11 +32,13 @@ public class RulesTable extends JTable {
 		columnModel.getColumn(1).setMaxWidth(50);
 		columnModel.getColumn(2).setMaxWidth(50);
 		columnModel.getColumn(3).setMaxWidth(50);
-		columnModel.getColumn(4).setCellEditor(new DropDownMenuEditor());
+
+		JComboBox jcb = new JComboBox(OPERATIONS);
+		
+		DefaultCellEditor dce = new DefaultCellEditor(jcb);
+		columnModel.getColumn(4).setCellEditor(dce);
 		this.setRowHeight(ROW_HEIGHT);
 	}
-	
-	
 
 	private void addRow(int i) {
 		int offset = 0;
@@ -57,7 +60,7 @@ public class RulesTable extends JTable {
 		tableModel.removeRow(i);
 	}
 
-	public boolean moveRowBy(int row, int by) { //vraci uspech
+	public boolean moveRowBy(int row, int by) { // vraci uspech
 		if (row < 0 || row >= tableModel.getRowCount()) {
 			return false;
 		}
@@ -75,34 +78,7 @@ public class RulesTable extends JTable {
 	public void setData(Vector<Vector<Object>> to) {
 		Vector<String> columnNames = new Vector<String>(Arrays.asList(COLUMNS));
 		tableModel.setDataVector(to, columnNames);
-		columnModel.getColumn(4).setCellEditor(new DropDownMenuEditor());
-		
-		//addRow();
-	}
-
-	private static class DropDownMenuEditor extends AbstractCellEditor implements TableCellEditor {
-
-		private JComboBox editor;
-
-		public DropDownMenuEditor() {
-			editor = new JComboBox(OPERATIONS);
-		}
-
-		@Override
-		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int rowIndex,
-				int colIndex) {
-			if (isSelected) {
-				editor.setSelectedItem(value);
-				TableModel model = table.getModel();
-				model.setValueAt(value, rowIndex, colIndex);
-			}
-
-			return editor;
-		}
-
-		@Override
-		public Object getCellEditorValue() {
-			return editor.getSelectedItem();
-		}
+		finishInit();
+		// addRow();
 	}
 }
