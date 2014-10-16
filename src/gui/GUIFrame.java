@@ -11,8 +11,6 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.Arrays;
-import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -25,6 +23,7 @@ import javax.swing.JTextField;
 import log.Logger;
 import masking.Masker;
 import output.DatabaseWriter;
+import exception.MaskingException;
 
 public class GUIFrame extends JFrame {
 	public static void main(String[] args) {
@@ -133,8 +132,13 @@ public class GUIFrame extends JFrame {
 				if (res == JFileChooser.APPROVE_OPTION) {
 					rulesField.setText(chooser.getSelectedFile().getAbsolutePath());
 				}
+				try{
 				Masker masker = new Masker(rulesField.getText());
 				table.setData(masker.getData());
+				}catch(MaskingException e){
+					JOptionPane.showMessageDialog(GUIFrame.this, e.getMessage());
+					
+				}
 			}
 		});
 
@@ -175,33 +179,38 @@ public class GUIFrame extends JFrame {
 				FileReader fReader = new FileReader(inputFile);
 				DatabaseReader dReader = new DatabaseReader(fReader.readNLines(header));
 				DatabaseWriter writer = new DatabaseWriter(outputFile, dReader.getHeader());
-				Masker masker = new Masker(maskingSettingsFile);
-				if(!masker.setData(table.getData())){
-					JOptionPane.showMessageDialog(GUIFrame.this, "Invalid data.");
-					return;
-				}
-				String[] input;
-				String[][] database;
-				try {
-					writer.prepareFile();
-				}
-				catch (Exception e) {
-					Logger.log(e.getMessage());
-				}
-				
-				while((input = fReader.readNLines(lines))[0] != null){
-					Logger.debug("Masking "+input.length+" lines");
-					dReader.input = input;
-					database = dReader.read();
-					database = masker.mask(database);
+				try{
+					Masker masker = new Masker(maskingSettingsFile);
+					if(!masker.setData(table.getData())){
+						JOptionPane.showMessageDialog(GUIFrame.this, "Invalid data.");
+						return;
+					}
+					String[] input;
+					String[][] database;
 					try {
-						writer.append(database);
-					} catch (Exception e) {
+						writer.prepareFile();
+					}
+					catch (Exception e) {
 						Logger.log(e.getMessage());
 					}
+					
+					while((input = fReader.readNLines(lines))[0] != null){
+						Logger.debug("Masking "+input.length+" lines");
+						dReader.input = input;
+						database = dReader.read();
+						database = masker.mask(database);
+						try {
+							writer.append(database);
+						} catch (Exception e) {
+							Logger.log(e.getMessage());
+						}
+					}
+					
+					writer.closeFile();
+				}catch(MaskingException e){
+					JOptionPane.showMessageDialog(GUIFrame.this, e.getMessage());
+					return;
 				}
-				
-				writer.closeFile();
 			}
 		});
 
