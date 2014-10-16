@@ -28,7 +28,6 @@ public class MaskerSettings extends Exception {
 	public MaskingRule[] getRules() throws MaskingException {
 		MaskingRule[] mRules = new MaskingRule[this.settingStrings.length];
 		for (int i = 0; i < this.settingStrings.length; i++) {
-			Logger.debug("radek " + (i + 1));
 			mRules[i] = getRuleByString(this.settingStrings[i]);
 		}
 		return mRules;

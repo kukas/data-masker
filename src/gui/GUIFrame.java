@@ -153,7 +153,6 @@ public class GUIFrame extends JFrame {
 					FileReader fr = new FileReader(path);
 					String[] popisySloupcu = fr.read();
 					Vector<Vector<Object>> doTabulky = new Vector<Vector<Object>>(popisySloupcu.length);
-					System.out.println(doTabulky.size());
 					for(int i = 0; i < popisySloupcu.length; i++){
 						doTabulky.add( new Vector<Object>(Arrays.asList(popisySloupcu[i].split(";"))));
 					};
@@ -302,10 +301,10 @@ public class GUIFrame extends JFrame {
 						Logger.log(e.getMessage());
 					}
 					
-					while((input = fReader.readNLines(lines))[0] != null){System.out.println("Hello");
+					while((input = fReader.readNLines(lines))[0] != null){
 						Logger.debug("Masking "+input.length+" lines");
 						dReader.input = input;
-						database = dReader.read();System.out.println(database[0][0]);
+						database = dReader.read();
 						database = masker.mask(database);
 						try {
 							writer.append(database);
