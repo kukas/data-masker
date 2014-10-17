@@ -251,7 +251,7 @@ public class GUIFrame extends JFrame {
 				File rulesFile = new File(rulesField.getText());
 
 				if (!inFile.exists()) {
-					displayMessage("Input file doesn't exists");
+					displayMessage("Input file doesn't exist.");
 					return;
 				}
 				if (outputField.getText().equals("")) {
@@ -298,7 +298,7 @@ public class GUIFrame extends JFrame {
 					try {
 						writer.prepareFile();
 					} catch (Exception e) {
-						System.err.println(e.getMessage());
+						e.printStackTrace();
 					}
 
 					while ((input = fReader.readNLines(lines))[0] != null) {
@@ -309,7 +309,7 @@ public class GUIFrame extends JFrame {
 							writer.append(database, input);
 							//writer.append(input, database);
 						} catch (Exception e) {
-							System.err.println(e.getMessage());
+							e.printStackTrace();
 						}
 					}
 
