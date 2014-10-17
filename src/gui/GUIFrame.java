@@ -42,6 +42,8 @@ public class GUIFrame extends JFrame {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 	}
+	
+	private String currentDir = null;
 
 	private static final Insets DEFAULT_INSETS = new Insets(5, 5, 5, 5);
 	private static final double INPUT_HEIGHT = 0;
@@ -101,8 +103,21 @@ public class GUIFrame extends JFrame {
 		JScrollPane scroll = new JScrollPane(logs, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
 		final Logger logger = new Logger(logs, scroll);
-		placeComponent(scroll, 1, 7, 4, 2, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0, 0);
-
+		placeComponent(scroll, 1, 7, 4, 2,  GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0, 0);
+		
+		logger.logGUI(
+				"                  ,.\n" +
+				"                 (\\(\\)\n" +
+				" ,_              ;  o >\n" +
+				"  {`-.          /  (_) \n" +
+				"  `={\\`-._____/`   |\n" +
+				"   `-{ /    -=`\\   |\n" +
+				"    `={  -= = _/   /\n" +
+				"       `\\  .-'   /`\n" +
+				"        {`-,__.'===,_\n" +
+				"        //`        `\\\n" +
+				"       //\n" +
+				"      `\\=\n");
 		// input label
 		inputLabel = new JLabel("Input file");
 		placeComponent(inputLabel, 0, 0, 1, 1, GridBagConstraints.NONE, GridBagConstraints.LINE_END, 0, INPUT_HEIGHT);
@@ -120,11 +135,19 @@ public class GUIFrame extends JFrame {
 		inputButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				JFileChooser chooser = new JFileChooser();
-				logger.logGUI("Choosing file ...");
+				String dir = inputField.getText();
+				if (inputField.getText().equals("")) {
+					dir = currentDir;
+				}
+				
+				JFileChooser chooser = new JFileChooser(dir);
+
 				int res = chooser.showOpenDialog(GUIFrame.this);
+				
 				if (res == JFileChooser.APPROVE_OPTION) {
 					inputField.setText(chooser.getSelectedFile().getAbsolutePath());
+					
+					currentDir = chooser.getSelectedFile().getParent();
 				}
 				cfg.config[0] = inputField.getText();
 				cfg.write(cfg.config);
@@ -148,11 +171,18 @@ public class GUIFrame extends JFrame {
 		outputButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				JFileChooser chooser = new JFileChooser();
-				logger.logGUI("Choosing file ...");
+				String dir = outputField.getText();
+				if (outputField.getText().equals("")) {
+					dir = currentDir;
+				}
+				
+				JFileChooser chooser = new JFileChooser(dir);
 				int res = chooser.showOpenDialog(GUIFrame.this);
+				
 				if (res == JFileChooser.APPROVE_OPTION) {
 					outputField.setText(chooser.getSelectedFile().getAbsolutePath());
+					
+					currentDir = chooser.getSelectedFile().getParent();
 				}
 				cfg.config[0] = inputField.getText();
 				cfg.config[1] = outputField.getText();
@@ -192,9 +222,14 @@ public class GUIFrame extends JFrame {
 		rulesButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				JFileChooser chooser = new JFileChooser();
-				logger.logGUI("Choosing file ...");
+				String dir = rulesField.getText();
+				if (outputField.getText().equals("")) {
+					dir = currentDir;
+				}
+				
+				JFileChooser chooser = new JFileChooser(dir);
 				int res = chooser.showOpenDialog(GUIFrame.this);
+				
 				if (res == JFileChooser.APPROVE_OPTION) {
 					String path = chooser.getSelectedFile().getAbsolutePath();
 					rulesField.setText(path);
@@ -339,7 +374,7 @@ public class GUIFrame extends JFrame {
 					try {
 						lengths[i] = Integer.parseInt((String) tableDATA.get(i).get(2));
 					} catch (NumberFormatException e) {
-						displayMessage("Invalid length on column " + (i + 1) + ": "
+						displayMessage("Invalid length argument at column " + (i + 1) + ": "
 								+ tableDATA.get(i).get(2).toString());
 						return;
 					}
@@ -347,19 +382,19 @@ public class GUIFrame extends JFrame {
 					try {
 						offsets[i] = Integer.parseInt((String) tableDATA.get(i).get(3));
 					} catch (NumberFormatException e) {
-						displayMessage("Invalid offset on column " + (i + 1) + ": "
+						displayMessage("Invalid offset argument at column " + (i + 1) + ": "
 								+ tableDATA.get(i).get(3).toString());
 						return;
 					}
 
 					if (lengths[i] < 1) {
-						displayMessage("Invalid length on column " + (i + 1) + ": "
+						displayMessage("Invalid length argument at column " + (i + 1) + ": "
 								+ tableDATA.get(i).get(2).toString());
 						return;
 					}
 
 					if (offsets[i] < 0) {
-						displayMessage("Invalid offset on column " + (i + 1) + ": "
+						displayMessage("Invalid offset argument at column " + (i + 1) + ": "
 								+ tableDATA.get(i).get(3).toString());
 						return;
 					}
@@ -380,11 +415,8 @@ public class GUIFrame extends JFrame {
 						rowLength = firstLines[i].length();
 					}
 				}
-
 				if (rowLength > 0) {
 					for (int i = 0; i < lengths.length; i++) {
-						System.out.println(rowLength + " " + lengths[i] + " " + offsets[i] + " "
-								+ (offsets[i] + lengths[i]));
 						if (offsets[i] + lengths[i] > rowLength) {
 							displayMessage("Column " + (i + 1) + " is out of range.");
 							return;
@@ -396,7 +428,7 @@ public class GUIFrame extends JFrame {
 				}
 
 				if (table.getRowCount() == 0) {
-					displayMessage("No changes inputted.");
+					displayMessage("No masking rules specified. Masking aborted.");
 					return;
 				}
 
