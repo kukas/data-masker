@@ -97,7 +97,7 @@ public class GUIFrame extends JFrame {
 		inputButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				JFileChooser chooser = new JFileChooser();
+				JFileChooser chooser = new JFileChooser(inputField.getText());
 				int res = chooser.showOpenDialog(GUIFrame.this);
 				if (res == JFileChooser.APPROVE_OPTION) {
 					inputField.setText(chooser.getSelectedFile().getAbsolutePath());
@@ -121,7 +121,7 @@ public class GUIFrame extends JFrame {
 		outputButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				JFileChooser chooser = new JFileChooser();
+				JFileChooser chooser = new JFileChooser(outputField.getText());
 				int res = chooser.showOpenDialog(GUIFrame.this);
 				if (res == JFileChooser.APPROVE_OPTION) {
 					outputField.setText(chooser.getSelectedFile().getAbsolutePath());
@@ -224,7 +224,7 @@ public class GUIFrame extends JFrame {
 				//prikazy pri ulozeni
 				SettingsWriter writ = new SettingsWriter();
 				
-				JFileChooser chooser = new JFileChooser();
+				JFileChooser chooser = new JFileChooser(rulesField.getText());
 				int res = chooser.showSaveDialog(GUIFrame.this);
 				if (res == JFileChooser.APPROVE_OPTION) {
 					String address = chooser.getSelectedFile().getAbsolutePath();
