@@ -317,7 +317,6 @@ public class GUIFrame extends JFrame {
 				
 				if(rowLength > 0){
 					for(int i=0; i<lengths.length; i++){
-						System.out.println(rowLength+" "+lengths[i]+" "+offsets[i]+" "+(offsets[i]+lengths[i]));
 						if(offsets[i]+lengths[i] > rowLength){
 							displayMessage("Column "+(i+1)+" is out of range.");
 							return;
