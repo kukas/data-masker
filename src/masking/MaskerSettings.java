@@ -60,6 +60,8 @@ public class MaskerSettings extends Exception {
 			int numOfParams = arguments.length;
 
 			return getRuleByRuleName(ruleName, arguments, s);
+		}else{
+			//throw new MaskingException("Wrong format setting_masking file (wrong number of parts in line)");
 		}
 
 		return getRuleByRuleName(ruleName, new String[0], s);
@@ -95,7 +97,7 @@ public class MaskerSettings extends Exception {
 							throw new MaskingException("Start position is bigger than end position");
 						}
 						
-						return new StarsRule(start, end);
+						return new StarsRule(correctStart, correctEnd);
 					}else{
 						throw new MaskingException("In star rule are too much parametrs");
 					}
