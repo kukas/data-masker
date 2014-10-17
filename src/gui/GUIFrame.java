@@ -230,6 +230,8 @@ public class GUIFrame extends JFrame {
 					String address = chooser.getSelectedFile().getAbsolutePath();
 					if(!address.endsWith(".txt")){
 						address+= ".txt";
+						
+						rulesField.setText(address);
 					}
 					writ.write(address, table.getData());
 				}
