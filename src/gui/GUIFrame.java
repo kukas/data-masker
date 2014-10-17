@@ -289,12 +289,12 @@ public class GUIFrame extends JFrame {
 					
 					
 					if(lengths[i] < 1){
-						displayMessage("Invalid length on column "+(i+1)+": "+lengths[i]);
+						displayMessage("Invalid length on column "+(i+1)+": "+tableDATA.get(i).get(2).toString());
 						return;
 					}
 						
 					if(offsets[i] < 0){
-						displayMessage("Invalid offset on column "+(i+1)+": "+offsets[i]);
+						displayMessage("Invalid offset on column "+(i+1)+": "+tableDATA.get(i).get(3).toString());
 						return;
 					}
 				};
@@ -302,9 +302,31 @@ public class GUIFrame extends JFrame {
 				int lines = 100000;
 
 				FileReader fReader = new FileReader(inputFile);
-				//DatabaseReader dReader = new DatabaseReader(fReader.readNLines(3));
 				DatabaseReader dReader = new DatabaseReader(lengths, offsets);
 				DatabaseWriter writer = new DatabaseWriter(outputFile, dReader.getHeader());
+				
+				FileReader lineLengthReader = new FileReader(inputFile);
+				String[] firstLines = lineLengthReader.readNLines(20);
+				int rowLength = 0;
+				for(int i=0; i<firstLines.length; i++){
+					if(firstLines[i].length() > rowLength){
+						rowLength = firstLines[i].length();
+					}
+				}
+				
+				if(rowLength > 0){
+					for(int i=0; i<lengths.length; i++){
+						System.out.println(rowLength+" "+lengths[i]+" "+offsets[i]+" "+(offsets[i]+lengths[i]));
+						if(offsets[i]+lengths[i] > rowLength){
+							displayMessage("Column "+(i+1)+" is out of range.");
+							return;
+						}
+					}
+				}
+				else {
+					displayMessage("Input file is empty.");
+					return;
+				}
 
 
 				try{
