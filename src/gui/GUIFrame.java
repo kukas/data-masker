@@ -41,6 +41,8 @@ public class GUIFrame extends JFrame {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 	}
+	
+	private String currentDir = null;
 
 	private static final Insets DEFAULT_INSETS = new Insets(5, 5, 5, 5);
 	private static final double INPUT_HEIGHT = 0;
@@ -97,10 +99,18 @@ public class GUIFrame extends JFrame {
 		inputButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				JFileChooser chooser = new JFileChooser(inputField.getText());
+				String dir = inputField.getText();
+				if (inputField.getText().equals("")) {
+					dir = currentDir;
+				}
+				
+				JFileChooser chooser = new JFileChooser(dir);
 				int res = chooser.showOpenDialog(GUIFrame.this);
+				
 				if (res == JFileChooser.APPROVE_OPTION) {
 					inputField.setText(chooser.getSelectedFile().getAbsolutePath());
+					
+					currentDir = chooser.getSelectedFile().getParent();
 				}
 			}
 		});
@@ -121,10 +131,18 @@ public class GUIFrame extends JFrame {
 		outputButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				JFileChooser chooser = new JFileChooser(outputField.getText());
+				String dir = outputField.getText();
+				if (outputField.getText().equals("")) {
+					dir = currentDir;
+				}
+				
+				JFileChooser chooser = new JFileChooser(dir);
 				int res = chooser.showOpenDialog(GUIFrame.this);
+				
 				if (res == JFileChooser.APPROVE_OPTION) {
 					outputField.setText(chooser.getSelectedFile().getAbsolutePath());
+					
+					currentDir = chooser.getSelectedFile().getParent();
 				}
 			}
 		});
@@ -145,8 +163,14 @@ public class GUIFrame extends JFrame {
 		rulesButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				JFileChooser chooser = new JFileChooser();
+				String dir = rulesField.getText();
+				if (outputField.getText().equals("")) {
+					dir = currentDir;
+				}
+				
+				JFileChooser chooser = new JFileChooser(dir);
 				int res = chooser.showOpenDialog(GUIFrame.this);
+				
 				if (res == JFileChooser.APPROVE_OPTION) {
 					String path = chooser.getSelectedFile().getAbsolutePath();
 					rulesField.setText(path);
@@ -156,7 +180,8 @@ public class GUIFrame extends JFrame {
 					for (int i = 0; i < popisySloupcu.length; i++) {
 						doTabulky.add(new Vector<Object>(Arrays.asList(popisySloupcu[i].split(";"))));
 					}
-					;
+					
+					currentDir = chooser.getSelectedFile().getParent();
 					table.setData(doTabulky);
 				}
 				try {
