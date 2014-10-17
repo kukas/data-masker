@@ -30,6 +30,7 @@ public class SettingsWriter {
 				}
 				bw.write(s);
 				bw.newLine();
+				bw.close();
 			}
 			bw.flush();
 		} catch (IOException e) {
