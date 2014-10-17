@@ -21,7 +21,6 @@ public class DatabaseReader {
 	public String[][] read() {
 		int[] lengths = header.getLengths();
 		int[] offsets = header.getOffsets();
-		System.out.println(lengths[0]);
 		String[][] result = new String[input.length][offsets.length];
 		int curPos;
 		for (int i = 0; i < input.length; i++) {

@@ -43,7 +43,7 @@ public class FileReader {
 				}
 			}
 			catch (IOException ex){
-				System.out.println();
+				System.err.println();
 			}
 		}
 		else{
@@ -61,8 +61,8 @@ public class FileReader {
 				return line;
 			}
 			catch (IOException ex){
-				System.out.println("Ztracen reader v read line");
-				System.out.println(ex);
+				System.err.println("Ztracen reader v read line");
+				System.err.println(ex);
 				return null;
 			}
 		}
@@ -80,7 +80,7 @@ public class FileReader {
 			return true;
 		}
 		catch (IOException ex) {
-			System.out.println(ex);
+			System.err.println(ex);
 			initialized = false;
 			return false;
 		}
@@ -124,7 +124,7 @@ public class FileReader {
 			return lines.toArray(new String[0]);
 		}
 		catch (IOException ex) {
-			System.out.println(ex);
+			System.err.println(ex);
 		}
 		return null;
 	}

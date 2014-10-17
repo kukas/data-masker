@@ -50,24 +50,23 @@ public class Logic {
 				writer.prepareFile();
 			}
 			catch (Exception e) {
-				Logger.log(e.getMessage());
+				System.err.println(e.getMessage());
 			}
 			
 			while((input = fReader.readNLines(lines))[0] != null){
-				Logger.debug("Masking "+input.length+" lines");
 				dReader.input = input;
 				database = dReader.read();
 				database = masker.mask(database);
 				try {
 					writer.append(database);
 				} catch (Exception e) {
-					Logger.log(e.getMessage());
+					System.err.println(e.getMessage());
 				}
 			}
 			
 			writer.closeFile();
 		}catch(MaskingException e){
-			Logger.debug("Error: "+e.getMessage());
+			System.err.println("Error: "+e.getMessage());
 		}
 	}
 	
