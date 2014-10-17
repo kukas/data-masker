@@ -307,7 +307,7 @@ public class GUIFrame extends JFrame {
 						database = dReader.read();
 						database = masker.mask(database);
 						try {
-							writer.append(database);
+							writer.append(database, input);
 							//writer.append(input, database);
 						} catch (Exception e) {
 							Logger.log(e.getMessage());
