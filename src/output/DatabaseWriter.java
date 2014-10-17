@@ -46,13 +46,13 @@ public class DatabaseWriter {
 	public void prepareFile() throws IOException {
 		writer = new PrintWriter(new BufferedWriter(new FileWriter(path)));
 
-		String[] headerString = header.getLines();
+		/*String[] headerString = header.getLines();
 
 		for (int i = 0; i < headerString.length; i++) {
 			writer.println(headerString[i]);
 		}
 
-		writer.println("");
+		writer.println("");*/
 	}
 
 	public void append(String[][] data, String[] input) {
@@ -66,8 +66,8 @@ public class DatabaseWriter {
 			for (int j = 0; j < headerLengths.length; j++) {
 				int offset = headerOffsets[j];
 				int length = headerLengths[j];
-				newLine = newLine.substring(0, offset) + data[i][j]
-						+ newLine.substring(offset + length-1);
+
+				newLine = newLine.substring(0, offset) + data[i][j] + newLine.substring(offset+length);
 			}
 
 			writer.println(newLine);

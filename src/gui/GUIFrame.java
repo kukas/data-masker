@@ -20,9 +20,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 
+import log.Logger;
 import masking.Masker;
 import output.DatabaseWriter;
 import output.SettingsWriter;
@@ -77,6 +79,7 @@ public class GUIFrame extends JFrame {
 	}
 
 	public GUIFrame() {
+		final ConfigSaver cfg = new ConfigSaver();
 		final RulesTable table = new RulesTable();
 		JLabel inputLabel, outputLabel, rulesLabel;
 		final JTextField inputField, outputField, rulesField;
@@ -93,6 +96,12 @@ public class GUIFrame extends JFrame {
 		gbc.weighty = 0.5;
 		gbc.insets = new Insets(10, 10, 10, 10);
 
+		// Output for logger
+		JTextArea logs = new JTextArea("Welcome to Data Masking  by psvt");
+		JScrollPane scroll = new JScrollPane(logs, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		final Logger logger = new Logger(logs, scroll);
+		placeComponent(scroll, 1, 7, 4, 2,  GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0, 0);
+		
 		// input label
 		inputLabel = new JLabel("Input file");
 		placeComponent(inputLabel, 0, 0, 1, 1, GridBagConstraints.NONE, GridBagConstraints.LINE_END, 0, INPUT_HEIGHT);
@@ -109,11 +118,14 @@ public class GUIFrame extends JFrame {
 		inputButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				JFileChooser chooser = new JFileChooser(inputField.getText());
+				JFileChooser chooser = new JFileChooser();
+				logger.logGUI("Choosing file ...");
 				int res = chooser.showOpenDialog(GUIFrame.this);
 				if (res == JFileChooser.APPROVE_OPTION) {
 					inputField.setText(chooser.getSelectedFile().getAbsolutePath());
 				}
+				cfg.config[0] = inputField.getText();
+				cfg.write(cfg.config);	
 			}
 		});
 
@@ -133,12 +145,18 @@ public class GUIFrame extends JFrame {
 		outputButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				JFileChooser chooser = new JFileChooser(outputField.getText());
+				JFileChooser chooser = new JFileChooser();
+				logger.logGUI("Choosing file ...");
 				int res = chooser.showOpenDialog(GUIFrame.this);
 				if (res == JFileChooser.APPROVE_OPTION) {
 					outputField.setText(chooser.getSelectedFile().getAbsolutePath());
 				}
+				cfg.config[0] = inputField.getText();
+				cfg.config[1] = outputField.getText();
+				//cfg.config[2] = rulesField.getText();
+				cfg.write(cfg.config);	
 			}
+			
 		});
 
 		// rules label
@@ -166,6 +184,7 @@ public class GUIFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				JFileChooser chooser = new JFileChooser();
+				logger.logGUI("Choosing file ...");
 				int res = chooser.showOpenDialog(GUIFrame.this);
 				if (res == JFileChooser.APPROVE_OPTION) {
 					String path = chooser.getSelectedFile().getAbsolutePath();
@@ -175,6 +194,10 @@ public class GUIFrame extends JFrame {
 						table.setData(data);
 					}
 				}
+				cfg.config[0] = inputField.getText();
+				cfg.config[1] = outputField.getText();
+				cfg.config[2] = rulesField.getText();
+				cfg.write(cfg.config);	
 			}
 		});
 		// Masker masker = new Masker();
@@ -241,8 +264,17 @@ public class GUIFrame extends JFrame {
 					String address = chooser.getSelectedFile().getAbsolutePath();
 					if (!address.endsWith(".txt")) {
 						address += ".txt";
+
 						rulesField.setText(address);
+
 					}
+					
+					rulesField.setText(address);
+					cfg.config[0] = inputField.getText();
+					cfg.config[1] = outputField.getText();
+					cfg.config[2] = rulesField.getText();
+					cfg.write(cfg.config);		
+					
 					writ.write(address, table.getData());
 				}
 
@@ -251,7 +283,7 @@ public class GUIFrame extends JFrame {
 
 		// run button
 		runButton = new JButton("Run");
-		placeComponent(runButton, 1, 7, 5, 1, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0.5, 0.05);
+		placeComponent(runButton, 0, 8, 1, 1, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0, 0.05);
 		runButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -277,18 +309,64 @@ public class GUIFrame extends JFrame {
 				Vector<Vector<Object>> tableDATA = table.getData();
 				int[] lengths = new int[tableDATA.size()];
 				int[] offsets = new int[tableDATA.size()];
-				for (int i = 0; i < tableDATA.size(); i++) {
-					lengths[i] = Integer.parseInt((String) tableDATA.get(i).get(2));
-					offsets[i] = Integer.parseInt((String) tableDATA.get(i).get(3));
-				}
-				;
 
+				for(int i = 0; i < tableDATA.size(); i++){
+					try {
+						lengths[i] = Integer.parseInt((String) tableDATA.get(i).get(2));
+					}
+					catch (NumberFormatException e){
+						displayMessage("Invalid length on column "+(i+1)+": "+tableDATA.get(i).get(2).toString());
+						return;
+					}
+					
+					try {
+						offsets[i] = Integer.parseInt((String) tableDATA.get(i).get(3));
+					}
+					catch (NumberFormatException e){
+						displayMessage("Invalid offset on column "+(i+1)+": "+tableDATA.get(i).get(3).toString());
+						return;
+					}
+					
+					
+					if(lengths[i] < 1){
+						displayMessage("Invalid length on column "+(i+1)+": "+tableDATA.get(i).get(2).toString());
+						return;
+					}
+						
+					if(offsets[i] < 0){
+						displayMessage("Invalid offset on column "+(i+1)+": "+tableDATA.get(i).get(3).toString());
+						return;
+					}
+				};
+				
 				int lines = 100000;
 
 				FileReader fReader = new FileReader(inputFile);
-				// DatabaseReader dReader = new DatabaseReader(fReader.readNLines(3));
 				DatabaseReader dReader = new DatabaseReader(lengths, offsets);
 				DatabaseWriter writer = new DatabaseWriter(outputFile, dReader.getHeader());
+				
+				FileReader lineLengthReader = new FileReader(inputFile);
+				String[] firstLines = lineLengthReader.readNLines(20);
+				int rowLength = 0;
+				for(int i=0; i<firstLines.length; i++){
+					if(firstLines[i].length() > rowLength){
+						rowLength = firstLines[i].length();
+					}
+				}
+				
+				if(rowLength > 0){
+					for(int i=0; i<lengths.length; i++){
+						System.out.println(rowLength+" "+lengths[i]+" "+offsets[i]+" "+(offsets[i]+lengths[i]));
+						if(offsets[i]+lengths[i] > rowLength){
+							displayMessage("Column "+(i+1)+" is out of range.");
+							return;
+						}
+					}
+				}
+				else {
+					displayMessage("Input file is empty.");
+					return;
+				}
 
 				try {
 					Masker masker = new Masker(table.getData());
@@ -329,5 +407,13 @@ public class GUIFrame extends JFrame {
 			}
 		});
 
+		
+		
+		
+		inputField.setText(cfg.config[0]);
+		outputField.setText(cfg.config[1]);
+		rulesField.setText(cfg.config[2]);
+		
 	}
+	
 }
