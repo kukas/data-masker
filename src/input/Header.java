@@ -1,5 +1,7 @@
 package input;
 
+import log.Logger;
+
 public class Header {
 	String[] lines;
 	int[] lengths;
@@ -38,7 +40,7 @@ public class Header {
 	
 	public Header(int[] lengths, int[] offsets){
 		if(lengths.length != offsets.length){
-			System.out.println("Different number of offsets and lengths, adding lengths");
+			Logger.log("Different number of offsets and lengths, adding lengths");
 			this.lengths = new int[offsets.length];
 			for(int i = 0; i < lengths.length;i++){
 				this.lengths[i] = lengths[i];
