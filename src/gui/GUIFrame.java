@@ -5,6 +5,7 @@ import input.FileReader;
 
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -20,6 +21,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 
@@ -82,6 +84,12 @@ public class GUIFrame extends JFrame {
 		gbc.weighty = 0.5;
 		gbc.insets = new Insets(10, 10, 10, 10);
 
+		// Output for logger
+		JTextArea logs = new JTextArea("Welcome to Data Masking  by psvt");
+		JScrollPane scroll = new JScrollPane(logs, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		final Logger logger = new Logger(logs, scroll);
+		placeComponent(scroll, 1, 7, 4, 2,  GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0, 0);
+		
 		// input label
 		inputLabel = new JLabel("Input file");
 		placeComponent(inputLabel, 0, 0, 1, 1, GridBagConstraints.NONE, GridBagConstraints.LINE_END, 0, INPUT_HEIGHT);
@@ -98,7 +106,8 @@ public class GUIFrame extends JFrame {
 		inputButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				JFileChooser chooser = new JFileChooser(inputField.getText());
+				JFileChooser chooser = new JFileChooser();
+				logger.logGUI("Choosing file ...");
 				int res = chooser.showOpenDialog(GUIFrame.this);
 				if (res == JFileChooser.APPROVE_OPTION) {
 					inputField.setText(chooser.getSelectedFile().getAbsolutePath());
@@ -124,7 +133,8 @@ public class GUIFrame extends JFrame {
 		outputButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				JFileChooser chooser = new JFileChooser(outputField.getText());
+				JFileChooser chooser = new JFileChooser();
+				logger.logGUI("Choosing file ...");
 				int res = chooser.showOpenDialog(GUIFrame.this);
 				if (res == JFileChooser.APPROVE_OPTION) {
 					outputField.setText(chooser.getSelectedFile().getAbsolutePath());
@@ -154,6 +164,7 @@ public class GUIFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				JFileChooser chooser = new JFileChooser();
+				logger.logGUI("Choosing file ...");
 				int res = chooser.showOpenDialog(GUIFrame.this);
 				if (res == JFileChooser.APPROVE_OPTION) {
 					String path = chooser.getSelectedFile().getAbsolutePath();
@@ -266,7 +277,7 @@ public class GUIFrame extends JFrame {
 
 		// run button
 		runButton = new JButton("Run");
-		placeComponent(runButton, 1, 7, 5, 1, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0.5, 0.05);
+		placeComponent(runButton, 0, 8, 1, 1, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0, 0.05);
 		runButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -390,6 +401,7 @@ public class GUIFrame extends JFrame {
 				}
 			}
 		});
+
 		
 		
 		
