@@ -17,7 +17,7 @@ public class Masker {
 
 	public Masker(String maskingSettingFile) throws MaskingException {
 		maskerSettings = new MaskerSettings(maskingSettingFile);
-		maskingRules = maskerSettings.getRules();
+		maskingRules = maskerSettings.newGetRules();
 	}
 
 	public Masker(Vector<Vector<Object>> data) throws MaskingException {
@@ -26,7 +26,7 @@ public class Masker {
 
 	public String[][] mask(String[][] input, String maskingsSettingFile) throws MaskingException {
 		MaskerSettings mSetting = new MaskerSettings(maskingsSettingFile);
-		MaskingRule[] rules = mSetting.getRules();
+		MaskingRule[] rules = mSetting.newGetRules();
 		if (rules.length > input[0].length) {
 			Logger.log("Warning: the number of rules is greater than the number of columns.");
 		}
@@ -41,7 +41,6 @@ public class Masker {
 	}
 
 	public String[][] mask(String[][] input) throws MaskingException {
-		System.out.println(maskingRules.length);
 		if (maskingRules.length > input[0].length) {
 			Logger.log("Warning: the number of rules is greater than the number of columns.");
 		}
@@ -80,7 +79,6 @@ public class Masker {
 
 		int columns= data.get(0).size();
 		int rows = data.size();
-		Logger.debug("size " + columns);
 		String[] settingStrings;
 		if (columns >= 6) {
 
@@ -104,13 +102,7 @@ public class Masker {
 		} else {
 			return false;
 		}
-		//System.out.println(row+": "+settingStrings[row]);
-		System.out.println("gen");
-		
-		for(int i = 0;i<settingStrings.length;i++){
-			System.out.println(settingStrings[i]);
-			
-		}
+
 		maskerSettings = new MaskerSettings(settingStrings);
 		maskingRules = maskerSettings.newGetRules();
 

@@ -230,6 +230,8 @@ public class GUIFrame extends JFrame {
 					String address = chooser.getSelectedFile().getAbsolutePath();
 					if(!address.endsWith(".txt")){
 						address+= ".txt";
+						
+						rulesField.setText(address);
 					}
 					writ.write(address, table.getData());
 				}
@@ -298,11 +300,10 @@ public class GUIFrame extends JFrame {
 						writer.prepareFile();
 					}
 					catch (Exception e) {
-						Logger.log(e.getMessage());
+						System.err.println(e.getMessage());
 					}
 					
 					while((input = fReader.readNLines(lines))[0] != null){
-						Logger.debug("Masking "+input.length+" lines");
 						dReader.input = input;
 						database = dReader.read();
 						database = masker.mask(database);
@@ -310,7 +311,7 @@ public class GUIFrame extends JFrame {
 							writer.append(database, input);
 							//writer.append(input, database);
 						} catch (Exception e) {
-							Logger.log(e.getMessage());
+							System.err.println(e.getMessage());
 						}
 					}
 					
