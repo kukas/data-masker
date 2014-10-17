@@ -74,13 +74,18 @@ public class MaskerSettings extends Exception {
 			return new NothingRule();
 
 		case "star":
+			
 			if (numOfParams == 0) {
 				return new StarsRule();
 			} else {
-				if (numOfParams == 1) {
-					return new StarsRule(0, Integer.parseInt(arrParams[0]));
-				} else {
-					return new StarsRule(Integer.parseInt(arrParams[0]), Integer.parseInt(arrParams[1]));
+				try{
+					if (numOfParams == 1) {
+						return new StarsRule(0, Integer.parseInt(arrParams[0]));
+					} else {
+						return new StarsRule(Integer.parseInt(arrParams[0]), Integer.parseInt(arrParams[1]));
+					}
+				}catch(Exception e){
+					throw new MaskingException("Bad parametrs for star rule");
 				}
 			}
 
@@ -100,7 +105,12 @@ public class MaskerSettings extends Exception {
 			}
 
 		case "replace_from_seeds_file":
-			return new ReplaceRule(arrParams[0]);
+			if(numOfParams<1){
+				throw new MaskingException("For rule replace_from_seeds_file must parametr for file name.");
+			}else{
+				return new ReplaceRule(arrParams[0]);
+			}
+			
 
 		case "random_rc":
 			return new RandomRCRule();
@@ -143,12 +153,8 @@ public class MaskerSettings extends Exception {
 			}
 
 		default:
-			/*
-			 * throw new MaskingException("Bad format line in masking settings file. Undefined rule: \"" +
-			 * originalString + "\"");
-			 */
-			Logger.debug("chyab");
-			return null;
+			throw new MaskingException("Bad format line in masking settings file. Undefined rule: \"" + originalString
+					+ "\"");
 		}
 	}
 

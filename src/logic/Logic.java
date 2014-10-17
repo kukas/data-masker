@@ -58,7 +58,7 @@ public class Logic {
 				database = dReader.read();
 				database = masker.mask(database);
 				try {
-					writer.append(database);
+					writer.append(database, input);
 				} catch (Exception e) {
 					System.err.println(e.getMessage());
 				}

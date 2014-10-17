@@ -97,7 +97,7 @@ public class GUIFrame extends JFrame {
 		inputButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				JFileChooser chooser = new JFileChooser();
+				JFileChooser chooser = new JFileChooser(inputField.getText());
 				int res = chooser.showOpenDialog(GUIFrame.this);
 				if (res == JFileChooser.APPROVE_OPTION) {
 					inputField.setText(chooser.getSelectedFile().getAbsolutePath());
@@ -121,7 +121,7 @@ public class GUIFrame extends JFrame {
 		outputButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				JFileChooser chooser = new JFileChooser();
+				JFileChooser chooser = new JFileChooser(outputField.getText());
 				int res = chooser.showOpenDialog(GUIFrame.this);
 				if (res == JFileChooser.APPROVE_OPTION) {
 					outputField.setText(chooser.getSelectedFile().getAbsolutePath());
@@ -227,13 +227,13 @@ public class GUIFrame extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				// prikazy pri ulozeni
 				SettingsWriter writ = new SettingsWriter();
-
-				JFileChooser chooser = new JFileChooser();
+				JFileChooser chooser = new JFileChooser(rulesField.getText());
 				int res = chooser.showSaveDialog(GUIFrame.this);
 				if (res == JFileChooser.APPROVE_OPTION) {
 					String address = chooser.getSelectedFile().getAbsolutePath();
-					if (!address.endsWith(".txt")) {
-						address += ".txt";
+					if(!address.endsWith(".txt")){
+						address+= ".txt";
+						rulesField.setText(address);
 					}
 					writ.write(address, table.getData());
 				}
@@ -306,8 +306,8 @@ public class GUIFrame extends JFrame {
 						database = dReader.read();
 						database = masker.mask(database);
 						try {
-							writer.append(database);
-							// writer.append(input, database);
+							writer.append(database, input);
+							//writer.append(input, database);
 						} catch (Exception e) {
 							System.err.println(e.getMessage());
 						}
