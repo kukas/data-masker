@@ -273,6 +273,10 @@ public class GUIFrame extends JFrame {
 				for(int i = 0; i < tableDATA.size(); i++){
 					lengths[i] = Integer.parseInt((String) tableDATA.get(i).get(2));
 					offsets[i] = Integer.parseInt((String) tableDATA.get(i).get(3));
+					if(lengths[i] < 1)
+						displayMessage("Invalid length on column "+(i+1)+": "+lengths[i]);
+					if(offsets[i] < 0)
+						displayMessage("Invalid offset on column "+(i+1)+": "+offsets[i]);
 				};
 				
 				int lines = 100000;
