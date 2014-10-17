@@ -30,9 +30,9 @@ public class SettingsWriter {
 				}
 				bw.write(s);
 				bw.newLine();
-				bw.close();
 			}
 			bw.flush();
+			bw.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
