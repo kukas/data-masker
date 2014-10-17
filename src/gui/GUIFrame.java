@@ -167,6 +167,10 @@ public class GUIFrame extends JFrame {
 		rulesField = new JTextField("");
 		placeComponent(rulesField, 1, 2, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 0.8,
 				INPUT_HEIGHT);
+		Vector data = (loadTableDataFromFile(cfg.config[2]));
+		if (data != null) {
+			table.setData(data);
+		}
 		rulesField.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				Vector data = (loadTableDataFromFile(rulesField.getText()));
