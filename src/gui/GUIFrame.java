@@ -97,9 +97,9 @@ public class GUIFrame extends JFrame {
 		gbc.insets = new Insets(10, 10, 10, 10);
 
 		// Output for logger
-		JTextArea logs = new JTextArea("Welcome to Data Masking  by psvt");
-		JScrollPane scroll = new JScrollPane(logs, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		JTextArea logs = new JTextArea("Welcome to Data Masking by psvt");
+		JScrollPane scroll = new JScrollPane(logs, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
 		final Logger logger = new Logger(logs, scroll);
 		placeComponent(scroll, 1, 7, 4, 2, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0, 0);
 
@@ -168,6 +168,10 @@ public class GUIFrame extends JFrame {
 		rulesField = new JTextField("");
 		placeComponent(rulesField, 1, 2, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 0.8,
 				INPUT_HEIGHT);
+		Vector data = (loadTableDataFromFile(cfg.config[2]));
+		if (data != null) {
+			table.setData(data);
+		}
 		rulesField.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				Vector data = (loadTableDataFromFile(rulesField.getText()));
@@ -399,8 +403,9 @@ public class GUIFrame extends JFrame {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-
+					int linesMasked = 0;
 					while ((input = fReader.readNLines(lines))[0] != null) {
+						linesMasked += input.length;
 						dReader.input = input;
 						database = dReader.read();
 						database = masker.mask(database);
@@ -414,6 +419,7 @@ public class GUIFrame extends JFrame {
 
 					writer.closeFile();
 					displayMessage("Done.");
+					logger.logGUI("Finished: Masked "+linesMasked+" lines");
 				} catch (MaskingException e) {
 					JOptionPane.showMessageDialog(GUIFrame.this, e.getMessage());
 					return;
