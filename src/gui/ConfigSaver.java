@@ -22,7 +22,7 @@ public class ConfigSaver {
 				for(int i = 0; i<3; i++){
 				bw.write(settings[i]);
 				bw.newLine();
-				Logger.debug(settings[i]);
+				//Logger.debug(settings[i]);
 				}
 			
 			bw.flush();
