@@ -300,11 +300,10 @@ public class GUIFrame extends JFrame {
 						writer.prepareFile();
 					}
 					catch (Exception e) {
-						Logger.log(e.getMessage());
+						System.err.println(e.getMessage());
 					}
 					
 					while((input = fReader.readNLines(lines))[0] != null){
-						Logger.debug("Masking "+input.length+" lines");
 						dReader.input = input;
 						database = dReader.read();
 						database = masker.mask(database);
@@ -312,7 +311,7 @@ public class GUIFrame extends JFrame {
 							writer.append(database);
 							//writer.append(input, database);
 						} catch (Exception e) {
-							Logger.log(e.getMessage());
+							System.err.println(e.getMessage());
 						}
 					}
 					
