@@ -66,7 +66,8 @@ public class DatabaseWriter {
 			for (int j=0; j<headerLengths.length; j++){
 				int offset = headerOffsets[j];
 				int length = headerLengths[j];
-				newLine = newLine.substring(0, offset) + data[i][j] + newLine.substring(offset+length, lineLength-offset-length-1);
+				System.out.println(data[i][j].length());
+				newLine = newLine.substring(0, offset) + data[i][j] + newLine.substring(offset+length);
 			}
 			
 			writer.println(newLine);
