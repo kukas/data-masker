@@ -65,6 +65,7 @@ public class GUIFrame extends JFrame {
 	}
 
 	public GUIFrame() {
+		final ConfigSaver cfg = new ConfigSaver();
 		final RulesTable table = new RulesTable();
 		JLabel inputLabel, outputLabel, rulesLabel;
 		final JTextField inputField, outputField, rulesField;
@@ -102,6 +103,8 @@ public class GUIFrame extends JFrame {
 				if (res == JFileChooser.APPROVE_OPTION) {
 					inputField.setText(chooser.getSelectedFile().getAbsolutePath());
 				}
+				cfg.config[0] = inputField.getText();
+				cfg.write(cfg.config);	
 			}
 		});
 
@@ -126,7 +129,12 @@ public class GUIFrame extends JFrame {
 				if (res == JFileChooser.APPROVE_OPTION) {
 					outputField.setText(chooser.getSelectedFile().getAbsolutePath());
 				}
+				cfg.config[0] = inputField.getText();
+				cfg.config[1] = outputField.getText();
+				//cfg.config[2] = rulesField.getText();
+				cfg.write(cfg.config);	
 			}
+			
 		});
 
 		// rules label
@@ -164,6 +172,10 @@ public class GUIFrame extends JFrame {
 					JOptionPane.showMessageDialog(GUIFrame.this, e.getMessage());
 					
 				}
+				cfg.config[0] = inputField.getText();
+				cfg.config[1] = outputField.getText();
+				cfg.config[2] = rulesField.getText();
+				cfg.write(cfg.config);	
 			}
 		});
 		//Masker masker = new Masker();
@@ -231,8 +243,14 @@ public class GUIFrame extends JFrame {
 					if(!address.endsWith(".txt")){
 						address+= ".txt";
 						
-						rulesField.setText(address);
 					}
+					
+					rulesField.setText(address);
+					cfg.config[0] = inputField.getText();
+					cfg.config[1] = outputField.getText();
+					cfg.config[2] = rulesField.getText();
+					cfg.write(cfg.config);		
+					
 					writ.write(address, table.getData());
 				}
 				
@@ -323,6 +341,13 @@ public class GUIFrame extends JFrame {
 				}
 			}
 		});
-
+		
+		
+		
+		inputField.setText(cfg.config[0]);
+		outputField.setText(cfg.config[1]);
+		rulesField.setText(cfg.config[2]);
+		
 	}
+	
 }
