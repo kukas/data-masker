@@ -360,7 +360,7 @@ public class GUIFrame extends JFrame {
 					try {
 						lengths[i] = Integer.parseInt((String) tableDATA.get(i).get(2));
 					} catch (NumberFormatException e) {
-						displayMessage("Invalid length on column " + (i + 1) + ": "
+						displayMessage("Invalid length argument at column " + (i + 1) + ": "
 								+ tableDATA.get(i).get(2).toString());
 						return;
 					}
@@ -368,19 +368,19 @@ public class GUIFrame extends JFrame {
 					try {
 						offsets[i] = Integer.parseInt((String) tableDATA.get(i).get(3));
 					} catch (NumberFormatException e) {
-						displayMessage("Invalid offset on column " + (i + 1) + ": "
+						displayMessage("Invalid offset argument at column " + (i + 1) + ": "
 								+ tableDATA.get(i).get(3).toString());
 						return;
 					}
 
 					if (lengths[i] < 1) {
-						displayMessage("Invalid length on column " + (i + 1) + ": "
+						displayMessage("Invalid length argument at column " + (i + 1) + ": "
 								+ tableDATA.get(i).get(2).toString());
 						return;
 					}
 
 					if (offsets[i] < 0) {
-						displayMessage("Invalid offset on column " + (i + 1) + ": "
+						displayMessage("Invalid offset argument at column " + (i + 1) + ": "
 								+ tableDATA.get(i).get(3).toString());
 						return;
 					}
