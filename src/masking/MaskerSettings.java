@@ -92,7 +92,7 @@ public class MaskerSettings extends Exception {
 					min = Integer.parseInt(arrParams[0]);
 					max = Integer.parseInt(arrParams[1]);
 				} catch (Exception e) {
-					throw new MaskingException("Bad parametrs for random number");
+					throw new MaskingException("Bad parameters for " + funcName);
 				}
 				return new RandomNumberRule(min, max);
 			} else {
@@ -127,12 +127,26 @@ public class MaskerSettings extends Exception {
 					}
 				}
 			} catch (Exception e) {
-				throw new MaskingException("Bad format for replace_with_random_digits");
+				throw new MaskingException("Bad parameters for " + funcName);
+			}
+		case "replace_with_random_characters":
+			try {
+				if (numOfParams == 1) {
+					return new RandomCharacterRule(arrParams[0]);
+				} else if (numOfParams == 3) {
+					return new RandomCharacterRule(arrParams[0], Integer.parseInt(arrParams[1]),
+							Integer.parseInt(arrParams[2]));
+				}
+
+			} catch (Exception e) {
+				throw new MaskingException("Bad parameters for " + funcName);
 			}
 
 		default:
-			/*throw new MaskingException("Bad format line in masking settings file. Undefined rule: \"" + originalString
-					+ "\"");*/
+			/*
+			 * throw new MaskingException("Bad format line in masking settings file. Undefined rule: \"" +
+			 * originalString + "\"");
+			 */
 			Logger.debug("chyab");
 			return null;
 		}
@@ -145,9 +159,10 @@ public class MaskerSettings extends Exception {
 		if (startPosition == -1 && endPosition == -1) {// nejsou zadne parametry
 			return new String[] { s };
 		}
-		/*if (startPosition == -1 || endPosition == -1) {// zde by se mela vyhodit chyba
-			throw new MaskingException("Bad format masking-settings file:\"" + s + "\"");
-		}*/
+		/*
+		 * if (startPosition == -1 || endPosition == -1) {// zde by se mela vyhodit chyba throw new
+		 * MaskingException("Bad format masking-settings file:\"" + s + "\""); }
+		 */
 		String funcName = s.substring(0, startPosition);
 		String parametersString = s.substring(startPosition + 1, endPosition);
 		String[] arrParameters = parametersString.split(",");
