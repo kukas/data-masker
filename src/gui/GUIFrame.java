@@ -97,7 +97,7 @@ public class GUIFrame extends JFrame {
 		inputButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				JFileChooser chooser = new JFileChooser();
+				JFileChooser chooser = new JFileChooser(inputField.getText());
 				int res = chooser.showOpenDialog(GUIFrame.this);
 				if (res == JFileChooser.APPROVE_OPTION) {
 					inputField.setText(chooser.getSelectedFile().getAbsolutePath());
@@ -121,7 +121,7 @@ public class GUIFrame extends JFrame {
 		outputButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				JFileChooser chooser = new JFileChooser();
+				JFileChooser chooser = new JFileChooser(outputField.getText());
 				int res = chooser.showOpenDialog(GUIFrame.this);
 				if (res == JFileChooser.APPROVE_OPTION) {
 					outputField.setText(chooser.getSelectedFile().getAbsolutePath());
@@ -153,21 +153,24 @@ public class GUIFrame extends JFrame {
 					FileReader fr = new FileReader(path);
 					String[] popisySloupcu = fr.read();
 					Vector<Vector<Object>> doTabulky = new Vector<Vector<Object>>(popisySloupcu.length);
-					for(int i = 0; i < popisySloupcu.length; i++){
-						doTabulky.add( new Vector<Object>(Arrays.asList(popisySloupcu[i].split(";"))));
-					};
+					for (int i = 0; i < popisySloupcu.length; i++) {
+						doTabulky.add(new Vector<Object>(Arrays.asList(popisySloupcu[i].split(";"))));
+					}
+					;
 					table.setData(doTabulky);
 				}
-				try{
-					Masker masker = new Masker(rulesField.getText());
-				}catch(MaskingException e){
+				try {
+					if (new File(rulesField.getText()).exists()) {
+						Masker masker = new Masker(rulesField.getText());
+					}
+				} catch (MaskingException e) {
 					JOptionPane.showMessageDialog(GUIFrame.this, e.getMessage());
-					
+
 				}
 			}
 		});
-		//Masker masker = new Masker();
-		//table.setData(masker.getData());
+		// Masker masker = new Masker();
+		// table.setData(masker.getData());
 
 		// big table
 
@@ -212,7 +215,8 @@ public class GUIFrame extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				if (table.moveRowBy(table.getSelectedRow(), 1)) {
 					table.setRowSelectionInterval(table.getSelectedRow() + 1, table.getSelectedRow() + 1);
-				}}
+				}
+			}
 		});
 
 		// save button
@@ -221,26 +225,22 @@ public class GUIFrame extends JFrame {
 		saveButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				//prikazy pri ulozeni
+				// prikazy pri ulozeni
 				SettingsWriter writ = new SettingsWriter();
-				
-				JFileChooser chooser = new JFileChooser();
+				JFileChooser chooser = new JFileChooser(rulesField.getText());
 				int res = chooser.showSaveDialog(GUIFrame.this);
 				if (res == JFileChooser.APPROVE_OPTION) {
 					String address = chooser.getSelectedFile().getAbsolutePath();
 					if(!address.endsWith(".txt")){
 						address+= ".txt";
-						
 						rulesField.setText(address);
 					}
 					writ.write(address, table.getData());
 				}
-				
-				
+
 			}
 		});
-		
-		
+
 		// run button
 		runButton = new JButton("Run");
 		placeComponent(runButton, 1, 7, 5, 1, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0.5, 0.05);
@@ -251,17 +251,17 @@ public class GUIFrame extends JFrame {
 				File rulesFile = new File(rulesField.getText());
 
 				if (!inFile.exists()) {
-					displayMessage("Input file doesn't exists");
+					displayMessage("Input file doesn't exist.");
 					return;
 				}
 				if (outputField.getText().equals("")) {
 					displayMessage("Output file not set.");
 					return;
 				}
-				if (!rulesFile.exists()) {
+				/*if (!rulesFile.exists()) {
 					displayMessage("Rules file doesn't exist.");
 					return;
-				}
+				}*/
 
 				String inputFile = inputField.getText();
 				String outputFile = outputField.getText();
@@ -270,6 +270,7 @@ public class GUIFrame extends JFrame {
 				Vector<Vector<Object>> tableDATA = table.getData();
 				int[] lengths = new int[tableDATA.size()];
 				int[] offsets = new int[tableDATA.size()];
+
 				for(int i = 0; i < tableDATA.size(); i++){
 					try {
 						lengths[i] = Integer.parseInt((String) tableDATA.get(i).get(2));
@@ -328,28 +329,25 @@ public class GUIFrame extends JFrame {
 					return;
 				}
 
-
-				try{
+				try {
 					Masker masker = new Masker(table.getData());
-					/*if(!masker.setData()){
-						JOptionPane.showMessageDialog(GUIFrame.this, "Invalid data.");
-						return;
-					}*/
 					/*
-				 * Masker masker = new Masker(); if(!masker.setData(table.getData())){
-				 * JOptionPane.showMessageDialog(GUIFrame.this, "Invalid data."); return; }
-				 */
+					 * if(!masker.setData()){ JOptionPane.showMessageDialog(GUIFrame.this, "Invalid data."); return; }
+					 */
+					/*
+					 * Masker masker = new Masker(); if(!masker.setData(table.getData())){
+					 * JOptionPane.showMessageDialog(GUIFrame.this, "Invalid data."); return; }
+					 */
 					String[] input;
 					String[][] database;
 
 					try {
 						writer.prepareFile();
+					} catch (Exception e) {
+						e.printStackTrace();
 					}
-					catch (Exception e) {
-						System.err.println(e.getMessage());
-					}
-					
-					while((input = fReader.readNLines(lines))[0] != null){
+
+					while ((input = fReader.readNLines(lines))[0] != null) {
 						dReader.input = input;
 						database = dReader.read();
 						database = masker.mask(database);
@@ -357,13 +355,13 @@ public class GUIFrame extends JFrame {
 							writer.append(database, input);
 							//writer.append(input, database);
 						} catch (Exception e) {
-							System.err.println(e.getMessage());
+							e.printStackTrace();
 						}
 					}
-					
+
 					writer.closeFile();
 					displayMessage("Done.");
-				}catch(MaskingException e){
+				} catch (MaskingException e) {
 					JOptionPane.showMessageDialog(GUIFrame.this, e.getMessage());
 					return;
 				}
