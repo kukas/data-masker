@@ -5,7 +5,6 @@ import input.FileReader;
 
 import java.awt.Component;
 import java.awt.Container;
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -66,7 +65,21 @@ public class GUIFrame extends JFrame {
 		JOptionPane.showMessageDialog(GUIFrame.this, message);
 	}
 
+	private Vector<Vector<Object>> loadTableDataFromFile(String path) {
+		if (!new File(path).exists()) {
+			return null;
+		}
+		FileReader fr = new FileReader(path);
+		String[] popisySloupcu = fr.read();
+		Vector<Vector<Object>> doTabulky = new Vector<Vector<Object>>(popisySloupcu.length);
+		for (int i = 0; i < popisySloupcu.length; i++) {
+			doTabulky.add(new Vector<Object>(Arrays.asList(popisySloupcu[i].split(";"))));
+		}
+		return doTabulky;
+	}
+
 	public GUIFrame() {
+		final ConfigSaver cfg = new ConfigSaver();
 		final RulesTable table = new RulesTable();
 		JLabel inputLabel, outputLabel, rulesLabel;
 		final JTextField inputField, outputField, rulesField;
@@ -111,6 +124,8 @@ public class GUIFrame extends JFrame {
 				if (res == JFileChooser.APPROVE_OPTION) {
 					inputField.setText(chooser.getSelectedFile().getAbsolutePath());
 				}
+				cfg.config[0] = inputField.getText();
+				cfg.write(cfg.config);	
 			}
 		});
 
@@ -136,7 +151,12 @@ public class GUIFrame extends JFrame {
 				if (res == JFileChooser.APPROVE_OPTION) {
 					outputField.setText(chooser.getSelectedFile().getAbsolutePath());
 				}
+				cfg.config[0] = inputField.getText();
+				cfg.config[1] = outputField.getText();
+				//cfg.config[2] = rulesField.getText();
+				cfg.write(cfg.config);	
 			}
+			
 		});
 
 		// rules label
@@ -147,7 +167,19 @@ public class GUIFrame extends JFrame {
 		rulesField = new JTextField("");
 		placeComponent(rulesField, 1, 2, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 0.8,
 				INPUT_HEIGHT);
+		Vector data = (loadTableDataFromFile(cfg.config[2]));
+		if (data != null) {
+			table.setData(data);
+		}
+		rulesField.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Vector data = (loadTableDataFromFile(rulesField.getText()));
+				if (data != null) {
+					table.setData(data);
+				}
+			}
 
+		});
 		// rules button
 		rulesButton = new JButton("Select file");
 		placeComponent(rulesButton, 4, 2, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 0,
@@ -161,23 +193,15 @@ public class GUIFrame extends JFrame {
 				if (res == JFileChooser.APPROVE_OPTION) {
 					String path = chooser.getSelectedFile().getAbsolutePath();
 					rulesField.setText(path);
-					FileReader fr = new FileReader(path);
-					String[] popisySloupcu = fr.read();
-					Vector<Vector<Object>> doTabulky = new Vector<Vector<Object>>(popisySloupcu.length);
-					for (int i = 0; i < popisySloupcu.length; i++) {
-						doTabulky.add(new Vector<Object>(Arrays.asList(popisySloupcu[i].split(";"))));
+					Vector data = (loadTableDataFromFile(path));
+					if (data != null) {
+						table.setData(data);
 					}
-					;
-					table.setData(doTabulky);
 				}
-				try {
-					if (new File(rulesField.getText()).exists()) {
-						Masker masker = new Masker(rulesField.getText());
-					}
-				} catch (MaskingException e) {
-					JOptionPane.showMessageDialog(GUIFrame.this, e.getMessage());
-
-				}
+				cfg.config[0] = inputField.getText();
+				cfg.config[1] = outputField.getText();
+				cfg.config[2] = rulesField.getText();
+				cfg.write(cfg.config);	
 			}
 		});
 		// Masker masker = new Masker();
@@ -242,10 +266,19 @@ public class GUIFrame extends JFrame {
 				int res = chooser.showSaveDialog(GUIFrame.this);
 				if (res == JFileChooser.APPROVE_OPTION) {
 					String address = chooser.getSelectedFile().getAbsolutePath();
-					if(!address.endsWith(".txt")){
-						address+= ".txt";
+					if (!address.endsWith(".txt")) {
+						address += ".txt";
+
 						rulesField.setText(address);
+
 					}
+					
+					rulesField.setText(address);
+					cfg.config[0] = inputField.getText();
+					cfg.config[1] = outputField.getText();
+					cfg.config[2] = rulesField.getText();
+					cfg.write(cfg.config);		
+					
 					writ.write(address, table.getData());
 				}
 
@@ -269,10 +302,9 @@ public class GUIFrame extends JFrame {
 					displayMessage("Output file not set.");
 					return;
 				}
-				/*if (!rulesFile.exists()) {
-					displayMessage("Rules file doesn't exist.");
-					return;
-				}*/
+				/*
+				 * if (!rulesFile.exists()) { displayMessage("Rules file doesn't exist."); return; }
+				 */
 
 				String inputFile = inputField.getText();
 				String outputFile = outputField.getText();
@@ -365,7 +397,7 @@ public class GUIFrame extends JFrame {
 						database = masker.mask(database);
 						try {
 							writer.append(database, input);
-							//writer.append(input, database);
+							// writer.append(input, database);
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -380,5 +412,14 @@ public class GUIFrame extends JFrame {
 				}
 			}
 		});
+
+		
+		
+		
+		inputField.setText(cfg.config[0]);
+		outputField.setText(cfg.config[1]);
+		rulesField.setText(cfg.config[2]);
+		
 	}
+	
 }
