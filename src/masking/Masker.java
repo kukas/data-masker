@@ -39,6 +39,13 @@ public class Masker {
 
 		return input;
 	}
+	
+	private String padTo(String in, int length){
+		while(in.length()<length){
+			in+=" ";
+		}
+		return in;
+	}
 
 	public String[][] mask(String[][] input) throws MaskingException {
 		if (maskingRules.length > input[0].length) {
@@ -51,7 +58,7 @@ public class Masker {
 		{
 			for (int j = 0; j < input.length; j++) // prochazi cely sloupec
 			{
-				input[j][i] = maskingRules[i].mask(input[j][i]);
+				input[j][i] = padTo(maskingRules[i].mask(input[j][i]), input[j][i].length());
 			}
 		}
 
