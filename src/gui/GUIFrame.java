@@ -103,7 +103,7 @@ public class GUIFrame extends JFrame {
 		JScrollPane scroll = new JScrollPane(logs, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
 		final Logger logger = new Logger(logs, scroll);
-		placeComponent(scroll, 1, 7, 4, 2,  GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0, 0);
+		placeComponent(scroll, 1, 10, 4, 4,  GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0, 0);
 		
 		logger.logGUI(
 				"                  ,.\n" +
@@ -247,7 +247,7 @@ public class GUIFrame extends JFrame {
 
 		JScrollPane tablePane = new JScrollPane(table);
 
-		placeComponent(tablePane, 0, 3, 5, 4, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 1, 0.8);
+		placeComponent(tablePane, 0, 3, 5, 6, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 1, 0.8);
 		table.finishInit(); // graficke nastaveni tabulky se musi provest az po pridani dat
 
 		// side buttons
@@ -297,8 +297,8 @@ public class GUIFrame extends JFrame {
 		});
 
 		// save button
-		saveButton = new JButton("Save");
-		placeComponent(saveButton, 0, 7, 1, 1, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0, 0.05);
+		saveButton = new JButton("Save Rules");
+		placeComponent(saveButton, 5, 7, 1, 1, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0, 0);
 		saveButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -329,7 +329,7 @@ public class GUIFrame extends JFrame {
 
 		// run button
 		runButton = new JButton("Run");
-		placeComponent(runButton, 0, 8, 1, 1, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0, 0.05);
+		placeComponent(runButton, 0, 9, 1, 2, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0, 0.3);
 		runButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
