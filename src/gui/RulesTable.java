@@ -49,7 +49,7 @@ public class RulesTable extends JTable {
 			} catch (Exception e) {
 			}
 		}
-		tableModel.insertRow(i, new String[] { "", "text", "1", offset + "" });
+		tableModel.insertRow(i, new String[] { "", "text", "1", offset + "", "do_nothing"});
 	}
 
 	public void addRow() {

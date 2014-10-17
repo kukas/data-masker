@@ -90,7 +90,7 @@ public class GUIFrame extends JFrame {
 		JButton addButton, removeButton, upButton, downButton;
 
 		setSize(800, 600);
-		setTitle("Data masking");
+		setTitle("Data Masking");
 		Container pane = this.getContentPane();
 		pane.setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -126,7 +126,8 @@ public class GUIFrame extends JFrame {
 		inputField = new JTextField("");
 		placeComponent(inputField, 1, 0, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 0.5,
 				INPUT_HEIGHT);
-
+		inputField.setToolTipText("Insert a path to file containing input data.");
+		
 		// input button
 		inputButton = new JButton("Select file");
 		placeComponent(inputButton, 4, 0, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 0,
@@ -161,6 +162,7 @@ public class GUIFrame extends JFrame {
 		outputField = new JTextField("");
 		placeComponent(outputField, 1, 1, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 1,
 				INPUT_HEIGHT);
+		outputField.setToolTipText("Insert file path for the masked data. If the file does not exist, the program will create it.");
 
 		// output button
 		outputButton = new JButton("Select file");
@@ -211,6 +213,8 @@ public class GUIFrame extends JFrame {
 			}
 
 		});
+		rulesField.setToolTipText("Insert masking rules file path.");
+
 		// rules button
 		rulesButton = new JButton("Select file");
 		placeComponent(rulesButton, 4, 2, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 0,
@@ -259,6 +263,8 @@ public class GUIFrame extends JFrame {
 				table.addRow();
 			}
 		});
+		addButton.setToolTipText("Add a row to the table.");
+		
 		removeButton = new JButton("-");
 		placeComponent(removeButton, 5, 4, 1, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_END, 0, 0);
 		removeButton.addActionListener(new ActionListener() {
@@ -275,6 +281,8 @@ public class GUIFrame extends JFrame {
 				}
 			}
 		});
+		removeButton.setToolTipText("Remove the selected row from the table.");
+		
 		upButton = new JButton("Move up");
 		placeComponent(upButton, 5, 5, 1, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_END, 0, 0);
 		upButton.addActionListener(new ActionListener() {
@@ -285,6 +293,9 @@ public class GUIFrame extends JFrame {
 				}
 			}
 		});
+		upButton.setToolTipText("Move the selected row up.");
+		
+		
 		downButton = new JButton("Move down");
 		placeComponent(downButton, 5, 6, 1, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.FIRST_LINE_END, 0, 0);
 		downButton.addActionListener(new ActionListener() {
@@ -295,7 +306,8 @@ public class GUIFrame extends JFrame {
 				}
 			}
 		});
-
+		downButton.setToolTipText("Move the selected row down.");
+		
 		// save button
 		saveButton = new JButton("Save");
 		placeComponent(saveButton, 0, 7, 1, 1, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0, 0.05);
@@ -326,13 +338,15 @@ public class GUIFrame extends JFrame {
 
 			}
 		});
-
+		saveButton.setToolTipText("Save masking rules.");
+		
 		// run button
 		runButton = new JButton("Run");
 		placeComponent(runButton, 0, 8, 1, 1, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0, 0.05);
 		runButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				table.requestFocus();
 				File inFile = new File(inputField.getText());
 				File rulesFile = new File(rulesField.getText());
 
@@ -458,7 +472,8 @@ public class GUIFrame extends JFrame {
 				}
 			}
 		});
-
+		runButton.setToolTipText("Deselect lines in the table and click to run the program. See output file for masked data.");
+		
 		inputField.setText(cfg.config[0]);
 		outputField.setText(cfg.config[1]);
 		rulesField.setText(cfg.config[2]);
