@@ -223,7 +223,7 @@ public class GUIFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String dir = rulesField.getText();
-				if (outputField.getText().equals("")) {
+				if (rulesField.getText().equals("")) {
 					dir = currentDir;
 				}
 				
