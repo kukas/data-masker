@@ -81,11 +81,26 @@ public class MaskerSettings extends Exception {
 				try{
 					if (numOfParams == 1) {
 						return new StarsRule(0, Integer.parseInt(arrParams[0]));
-					} else {
-						return new StarsRule(Integer.parseInt(arrParams[0]), Integer.parseInt(arrParams[1]));
+					} else if(numOfParams==2){
+						int start = Integer.parseInt(arrParams[0]);
+						int end = Integer.parseInt(arrParams[1]);
+						int correctStart = start-1;//indexy
+						int correctEnd = end-1;
+						
+						if(correctStart<0){
+							throw new MaskingException("Start position in star rule must be > 0");
+						}
+						
+						if(correctStart>correctEnd){
+							throw new MaskingException("Start position is bigger than end position");
+						}
+						
+						return new StarsRule(start, end);
+					}else{
+						throw new MaskingException("In star rule are too much parametrs");
 					}
-				}catch(Exception e){
-					throw new MaskingException("Bad parametrs for star rule");
+				}catch(NumberFormatException e){
+					throw new MaskingException("Bad parametrs for star rule. (Parametrs can't be convert to integer)");
 				}
 			}
 
@@ -96,17 +111,26 @@ public class MaskerSettings extends Exception {
 				try {
 					min = Integer.parseInt(arrParams[0]);
 					max = Integer.parseInt(arrParams[1]);
-				} catch (Exception e) {
-					throw new MaskingException("Bad parameters for " + funcName);
+					if(min<0){
+						throw new MaskingException("Minium number must be >= 0");
+					}
+					
+					if(min>max){
+						throw new MaskingException("Maximum number must be bigger than minimum number");
+					}
+				} catch (NumberFormatException e) {
+					throw new MaskingException("Bad parameters for " + funcName + " (parametr can't be convert to integer)");
 				}
 				return new RandomNumberRule(min, max);
-			} else {
+			} else if(numOfParams==0){
 				return new RandomNumberRule();
+			}else{
+				throw new MaskingException("Bad number of parametrs for "+funcName);
 			}
 
 		case "replace_from_seeds_file":
-			if(numOfParams<1){
-				throw new MaskingException("For rule replace_from_seeds_file must parametr for file name.");
+			if(numOfParams!=1){
+				throw new MaskingException("For rule replace_from_seeds_file must be only parametr for file name.");
 			}else{
 				return new ReplaceRule(arrParams[0]);
 			}
@@ -122,34 +146,41 @@ public class MaskerSettings extends Exception {
 				return new IbanRule();
 			} else if (numOfParams == 1) {
 				return new IbanRule(arrParams[0]);
+			}else{
+				throw new MaskingException("Wrong number of parametrs for "+funcName);
 			}
-			return new IbanRule();
 
 		case "replace_with_random_digits":
 			try {
-				if (numOfParams == 0) {
+				switch(numOfParams){
+				case 0:
 					return new RandomDigitRule(true);
-				} else {
-					if (numOfParams == 1) {
-						return new RandomDigitRule(0, Integer.parseInt(arrParams[0]));
-					} else {
-						return new RandomDigitRule(Integer.parseInt(arrParams[0]), Integer.parseInt(arrParams[1]));
-					}
+				case 1:
+					return new RandomDigitRule(0, Integer.parseInt(arrParams[0]));
+				case 2:
+					return new RandomDigitRule(Integer.parseInt(arrParams[0]), Integer.parseInt(arrParams[1]));
+				default:
+					throw new MaskingException("Wrong number of parameters for "+funcName);
 				}
-			} catch (Exception e) {
-				throw new MaskingException("Bad parameters for " + funcName);
+				
+			} catch (NumberFormatException e) {
+				throw new MaskingException("Bad parameters for " + funcName + " (Parametr can't be convert to integer)");
 			}
 		case "replace_with_random_characters":
 			try {
-				if (numOfParams == 1) {
+				switch(numOfParams){
+				case 1:
 					return new RandomCharacterRule(arrParams[0]);
-				} else if (numOfParams == 3) {
+				case 3:
 					return new RandomCharacterRule(arrParams[0], Integer.parseInt(arrParams[1]),
 							Integer.parseInt(arrParams[2]));
+				default:
+					throw new MaskingException("Wrong number of parameters for "+funcName);
 				}
+				
 
-			} catch (Exception e) {
-				throw new MaskingException("Bad parameters for " + funcName);
+			} catch (NumberFormatException e) {
+				throw new MaskingException("Bad parameters for " + funcName + " (Parametrs can't be convert to integer)");
 			}
 
 		default:

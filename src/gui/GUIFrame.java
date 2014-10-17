@@ -20,6 +20,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 
@@ -66,7 +67,21 @@ public class GUIFrame extends JFrame {
 		JOptionPane.showMessageDialog(GUIFrame.this, message);
 	}
 
+	private Vector<Vector<Object>> loadTableDataFromFile(String path) {
+		if (!new File(path).exists()) {
+			return null;
+		}
+		FileReader fr = new FileReader(path);
+		String[] popisySloupcu = fr.read();
+		Vector<Vector<Object>> doTabulky = new Vector<Vector<Object>>(popisySloupcu.length);
+		for (int i = 0; i < popisySloupcu.length; i++) {
+			doTabulky.add(new Vector<Object>(Arrays.asList(popisySloupcu[i].split(";"))));
+		}
+		return doTabulky;
+	}
+
 	public GUIFrame() {
+		final ConfigSaver cfg = new ConfigSaver();
 		final RulesTable table = new RulesTable();
 		JLabel inputLabel, outputLabel, rulesLabel;
 		final JTextField inputField, outputField, rulesField;
@@ -83,6 +98,26 @@ public class GUIFrame extends JFrame {
 		gbc.weighty = 0.5;
 		gbc.insets = new Insets(10, 10, 10, 10);
 
+		// Output for logger
+		JTextArea logs = new JTextArea("Welcome to Data Masking  by psvt");
+		JScrollPane scroll = new JScrollPane(logs, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		final Logger logger = new Logger(logs, scroll);
+		placeComponent(scroll, 1, 7, 4, 2,  GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0, 0);
+		
+		logger.logGUI(
+				"                  ,.\n" +
+				"                 (\\(\\)\n" +
+				" ,_              ;  o >\n" +
+				"  {`-.          /  (_) \n" +
+				"  `={\\`-._____/`   |\n" +
+				"   `-{ /    -=`\\   |\n" +
+				"    `={  -= = _/   /\n" +
+				"       `\\  .-'   /`\n" +
+				"        {`-,__.'===,_\n" +
+				"        //`        `\\\n" +
+				"       //\n" +
+				"      `\\=\n");
+		
 		// input label
 		inputLabel = new JLabel("Input file");
 		placeComponent(inputLabel, 0, 0, 1, 1, GridBagConstraints.NONE, GridBagConstraints.LINE_END, 0, INPUT_HEIGHT);
@@ -105,6 +140,7 @@ public class GUIFrame extends JFrame {
 				}
 				
 				JFileChooser chooser = new JFileChooser(dir);
+
 				int res = chooser.showOpenDialog(GUIFrame.this);
 				
 				if (res == JFileChooser.APPROVE_OPTION) {
@@ -112,6 +148,8 @@ public class GUIFrame extends JFrame {
 					
 					currentDir = chooser.getSelectedFile().getParent();
 				}
+				cfg.config[0] = inputField.getText();
+				cfg.write(cfg.config);	
 			}
 		});
 
@@ -144,7 +182,12 @@ public class GUIFrame extends JFrame {
 					
 					currentDir = chooser.getSelectedFile().getParent();
 				}
+				cfg.config[0] = inputField.getText();
+				cfg.config[1] = outputField.getText();
+				//cfg.config[2] = rulesField.getText();
+				cfg.write(cfg.config);	
 			}
+			
 		});
 
 		// rules label
@@ -155,7 +198,15 @@ public class GUIFrame extends JFrame {
 		rulesField = new JTextField("");
 		placeComponent(rulesField, 1, 2, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 0.8,
 				INPUT_HEIGHT);
+		rulesField.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Vector data = (loadTableDataFromFile(rulesField.getText()));
+				if (data != null) {
+					table.setData(data);
+				}
+			}
 
+		});
 		// rules button
 		rulesButton = new JButton("Select file");
 		placeComponent(rulesButton, 4, 2, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 0,
@@ -174,24 +225,15 @@ public class GUIFrame extends JFrame {
 				if (res == JFileChooser.APPROVE_OPTION) {
 					String path = chooser.getSelectedFile().getAbsolutePath();
 					rulesField.setText(path);
-					FileReader fr = new FileReader(path);
-					String[] popisySloupcu = fr.read();
-					Vector<Vector<Object>> doTabulky = new Vector<Vector<Object>>(popisySloupcu.length);
-					for (int i = 0; i < popisySloupcu.length; i++) {
-						doTabulky.add(new Vector<Object>(Arrays.asList(popisySloupcu[i].split(";"))));
+					Vector data = (loadTableDataFromFile(path));
+					if (data != null) {
+						table.setData(data);
 					}
-					
-					currentDir = chooser.getSelectedFile().getParent();
-					table.setData(doTabulky);
 				}
-				try {
-					if (new File(rulesField.getText()).exists()) {
-						Masker masker = new Masker(rulesField.getText());
-					}
-				} catch (MaskingException e) {
-					JOptionPane.showMessageDialog(GUIFrame.this, e.getMessage());
-
-				}
+				cfg.config[0] = inputField.getText();
+				cfg.config[1] = outputField.getText();
+				cfg.config[2] = rulesField.getText();
+				cfg.write(cfg.config);	
 			}
 		});
 		// Masker masker = new Masker();
@@ -256,10 +298,19 @@ public class GUIFrame extends JFrame {
 				int res = chooser.showSaveDialog(GUIFrame.this);
 				if (res == JFileChooser.APPROVE_OPTION) {
 					String address = chooser.getSelectedFile().getAbsolutePath();
-					if(!address.endsWith(".txt")){
-						address+= ".txt";
+					if (!address.endsWith(".txt")) {
+						address += ".txt";
+
 						rulesField.setText(address);
+
 					}
+					
+					rulesField.setText(address);
+					cfg.config[0] = inputField.getText();
+					cfg.config[1] = outputField.getText();
+					cfg.config[2] = rulesField.getText();
+					cfg.write(cfg.config);		
+					
 					writ.write(address, table.getData());
 				}
 
@@ -268,7 +319,7 @@ public class GUIFrame extends JFrame {
 
 		// run button
 		runButton = new JButton("Run");
-		placeComponent(runButton, 1, 7, 5, 1, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0.5, 0.05);
+		placeComponent(runButton, 0, 8, 1, 1, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0, 0.05);
 		runButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -283,10 +334,9 @@ public class GUIFrame extends JFrame {
 					displayMessage("Output file not set.");
 					return;
 				}
-				/*if (!rulesFile.exists()) {
-					displayMessage("Rules file doesn't exist.");
-					return;
-				}*/
+				/*
+				 * if (!rulesFile.exists()) { displayMessage("Rules file doesn't exist."); return; }
+				 */
 
 				String inputFile = inputField.getText();
 				String outputFile = outputField.getText();
@@ -377,7 +427,7 @@ public class GUIFrame extends JFrame {
 						database = masker.mask(database);
 						try {
 							writer.append(database, input);
-							//writer.append(input, database);
+							// writer.append(input, database);
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -392,5 +442,13 @@ public class GUIFrame extends JFrame {
 			}
 		});
 
+		
+		
+		
+		inputField.setText(cfg.config[0]);
+		outputField.setText(cfg.config[1]);
+		rulesField.setText(cfg.config[2]);
+		
 	}
+	
 }
