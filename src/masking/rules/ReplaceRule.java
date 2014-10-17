@@ -18,7 +18,7 @@ public class ReplaceRule implements MaskingRule {
 			seed = f.read();
 			random = new Random();
 		}else{//soubor neexistuje
-			throw new MaskingException("Seed file not exist.");
+			throw new MaskingException("Seed file doesn't exist");
 		}
 	}
 	

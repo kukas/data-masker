@@ -55,26 +55,20 @@ public class DatabaseWriter {
 		writer.println("");
 	}
 
-	public void append(String[][] data) {
+	public void append(String[][] data, String[] input) {
 		int[] headerLengths = header.getLengths();
+		int[] headerOffsets = header.getOffsets();
 		
-		int colCount = data[0].length;
 		for (int i=0; i<data.length; i++) {
-			String newLine = "";
-			String delimiter = "";
-			for (int j=0; j<colCount; j++) {
-				int cellLen = data[i][j].length();
-				newLine += delimiter;
-				for(int k=0; k<headerLengths[j]; k++){
-					if(k<cellLen){
-						newLine += data[i][j].charAt(k);
-					}
-					else {
-						newLine += ' ';
-					}
-				}
-				delimiter = "";
+			String newLine = input[i];
+			
+			int lineLength = newLine.length();
+			for (int j=0; j<headerLengths.length; j++){
+				int offset = headerOffsets[j];
+				int length = headerLengths[j];
+				newLine = newLine.substring(0, offset) + data[i][j] + newLine.substring(offset+length, lineLength-offset-length-1);
 			}
+			
 			writer.println(newLine);
 		}
 	}
