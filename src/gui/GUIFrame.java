@@ -99,8 +99,9 @@ public class GUIFrame extends JFrame {
 		gbc.insets = new Insets(10, 10, 10, 10);
 
 		// Output for logger
-		JTextArea logs = new JTextArea("Welcome to Data Masking  by psvt");
+		JTextArea logs = new JTextArea("Welcome to Data Masking by psvt");
 		JScrollPane scroll = new JScrollPane(logs, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
 		final Logger logger = new Logger(logs, scroll);
 		placeComponent(scroll, 1, 7, 4, 2,  GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0, 0);
 		
@@ -117,7 +118,6 @@ public class GUIFrame extends JFrame {
 				"        //`        `\\\n" +
 				"       //\n" +
 				"      `\\=\n");
-		
 		// input label
 		inputLabel = new JLabel("Input file");
 		placeComponent(inputLabel, 0, 0, 1, 1, GridBagConstraints.NONE, GridBagConstraints.LINE_END, 0, INPUT_HEIGHT);
@@ -149,7 +149,7 @@ public class GUIFrame extends JFrame {
 					currentDir = chooser.getSelectedFile().getParent();
 				}
 				cfg.config[0] = inputField.getText();
-				cfg.write(cfg.config);	
+				cfg.write(cfg.config);
 			}
 		});
 
@@ -184,10 +184,10 @@ public class GUIFrame extends JFrame {
 				}
 				cfg.config[0] = inputField.getText();
 				cfg.config[1] = outputField.getText();
-				//cfg.config[2] = rulesField.getText();
-				cfg.write(cfg.config);	
+				// cfg.config[2] = rulesField.getText();
+				cfg.write(cfg.config);
 			}
-			
+
 		});
 
 		// rules label
@@ -198,6 +198,10 @@ public class GUIFrame extends JFrame {
 		rulesField = new JTextField("");
 		placeComponent(rulesField, 1, 2, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 0.8,
 				INPUT_HEIGHT);
+		Vector data = (loadTableDataFromFile(cfg.config[2]));
+		if (data != null) {
+			table.setData(data);
+		}
 		rulesField.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				Vector data = (loadTableDataFromFile(rulesField.getText()));
@@ -233,7 +237,7 @@ public class GUIFrame extends JFrame {
 				cfg.config[0] = inputField.getText();
 				cfg.config[1] = outputField.getText();
 				cfg.config[2] = rulesField.getText();
-				cfg.write(cfg.config);	
+				cfg.write(cfg.config);
 			}
 		});
 		// Masker masker = new Masker();
@@ -261,7 +265,13 @@ public class GUIFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (table.getSelectedRow() >= 0) {
-					table.removeRow(table.getSelectedRow());
+					int row = table.getSelectedRow();
+					table.removeRow(row);
+					if (row < table.getRowCount()) {
+						table.setRowSelectionInterval(row, row);
+					} else if (table.getRowCount() > 0) {
+						table.setRowSelectionInterval(row - 1, row - 1);
+					}
 				}
 			}
 		});
@@ -304,13 +314,13 @@ public class GUIFrame extends JFrame {
 						rulesField.setText(address);
 
 					}
-					
+
 					rulesField.setText(address);
 					cfg.config[0] = inputField.getText();
 					cfg.config[1] = outputField.getText();
 					cfg.config[2] = rulesField.getText();
-					cfg.write(cfg.config);		
-					
+					cfg.write(cfg.config);
+
 					writ.write(address, table.getData());
 				}
 
@@ -346,60 +356,65 @@ public class GUIFrame extends JFrame {
 				int[] lengths = new int[tableDATA.size()];
 				int[] offsets = new int[tableDATA.size()];
 
-				for(int i = 0; i < tableDATA.size(); i++){
+				for (int i = 0; i < tableDATA.size(); i++) {
 					try {
 						lengths[i] = Integer.parseInt((String) tableDATA.get(i).get(2));
-					}
-					catch (NumberFormatException e){
-						displayMessage("Invalid length on column "+(i+1)+": "+tableDATA.get(i).get(2).toString());
+					} catch (NumberFormatException e) {
+						displayMessage("Invalid length on column " + (i + 1) + ": "
+								+ tableDATA.get(i).get(2).toString());
 						return;
 					}
-					
+
 					try {
 						offsets[i] = Integer.parseInt((String) tableDATA.get(i).get(3));
-					}
-					catch (NumberFormatException e){
-						displayMessage("Invalid offset on column "+(i+1)+": "+tableDATA.get(i).get(3).toString());
+					} catch (NumberFormatException e) {
+						displayMessage("Invalid offset on column " + (i + 1) + ": "
+								+ tableDATA.get(i).get(3).toString());
 						return;
 					}
-					
-					
-					if(lengths[i] < 1){
-						displayMessage("Invalid length on column "+(i+1)+": "+tableDATA.get(i).get(2).toString());
+
+					if (lengths[i] < 1) {
+						displayMessage("Invalid length on column " + (i + 1) + ": "
+								+ tableDATA.get(i).get(2).toString());
 						return;
 					}
-						
-					if(offsets[i] < 0){
-						displayMessage("Invalid offset on column "+(i+1)+": "+tableDATA.get(i).get(3).toString());
+
+					if (offsets[i] < 0) {
+						displayMessage("Invalid offset on column " + (i + 1) + ": "
+								+ tableDATA.get(i).get(3).toString());
 						return;
 					}
-				};
-				
+				}
+				;
+
 				int lines = 100000;
 
 				FileReader fReader = new FileReader(inputFile);
 				DatabaseReader dReader = new DatabaseReader(lengths, offsets);
 				DatabaseWriter writer = new DatabaseWriter(outputFile, dReader.getHeader());
-				
+
 				FileReader lineLengthReader = new FileReader(inputFile);
 				String[] firstLines = lineLengthReader.readNLines(20);
 				int rowLength = 0;
-				for(int i=0; i<firstLines.length; i++){
-					if(firstLines[i].length() > rowLength){
+				for (int i = 0; i < firstLines.length; i++) {
+					if (firstLines[i].length() > rowLength) {
 						rowLength = firstLines[i].length();
 					}
 				}
-				
-				if(rowLength > 0){
-					for(int i=0; i<lengths.length; i++){
-						if(offsets[i]+lengths[i] > rowLength){
-							displayMessage("Column "+(i+1)+" is out of range.");
+				if (rowLength > 0) {
+					for (int i = 0; i < lengths.length; i++) {
+						if (offsets[i] + lengths[i] > rowLength) {
+							displayMessage("Column " + (i + 1) + " is out of range.");
 							return;
 						}
 					}
-				}
-				else {
+				} else {
 					displayMessage("Input file is empty.");
+					return;
+				}
+
+				if (table.getRowCount() == 0) {
+					displayMessage("No changes inputted.");
 					return;
 				}
 
@@ -420,8 +435,9 @@ public class GUIFrame extends JFrame {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-
+					int linesMasked = 0;
 					while ((input = fReader.readNLines(lines))[0] != null) {
+						linesMasked += input.length;
 						dReader.input = input;
 						database = dReader.read();
 						database = masker.mask(database);
@@ -435,6 +451,7 @@ public class GUIFrame extends JFrame {
 
 					writer.closeFile();
 					displayMessage("Done.");
+					logger.logGUI("Finished: Masked "+linesMasked+" lines");
 				} catch (MaskingException e) {
 					JOptionPane.showMessageDialog(GUIFrame.this, e.getMessage());
 					return;
@@ -442,13 +459,10 @@ public class GUIFrame extends JFrame {
 			}
 		});
 
-		
-		
-		
 		inputField.setText(cfg.config[0]);
 		outputField.setText(cfg.config[1]);
 		rulesField.setText(cfg.config[2]);
-		
+
 	}
-	
+
 }

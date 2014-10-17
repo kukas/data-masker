@@ -17,7 +17,7 @@ public class SettingsWriter {
 				String s = "";
 				for(int j = 0; j < data.get(i).size(); j++){
 				
-				if(data.get(i).get(j).equals("")){
+				if(data.get(i).get(j).equals(null)){
 					s += "";
 				}else{
 					s += data.get(i).get(j);

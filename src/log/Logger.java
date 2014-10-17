@@ -25,7 +25,7 @@ public class Logger {
 	public Logger(JTextArea textarea, JScrollPane scroll){
 		destination = textarea;
 		this.scroll = scroll;
-		destination.setEditable(true);
+		destination.setEditable(false);
 		destination.setLineWrap(true);
 	}
 	
