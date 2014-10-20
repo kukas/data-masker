@@ -14,6 +14,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Vector;
 
@@ -464,6 +465,9 @@ public class GUIFrame extends JFrame {
 		String[] firstLines = lineLengthReader.readNLines(20);
 		int rowLength = 0;
 		for (int i = 0; i < firstLines.length; i++) {
+			if(firstLines[i] == null){
+				continue;
+			}
 			if (firstLines[i].length() > rowLength) {
 				rowLength = firstLines[i].length();
 			}
