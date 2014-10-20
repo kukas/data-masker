@@ -2,6 +2,8 @@ package masking.rules;
 
 import java.util.Random;
 
+import exception.MaskingException;
+
 public class RandomDigitRule implements MaskingRule {
 
 	public int start = 0;
@@ -14,8 +16,8 @@ public class RandomDigitRule implements MaskingRule {
 	Random random = new Random();
 
 	public RandomDigitRule(int start, int end) {
-		this.start = start;
-		this.end = end;
+		this.start = start - 1;
+		this.end = end - 1;
 		length = end - start + 1;
 	}
 
@@ -24,7 +26,20 @@ public class RandomDigitRule implements MaskingRule {
 	}
 
 	@Override
-	public String mask(String in) {
+	public String mask(String in) throws MaskingException {
+		if (end > in.length() - 1) {
+			throw new MaskingException(
+					"The second parameter of the \"replace_with_random_digits\" rule is greater than the column length.");
+		}
+		if (start < 0) {
+			throw new MaskingException(
+					"The first parameter of the \"replace_with_random_digits\" rule must be greater than zero.");
+		}
+		if (end < start) {
+			throw new MaskingException(
+					"The second parameter of the \"replace_with_random_digits\" rule must be greater than or equal to the second one.");
+		}
+
 		if (all) {
 			start = 0;
 			end = in.length() - 1;

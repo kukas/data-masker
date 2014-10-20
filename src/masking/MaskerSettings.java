@@ -60,8 +60,8 @@ public class MaskerSettings extends Exception {
 			int numOfParams = arguments.length;
 
 			return getRuleByRuleName(ruleName, arguments, s);
-		}else{
-			//throw new MaskingException("Wrong format setting_masking file (wrong number of parts in line)");
+		} else {
+			// throw new MaskingException("Wrong format setting_masking file (wrong number of parts in line)");
 		}
 
 		return getRuleByRuleName(ruleName, new String[0], s);
@@ -76,32 +76,20 @@ public class MaskerSettings extends Exception {
 			return new NothingRule();
 
 		case "star":
-			
+
 			if (numOfParams == 0) {
 				return new StarsRule();
 			} else {
-				try{
+				try {
 					if (numOfParams == 1) {
 						return new StarsRule(0, Integer.parseInt(arrParams[0]));
-					} else if(numOfParams==2){
-						int start = Integer.parseInt(arrParams[0]);
-						int end = Integer.parseInt(arrParams[1]);
-						int correctStart = start-1;//indexy
-						int correctEnd = end-1;
-						
-						if(correctStart<0){
-							throw new MaskingException("The first parameter of the \"star\" rule must be greater than or equal to zero.");
-						}
-						
-						if(correctStart>correctEnd){
-							throw new MaskingException("The second parameter of the \"star\" rule must be greater than or equal to the second one.");
-						}
-						
-						return new StarsRule(correctStart, correctEnd);
-					}else{
-						throw new MaskingException("The \"star\" rule takes no, one or two parameters ("+numOfParams+" given).");
+					} else if (numOfParams == 2) {
+						return new StarsRule(Integer.parseInt(arrParams[0]), Integer.parseInt(arrParams[1]));
+					} else {
+						throw new MaskingException("The \"star\" rule takes no, one or two parameters (" + numOfParams
+								+ " given).");
 					}
-				}catch(NumberFormatException e){
+				} catch (NumberFormatException e) {
 					throw new MaskingException("The \"star\" rule takes no, one or two integer parameters.");
 				}
 			}
@@ -113,59 +101,62 @@ public class MaskerSettings extends Exception {
 				try {
 					min = Integer.parseInt(arrParams[0]);
 					max = Integer.parseInt(arrParams[1]);
-					if(min<0){
-						throw new MaskingException("The first parameter of the \"random_number\" rule must be greater than or equal to zero.");
+					if (min < 0) {
+						throw new MaskingException(
+								"The first parameter of the \"random_number\" rule must be greater than or equal to zero.");
 					}
-					
-					if(min>max){
-						throw new MaskingException("The second parameter of the \"random_number\" rule must be greater than or equal to the first one.");
+
+					if (min > max) {
+						throw new MaskingException(
+								"The second parameter of the \"random_number\" rule must be greater than or equal to the first one.");
 					}
 				} catch (NumberFormatException e) {
 					throw new MaskingException("The \"random_number\" rule takes no or two integer parameters.");
 				}
 				return new RandomNumberRule(min, max);
-			} else if(numOfParams==0){
+			} else if (numOfParams == 0) {
 				return new RandomNumberRule();
-			}else{
-				throw new MaskingException("The \"random_number\" rule takes no or two parameters ("+numOfParams+" given).");
+			} else {
+				throw new MaskingException("The \"random_number\" rule takes no or two parameters (" + numOfParams
+						+ " given).");
 			}
 
 		case "replace_from_seeds_file":
-			if(numOfParams!=1){
-				throw new MaskingException("The \"replace_from_seeds_file\" rule takes exactly one parameter ("+numOfParams+" given).");
-			}else{
+			if (numOfParams != 1) {
+				throw new MaskingException("The \"replace_from_seeds_file\" rule takes exactly one parameter ("
+						+ numOfParams + " given).");
+			} else {
 				return new ReplaceRule(arrParams[0]);
 			}
-			
 
 		case "random_rc":
-			if(numOfParams==0){
+			if (numOfParams == 0) {
 				return new RandomRCRule();
-			}else{
-				throw new MaskingException("The \"random_rc\" rule takes no parameters ("+numOfParams+" given).");
+			} else {
+				throw new MaskingException("The \"random_rc\" rule takes no parameters (" + numOfParams + " given).");
 			}
 
-		case "random_phone_number":	
-			if(numOfParams== 0){
+		case "random_phone_number":
+			if (numOfParams == 0) {
 				return new PhoneNumberRule();
-			}else if(numOfParams==1){
-				//return new PhoneNumberRule(arrParams[0]);
-			}else{
+			} else if (numOfParams == 1) {
+				// return new PhoneNumberRule(arrParams[0]);
+			} else {
 				throw new MaskingException("The \"random_phone_number\" rule takes no or one parameter.");
 			}
-			
+
 		case "IBAN":
 			if (numOfParams == 0) {
 				return new IbanRule();
 			} else if (numOfParams == 1) {
 				return new IbanRule(arrParams[0]);
-			}else{
-				throw new MaskingException("The \"IBAN\" rule takes no or one parameter ("+numOfParams+" given).");
+			} else {
+				throw new MaskingException("The \"IBAN\" rule takes no or one parameter (" + numOfParams + " given).");
 			}
 
 		case "replace_with_random_digits":
 			try {
-				switch(numOfParams){
+				switch (numOfParams) {
 				case 0:
 					return new RandomDigitRule(true);
 				case 1:
@@ -173,42 +164,35 @@ public class MaskerSettings extends Exception {
 				case 2:
 					return new RandomDigitRule(Integer.parseInt(arrParams[0]), Integer.parseInt(arrParams[1]));
 				default:
-					throw new MaskingException("The \"replace_with_random_digits\" rule takes no, one or two parameters ("+numOfParams+" given).");
+					throw new MaskingException(
+							"The \"replace_with_random_digits\" rule takes no, one or two parameters (" + numOfParams
+									+ " given).");
 				}
-				
+
 			} catch (NumberFormatException e) {
-				throw new MaskingException("The \"replace_with_random_digits\" rule takes no, one or two integer parameters.");
+				throw new MaskingException(
+						"The \"replace_with_random_digits\" rule takes no, one or two integer parameters.");
 			}
 		case "replace_with_random_characters":
 			try {
-				switch(numOfParams){
+				switch (numOfParams) {
 				case 1:
-					
 					return new RandomCharacterRule(arrParams[0]);
 				case 3:
-					int start = Integer.parseInt(arrParams[1]);
-					int end = Integer.parseInt(arrParams[2]);
-					int correctStart = start-1;
-					int correctEnd = end-1;
-					if(correctStart<0){
-						throw new MaskingException("The second parameter of the \""+funcName+"\" rule must be greater than zero.");
-					}
-					
-					if(correctEnd<correctStart){
-						throw new MaskingException("The third parameter of the \""+funcName+"\" rule must be greater than or equal to the second one.");
-					}
-					return new RandomCharacterRule(arrParams[0], correctStart,	correctEnd);
+					return new RandomCharacterRule(arrParams[0], Integer.parseInt(arrParams[1]), Integer.parseInt(arrParams[2]));
 				default:
-					throw new MaskingException("The \"replace_with_random_characters\" rule takes one or three parameters ("+numOfParams+" given).");
+					throw new MaskingException(
+							"The \"replace_with_random_characters\" rule takes one or three parameters (" + numOfParams
+									+ " given).");
 				}
-				
 
 			} catch (NumberFormatException e) {
-				throw new MaskingException("The \"replace_with_random_characters\" rule takes one or three parameters (the first one string, the second and the third one integers)");
+				throw new MaskingException(
+						"The \"replace_with_random_characters\" rule takes one or three parameters (the first one string, the second and the third one integers)");
 			}
 
 		default:
-			throw new MaskingException("Incorrect rule format: "+originalString+".");
+			throw new MaskingException("Incorrect rule format: " + originalString + ".");
 		}
 	}
 
