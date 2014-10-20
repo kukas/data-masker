@@ -116,18 +116,18 @@ public class GUIFrame extends JFrame {
 		placeComponent(scroll, 0, 10, 4, 4, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0, 0.6);
 
 		logger.logGUI("                  ,.\n" + // komentare zachranuji slepici pri formatovani (ctrl+shift+f)
-				"                 (\\(\\)\n" + // 
-				" ,_              ;  o >\n" + // 
-				"  {`-.          /  (_) \n" + // 
-				"  `={\\`-._____/`   |\n" + // 
-				"   `-{ /    -=`\\   |\n" + // 
+				"                 (\\(\\)\n" + //
+				" ,_              ;  o >\n" + //
+				"  {`-.          /  (_) \n" + //
+				"  `={\\`-._____/`   |\n" + //
+				"   `-{ /    -=`\\   |\n" + //
 				"    `={  -= = _/   /\n" + //
-				"       `\\  .-'   /`\n" + // 
-				"        {`-,__.'===,_\n" + // 
-				"        //`        `\\\n" + // 
+				"       `\\  .-'   /`\n" + //
+				"        {`-,__.'===,_\n" + //
+				"        //`        `\\\n" + //
 				"       //\n" + //
 				"      `\\=\n");
-		
+
 		// input label
 		inputLabel = new JLabel("Input file");
 		placeComponent(inputLabel, 0, 0, 1, 1, GridBagConstraints.NONE, GridBagConstraints.LINE_END, 0, INPUT_HEIGHT);
@@ -426,7 +426,7 @@ public class GUIFrame extends JFrame {
 			}
 
 			try {
-				offsets[i] = Integer.parseInt((String) tableDATA.get(i).get(3))-1;
+				offsets[i] = Integer.parseInt((String) tableDATA.get(i).get(3)) - 1;
 			} catch (NumberFormatException e) {
 				displayMessage("Invalid index argument at column " + (i + 1));
 				return;
@@ -445,8 +445,8 @@ public class GUIFrame extends JFrame {
 			}
 		}
 
-
-		int lines = 10000;
+		int lines = 1000;
+		logger.logGUI("------------------------------------------------");
 
 		FileReader fReader = new FileReader(inputFile);
 		DatabaseReader dReader = new DatabaseReader(lengths, offsets);
@@ -456,7 +456,7 @@ public class GUIFrame extends JFrame {
 		String[] firstLines = lineLengthReader.readNLines(20);
 		int rowLength = 0;
 		for (int i = 0; i < firstLines.length; i++) {
-			if(firstLines[i] == null){
+			if (firstLines[i] == null) {
 				continue;
 			}
 			if (firstLines[i].length() > rowLength) {
@@ -517,8 +517,8 @@ public class GUIFrame extends JFrame {
 			String[] columnDetails;
 			for (int i = 0; i < masker.maskerSettings.settingStrings.length; i++) {
 				columnDetails = masker.maskerSettings.settingStrings[i].split(";");
-				maskingWith = "Masking column(" + (Integer.parseInt(columnDetails[3]) + 1) + ","
-						+ (Integer.parseInt(columnDetails[2]) + Integer.parseInt(columnDetails[3])) + ")";
+				maskingWith = "Masking column(" + (Integer.parseInt(columnDetails[3])) + ","
+						+ (Integer.parseInt(columnDetails[2]) + Integer.parseInt(columnDetails[3]) - 1) + ")";
 				maskingWith += " with " + columnDetails[4];
 				logger.logGUI(maskingWith);
 			}
@@ -551,7 +551,7 @@ public class GUIFrame extends JFrame {
 			progressDialog.setVisible(false);
 			progressDialog.setModal(false);
 			JOptionPane.showMessageDialog(GUIFrame.this, e.getMessage());
-			//return;
+			// return;
 		}
 		t = new Thread(new Runnable() {
 			public void run() {
