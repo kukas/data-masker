@@ -503,8 +503,17 @@ public class GUIFrame extends JFrame {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			
+			String maskingWith = "";
+			String[] columnDetails;
+			for(int i = 0; i < masker.maskerSettings.settingStrings.length; i++){
+				columnDetails = masker.maskerSettings.settingStrings[i].split(";");
+				maskingWith = "Masking column("+(Integer.parseInt(columnDetails[3])+1)+","+(Integer.parseInt(columnDetails[2])+Integer.parseInt(columnDetails[3]))+")";
+				maskingWith += " with "+columnDetails[4];
+				logger.logGUI(maskingWith);
+			};
+			
 			int linesMasked = 0;
-			logger.logGUI("File size: " + fReader.fileSize);
 			int charsMasked = 0;
 			while ((input = fReader.readNLines(lines))[0] != null) {
 				charsMasked += (input[0].length() + 1) * input.length;
