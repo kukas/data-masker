@@ -141,6 +141,15 @@ public class MaskerSettings extends Exception {
 		case "random_rc":
 			if(numOfParams==0){
 				return new RandomRCRule();
+			}else if(numOfParams==1){
+				switch(arrParams[0]){
+				case "yes":
+					return new RandomRCRule(true);
+				case "no":
+					return new RandomRCRule(false);
+				default:
+					throw new MaskingException("The parametr for \""+funcName+"\" must be \"yes\" or \"no\".");
+				}
 			}else{
 				throw new MaskingException("The \"random_rc\" rule takes no parameters ("+numOfParams+" given).");
 			}
