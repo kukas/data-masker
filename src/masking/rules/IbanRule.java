@@ -1,5 +1,6 @@
 package masking.rules;
 
+import java.io.File;
 import java.math.BigInteger;
 
 import exception.MaskingException;
@@ -8,12 +9,28 @@ public class IbanRule implements MaskingRule{
 		
 	String countryCode ="";
 	boolean countryCodeSet = false;
+	String ibanFile  = "seeds/countryCodes.txt";
 	
-	public IbanRule(String countryCode){
-		this.countryCode =  countryCode;
-		countryCodeSet = true;
+	public IbanRule() throws MaskingException{
+		if(!new File(ibanFile).exists()){
+			throw new MaskingException("File for iban rule doesn't exist.");
+		}
 	}
-	public IbanRule(){
+	
+	public IbanRule(String in) throws MaskingException{
+		if(in.length()<2){
+			throw new MaskingException("Country code must have two characters");
+		}else if(in.length()==2){
+			this.countryCode =  in;
+			countryCodeSet = true;
+		}else{//ted to bere jako cestu k souboru
+			if(!new File(in).exists()){
+				throw new MaskingException("File \""+in+"\" doesn't exist.");
+			}
+			this.ibanFile = in;
+			
+		}
+		
 	}
 	
 	@Override
@@ -24,7 +41,7 @@ public class IbanRule implements MaskingRule{
 		//Logger.debug(accNumber);
 		
 		if(this.countryCode.length() != 2){
-			ReplaceRule country = new ReplaceRule("seeds/countryCodes.txt");
+			ReplaceRule country = new ReplaceRule(ibanFile);
 			countryCode = country.mask("00");
 		}
 		
