@@ -113,10 +113,19 @@ public class GUIFrame extends JFrame {
 
 		placeComponent(scroll, 0, 10, 4, 4, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0, 0);
 
-		logger.logGUI("                  ,.\n" + "                 (\\(\\)\n" + " ,_              ;  o >\n"
-				+ "  {`-.          /  (_) \n" + "  `={\\`-._____/`   |\n" + "   `-{ /    -=`\\   |\n"
-				+ "    `={  -= = _/   /\n" + "       `\\  .-'   /`\n" + "        {`-,__.'===,_\n"
-				+ "        //`        `\\\n" + "       //\n" + "      `\\=\n");
+		logger.logGUI(
+				"                  ,.\n" + 
+				"                 (\\(\\)\n" + 
+				" ,_              ;  o >\n"+
+				"  {`-.          /  (_) \n" + 
+				"  `={\\`-._____/`   |\n" + 
+				"   `-{ /    -=`\\   |\n" +
+				"    `={  -= = _/   /\n" + 
+				"       `\\  .-'   /`\n" + 
+				"        {`-,__.'===,_\n" +
+				"        //`        `\\\n" + 
+				"       //\n" + 
+				"      `\\=\n");
 		// input label
 		inputLabel = new JLabel("Input file");
 		placeComponent(inputLabel, 0, 0, 1, 1, GridBagConstraints.NONE, GridBagConstraints.LINE_END, 0, INPUT_HEIGHT);
