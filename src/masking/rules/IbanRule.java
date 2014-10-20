@@ -52,7 +52,7 @@ public class IbanRule implements MaskingRule{
 		int cC1 = (((int)countryCode.charAt(0)) - 55);
 		int cC2 = (((int)countryCode.charAt(1)) - 55);
 		if(cC1 < 1 || cC2 < 1){
-			throw new MaskingException("The \"IBAN\" country code does not exist.");
+			throw new MaskingException("The \"IBAN\" rule was given an invalid parameter ("+in+"country code does not exist).");
 		}
 		countryCodeConverted = cC1 + "" + cC2;
 		//Logger.debug(countryCodeConverted);
