@@ -451,7 +451,6 @@ public class GUIFrame extends JFrame {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-					logger.logGUI((offsets[0]+1)+" "+(offsets[0]+lengths[0]));
 					int linesMasked = 0;
 					String maskingWith = "";
 					String[] columnDetails;
