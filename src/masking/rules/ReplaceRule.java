@@ -18,7 +18,7 @@ public class ReplaceRule implements MaskingRule {
 			seed = f.read();
 			random = new Random();
 		}else{//soubor neexistuje
-			throw new MaskingException("Seed file doesn't exist");
+			throw new MaskingException("The \"replace_from_seeds_file\" rule was given an invalid parameter (takes the path to the seeds file) or the seeds file does not exist.");
 		}
 	}
 	
