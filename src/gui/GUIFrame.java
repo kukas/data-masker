@@ -452,7 +452,10 @@ public class GUIFrame extends JFrame {
 						e.printStackTrace();
 					}
 					int linesMasked = 0;
+					logger.logGUI("File size: "+fReader.fileSize);
+					int charsMasked = 0;
 					while ((input = fReader.readNLines(lines))[0] != null) {
+						charsMasked += (input[0].length()+1)*input.length;
 						linesMasked += input.length;
 						dReader.input = input;
 						database = dReader.read();
@@ -460,6 +463,7 @@ public class GUIFrame extends JFrame {
 						try {
 							writer.append(database, input);
 							// writer.append(input, database);
+							logger.logGUI("Progress: "+Math.round((double)charsMasked*1000/(double) fReader.fileSize)/(double)10);
 						} catch (Exception e) {
 							e.printStackTrace();
 						}

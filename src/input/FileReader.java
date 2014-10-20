@@ -16,10 +16,12 @@ public class FileReader {
 	public Charset charset;
 	public boolean initialized = false;
 	public ArrayList<String> lines = new ArrayList<String>();
+	public long fileSize = 0;
 	
 	public FileReader(String from){
 		File file = new File(from);
 		path = file.toPath();
+		fileSize = file.length();
 		
 		charset = StandardCharsets.UTF_8;
 		
@@ -28,6 +30,7 @@ public class FileReader {
 	public FileReader (String fileName, String _charset){
 		File file = new File(fileName);
 		path = file.toPath();
+		fileSize = file.length();
 		if(_charset == "UTF-8"){
 			charset = StandardCharsets.UTF_8;
 		}

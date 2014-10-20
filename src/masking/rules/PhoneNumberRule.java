@@ -1,14 +1,31 @@
 package masking.rules;
 
+import input.FileReader;
+
+import java.io.File;
+import java.util.Random;
+
 import exception.MaskingException;
 
 public class PhoneNumberRule implements MaskingRule{
+	public String fileName;
+	public PhoneNumberRule()  throws MaskingException{
+		this("seeds/PhoneNumbers.txt");
+	}
+	
+	public PhoneNumberRule(String file) throws MaskingException{
+		if(new File(file).exists()){
+			this.fileName = file;
+		}else{//soubor neexistuje
+			throw new MaskingException("Phone number file doesn't exist.");
+		}
+	}
 	
 	@Override
 	public String mask(String in) throws MaskingException{
 		String noSpace = in.replaceAll(" ", "");
 		String firstThreeDigits = noSpace.substring(0,3);
-		ReplaceRule prefix = new ReplaceRule("seeds/PhoneNumbers.txt");
+		ReplaceRule prefix = new ReplaceRule(this.fileName);
 		firstThreeDigits = prefix.mask(firstThreeDigits);
 		String otherDigits = ((int)(Math.random() * 999999)) + "";
 		while(otherDigits.length()<6){
