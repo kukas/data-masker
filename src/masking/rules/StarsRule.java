@@ -2,11 +2,11 @@ package masking.rules;
 
 public class StarsRule implements MaskingRule {
 	int start;
-	int length;
+	int end;
 	boolean all = false;
-	public StarsRule(int start, int length) {
+	public StarsRule(int start, int end) {
 		this.start = start;
-		this.length = length;
+		this.end = end;
 	}
 
 	public StarsRule() {
@@ -18,7 +18,7 @@ public class StarsRule implements MaskingRule {
 		String out = new String("");
 
 		for (int i = 0; i < in.length(); i++) {	
-			if ((i >= start && i <= start+length) || all){
+			if ((i >= start && i <= end) || all){
 				out += "*";
 			}
 			else {
