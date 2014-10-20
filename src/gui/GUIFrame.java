@@ -126,6 +126,16 @@ public class GUIFrame extends JFrame {
 				"        //`        `\\\n" + // 
 				"       //\n" + //
 				"      `\\=\n");
+		
+		logger.logGUI("    /'._     _,\n"+ //
+				"    \\   ;__.'  }\n"+ //
+				"(`-._;-\" _.--.}'\n"+ //
+				"/_'    /`    _}\n"+ //
+				"  `.   \\_._.;\n"+ //
+				"    '-.__ /\n"+ //
+				"     _/  `\\\n"+ //
+				"     ^`   ^`\n");
+		
 		// input label
 		inputLabel = new JLabel("Input file");
 		placeComponent(inputLabel, 0, 0, 1, 1, GridBagConstraints.NONE, GridBagConstraints.LINE_END, 0, INPUT_HEIGHT);
@@ -171,7 +181,7 @@ public class GUIFrame extends JFrame {
 		placeComponent(outputField, 1, 1, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 1,
 				INPUT_HEIGHT);
 		outputField
-				.setToolTipText("Insert file path for the masked data. If the file does not exist, the program will create it.");
+				.setToolTipText("Insert a file path for the masked data. If the file does not exist, the program will create it.");
 
 		// output button
 		outputButton = new JButton("Select file");
@@ -189,7 +199,11 @@ public class GUIFrame extends JFrame {
 				int res = chooser.showOpenDialog(GUIFrame.this);
 
 				if (res == JFileChooser.APPROVE_OPTION) {
-					outputField.setText(chooser.getSelectedFile().getAbsolutePath());
+					String address = chooser.getSelectedFile().getAbsolutePath();
+					if (!address.endsWith(".txt")) {
+						address += ".txt";
+					}
+					outputField.setText(address);
 
 					currentDir = chooser.getSelectedFile().getParent();
 				}
@@ -348,7 +362,7 @@ public class GUIFrame extends JFrame {
 
 			}
 		});
-		saveButton.setToolTipText("Save masking rules.");
+		saveButton.setToolTipText("Export new masking rules.");
 
 		// run button
 		runButton = new JButton("Run");
@@ -364,7 +378,7 @@ public class GUIFrame extends JFrame {
 			}
 		});
 		runButton
-				.setToolTipText("Deselect lines in the table and click to run the program. See output file for masked data.");
+				.setToolTipText("Deselect the parameter cell in the table and click to run the program. See output file for masked data.");
 
 		helpButton = new JButton("Help");
 		placeComponent(helpButton, 5, 9, 1, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.FIRST_LINE_END, 0, 0);
@@ -422,7 +436,7 @@ public class GUIFrame extends JFrame {
 			try {
 				offsets[i] = Integer.parseInt((String) tableDATA.get(i).get(3));
 			} catch (NumberFormatException e) {
-				displayMessage("Invalid offset argument at column " + (i + 1));
+				displayMessage("Invalid index argument at column " + (i + 1));
 				return;
 			}
 
@@ -433,7 +447,7 @@ public class GUIFrame extends JFrame {
 			}
 
 			if (offsets[i] < 0) {
-				displayMessage("Invalid offset argument at column " + (i + 1) + ": "
+				displayMessage("Invalid index argument at column " + (i + 1) + ": "
 						+ tableDATA.get(i).get(3).toString());
 				return;
 			}
