@@ -118,7 +118,7 @@ public class MaskerSettings extends Exception {
 					}
 					
 					if(min>max){
-						throw new MaskingException("The second parameter of the \"random_number\" rule must be greater than or equal to the second one.");
+						throw new MaskingException("The second parameter of the \"random_number\" rule must be greater than or equal to the first one.");
 					}
 				} catch (NumberFormatException e) {
 					throw new MaskingException("The \"random_number\" rule takes no or two integer parameters.");
@@ -183,10 +183,21 @@ public class MaskerSettings extends Exception {
 			try {
 				switch(numOfParams){
 				case 1:
+					
 					return new RandomCharacterRule(arrParams[0]);
 				case 3:
-					return new RandomCharacterRule(arrParams[0], Integer.parseInt(arrParams[1]),
-							Integer.parseInt(arrParams[2]));
+					int start = Integer.parseInt(arrParams[1]);
+					int end = Integer.parseInt(arrParams[2]);
+					int correctStart = start-1;
+					int correctEnd = end-1;
+					if(correctStart<0){
+						throw new MaskingException("The second parameter of the \""+funcName+"\" rule must be greater than zero.");
+					}
+					
+					if(correctEnd<correctStart){
+						throw new MaskingException("The third parameter of the \""+funcName+"\" rule must be greater than or equal to the second one.");
+					}
+					return new RandomCharacterRule(arrParams[0], correctStart,	correctEnd);
 				default:
 					throw new MaskingException("The \"replace_with_random_characters\" rule takes one or three parameters ("+numOfParams+" given).");
 				}
