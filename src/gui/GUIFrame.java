@@ -7,6 +7,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Desktop;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -102,8 +103,8 @@ public class GUIFrame extends JFrame {
 	}
 
 	public GUIFrame() {
-
-		setSize(800, 600);
+		logs.setFont(new Font("courier new", Font.PLAIN, 12));
+		setSize(800, 650);
 		setTitle("Data Masking");
 		Container pane = this.getContentPane();
 		pane.setLayout(new GridBagLayout());
@@ -112,21 +113,30 @@ public class GUIFrame extends JFrame {
 		gbc.weighty = 0.5;
 		gbc.insets = new Insets(10, 10, 10, 10);
 
-		placeComponent(scroll, 0, 10, 4, 4, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0, 0);
+		placeComponent(scroll, 0, 10, 4, 4, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0, 0.6);
 
-		logger.logGUI(
-				"                  ,.\n" + 
-				"                 (\\(\\)\n" + 
-				" ,_              ;  o >\n"+
-				"  {`-.          /  (_) \n" + 
-				"  `={\\`-._____/`   |\n" + 
-				"   `-{ /    -=`\\   |\n" +
-				"    `={  -= = _/   /\n" + 
-				"       `\\  .-'   /`\n" + 
-				"        {`-,__.'===,_\n" +
-				"        //`        `\\\n" + 
-				"       //\n" + 
+		logger.logGUI("                  ,.\n" + // komentare zachranuji slepici pri formatovani (ctrl+shift+f)
+				"                 (\\(\\)\n" + // 
+				" ,_              ;  o >\n" + // 
+				"  {`-.          /  (_) \n" + // 
+				"  `={\\`-._____/`   |\n" + // 
+				"   `-{ /    -=`\\   |\n" + // 
+				"    `={  -= = _/   /\n" + //
+				"       `\\  .-'   /`\n" + // 
+				"        {`-,__.'===,_\n" + // 
+				"        //`        `\\\n" + // 
+				"       //\n" + //
 				"      `\\=\n");
+		
+		logger.logGUI("    /'._     _,\n"+ //
+				"    \\   ;__.'  }\n"+ //
+				"(`-._;-\" _.--.}'\n"+ //
+				"/_'    /`    _}\n"+ //
+				"  `.   \\_._.;\n"+ //
+				"    '-.__ /\n"+ //
+				"     _/  `\\\n"+ //
+				"     ^`   ^`\n");
+		
 		// input label
 		inputLabel = new JLabel("Input file");
 		placeComponent(inputLabel, 0, 0, 1, 1, GridBagConstraints.NONE, GridBagConstraints.LINE_END, 0, INPUT_HEIGHT);
@@ -172,7 +182,7 @@ public class GUIFrame extends JFrame {
 		placeComponent(outputField, 1, 1, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 1,
 				INPUT_HEIGHT);
 		outputField
-				.setToolTipText("Insert file path for the masked data. If the file does not exist, the program will create it.");
+				.setToolTipText("Insert a file path for the masked data. If the file does not exist, the program will create it.");
 
 		// output button
 		outputButton = new JButton("Select file");
@@ -190,7 +200,11 @@ public class GUIFrame extends JFrame {
 				int res = chooser.showOpenDialog(GUIFrame.this);
 
 				if (res == JFileChooser.APPROVE_OPTION) {
-					outputField.setText(chooser.getSelectedFile().getAbsolutePath());
+					String address = chooser.getSelectedFile().getAbsolutePath();
+					if (!address.endsWith(".txt")) {
+						address += ".txt";
+					}
+					outputField.setText(address);
 
 					currentDir = chooser.getSelectedFile().getParent();
 				}
@@ -262,7 +276,7 @@ public class GUIFrame extends JFrame {
 
 		JScrollPane tablePane = new JScrollPane(table);
 
-		placeComponent(tablePane, 0, 4, 5, 6, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 1, 0.8);
+		placeComponent(tablePane, 0, 4, 5, 6, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 1, 0.3);
 		table.finishInit(); // graficke nastaveni tabulky se musi provest az po pridani dat
 
 		// side buttons
@@ -344,12 +358,12 @@ public class GUIFrame extends JFrame {
 					cfg.write(cfg.config);
 
 					writ.write(address, table.getData());
-					logger.logGUI("Saved settings to "+address);
+					logger.logGUI("Saved settings to " + address);
 				}
 
 			}
 		});
-		saveButton.setToolTipText("Save masking rules.");
+		saveButton.setToolTipText("Export new masking rules.");
 
 		// run button
 		runButton = new JButton("Run");
@@ -365,22 +379,21 @@ public class GUIFrame extends JFrame {
 			}
 		});
 		runButton
-				.setToolTipText("Deselect lines in the table and click to run the program. See output file for masked data.");
+				.setToolTipText("Deselect the parameter cell in the table and click to run the program. See output file for masked data.");
 
 		helpButton = new JButton("Help");
 		placeComponent(helpButton, 5, 9, 1, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.FIRST_LINE_END, 0, 0);
 		helpButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				//display help
-				 Desktop desktop = Desktop.getDesktop();  
-		          try {
-		        	  File f = new File("User documentation.docx");
-		        	  desktop.open(f);
-		          }
-		          catch(Exception ex) {
-		        	  displayMessage("Error: Documentation not found");
-		          }
+				// display help
+				Desktop desktop = Desktop.getDesktop();
+				try {
+					File f = new File("User documentation.docx");
+					desktop.open(f);
+				} catch (Exception ex) {
+					displayMessage("Error: Documentation not found");
+				}
 			}
 		});
 		helpButton.setToolTipText("Help! I'm stuck in a tooltip factory!");
@@ -424,7 +437,7 @@ public class GUIFrame extends JFrame {
 			try {
 				offsets[i] = Integer.parseInt((String) tableDATA.get(i).get(3));
 			} catch (NumberFormatException e) {
-				displayMessage("Invalid offset argument at column " + (i + 1));
+				displayMessage("Invalid index argument at column " + (i + 1));
 				return;
 			}
 
@@ -435,26 +448,12 @@ public class GUIFrame extends JFrame {
 			}
 
 			if (offsets[i] < 0) {
-				displayMessage("Invalid offset argument at column " + (i + 1) + ": "
+				displayMessage("Invalid index argument at column " + (i + 1) + ": "
 						+ tableDATA.get(i).get(3).toString());
 				return;
 			}
 		}
 
-		JProgressBar progressBar = new JProgressBar(0, 100);
-		final JDialog progressDialog = new JDialog(GUIFrame.this, "Masking in progress", true);
-		progressDialog.add(BorderLayout.CENTER, progressBar);
-		progressDialog.setSize(300, 75);
-		progressDialog.setLocationRelativeTo(GUIFrame.this);
-		progressDialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-		// progressDialog.setVisible(true);
-
-		Thread t = new Thread(new Runnable() {
-			public void run() {
-				progressDialog.setVisible(true);
-			}
-		});
-		t.start();
 
 		int lines = 10000;
 
@@ -466,6 +465,9 @@ public class GUIFrame extends JFrame {
 		String[] firstLines = lineLengthReader.readNLines(20);
 		int rowLength = 0;
 		for (int i = 0; i < firstLines.length; i++) {
+			if(firstLines[i] == null){
+				continue;
+			}
 			if (firstLines[i].length() > rowLength) {
 				rowLength = firstLines[i].length();
 			}
@@ -487,6 +489,21 @@ public class GUIFrame extends JFrame {
 			return;
 		}
 
+		JProgressBar progressBar = new JProgressBar(0, 100);
+		final JDialog progressDialog = new JDialog(GUIFrame.this, "Masking in progress", true);
+		progressDialog.add(BorderLayout.CENTER, progressBar);
+		progressDialog.setSize(300, 75);
+		progressDialog.setLocationRelativeTo(GUIFrame.this);
+		progressDialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+		// progressDialog.setVisible(true);
+
+		Thread t = new Thread(new Runnable() {
+			public void run() {
+				progressDialog.setVisible(true);
+			}
+		});
+		t.start();
+
 		try {
 			Masker masker = new Masker(table.getData());
 			/*
@@ -504,16 +521,18 @@ public class GUIFrame extends JFrame {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
+
 			String maskingWith = "";
 			String[] columnDetails;
-			for(int i = 0; i < masker.maskerSettings.settingStrings.length; i++){
+			for (int i = 0; i < masker.maskerSettings.settingStrings.length; i++) {
 				columnDetails = masker.maskerSettings.settingStrings[i].split(";");
-				maskingWith = "Masking column("+(Integer.parseInt(columnDetails[3])+1)+","+(Integer.parseInt(columnDetails[2])+Integer.parseInt(columnDetails[3]))+")";
-				maskingWith += " with "+columnDetails[4];
+				maskingWith = "Masking column(" + (Integer.parseInt(columnDetails[3]) + 1) + ","
+						+ (Integer.parseInt(columnDetails[2]) + Integer.parseInt(columnDetails[3])) + ")";
+				maskingWith += " with " + columnDetails[4];
 				logger.logGUI(maskingWith);
-			};
-			
+			}
+			;
+
 			int linesMasked = 0;
 			int charsMasked = 0;
 			while ((input = fReader.readNLines(lines))[0] != null) {
@@ -524,22 +543,30 @@ public class GUIFrame extends JFrame {
 				database = masker.mask(database);
 				try {
 					writer.append(database, input);
-					//logger.logGUI("Progress: " + Math.round((double) charsMasked * 1000 / (double) fReader.fileSize)
-					//		/ (double) 10);
+					// logger.logGUI("Progress: " + Math.round((double) charsMasked * 1000 / (double) fReader.fileSize)
+					// / (double) 10);
 					progressBar.setValue((int) Math.round((double) charsMasked * 100 / (double) fReader.fileSize));
 
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
-			progressDialog.setVisible(false);
+			progressDialog.setModal(false);
 
 			writer.closeFile();
 			displayMessage("Done.");
 			logger.logGUI("Finished: Masked " + linesMasked + " lines");
 		} catch (MaskingException e) {
+			progressDialog.setVisible(false);
+			progressDialog.setModal(false);
 			JOptionPane.showMessageDialog(GUIFrame.this, e.getMessage());
-			return;
+			//return;
 		}
+		t = new Thread(new Runnable() {
+			public void run() {
+				progressDialog.setVisible(false);
+			}
+		});
+		t.start();
 	}
 }

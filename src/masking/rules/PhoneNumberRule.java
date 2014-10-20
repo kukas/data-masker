@@ -17,7 +17,7 @@ public class PhoneNumberRule implements MaskingRule{
 		if(new File(file).exists()){
 			this.fileName = file;
 		}else{//soubor neexistuje
-			throw new MaskingException("Phone number file doesn't exist.");
+			throw new MaskingException("The \"random_phone_number\" rule was given an invalid parameter (takes the path to the seeds file) or the seeds file does not exist.");
 		}
 	}
 	

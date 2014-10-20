@@ -13,19 +13,19 @@ public class IbanRule implements MaskingRule{
 	
 	public IbanRule() throws MaskingException{
 		if(!new File(ibanFile).exists()){
-			throw new MaskingException("File for iban rule doesn't exist.");
+			throw new MaskingException("jsme kreteni a mame to zabugovany");
 		}
 	}
 	
 	public IbanRule(String in) throws MaskingException{
 		if(in.length()<2){
-			throw new MaskingException("Country code must have two characters");
+			throw new MaskingException("The \"IBAN\" rule was given an invalid parameter (takes the path to the seeds file or the country code) or the seeds file does not exist.");
 		}else if(in.length()==2){
 			this.countryCode =  in;
 			countryCodeSet = true;
 		}else{//ted to bere jako cestu k souboru
 			if(!new File(in).exists()){
-				throw new MaskingException("File \""+in+"\" doesn't exist.");
+				throw new MaskingException("The \"IBAN\" rule was given an invalid parameter (takes the path to the seeds file or the country code) or the seeds file does not exist.");
 			}
 			this.ibanFile = in;
 			
@@ -52,7 +52,7 @@ public class IbanRule implements MaskingRule{
 		int cC1 = (((int)countryCode.charAt(0)) - 55);
 		int cC2 = (((int)countryCode.charAt(1)) - 55);
 		if(cC1 < 1 || cC2 < 1){
-			throw new MaskingException("Wrong Iban country code.");
+			throw new MaskingException("The \"IBAN\" rule was given an invalid parameter ("+in+"country code does not exist).");
 		}
 		countryCodeConverted = cC1 + "" + cC2;
 		//Logger.debug(countryCodeConverted);
