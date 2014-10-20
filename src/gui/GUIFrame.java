@@ -192,7 +192,7 @@ public class GUIFrame extends JFrame {
 
 				if (res == JFileChooser.APPROVE_OPTION) {
 					String address = chooser.getSelectedFile().getAbsolutePath();
-					if (!address.endsWith(".txt")) {
+					if (!address.contains(".") && !address.endsWith(".txt")) {
 						address += ".txt";
 					}
 					outputField.setText(address);
@@ -335,7 +335,7 @@ public class GUIFrame extends JFrame {
 				int res = chooser.showSaveDialog(GUIFrame.this);
 				if (res == JFileChooser.APPROVE_OPTION) {
 					String address = chooser.getSelectedFile().getAbsolutePath();
-					if (!address.endsWith(".txt")) {
+					if (!address.contains(".") && !address.endsWith(".txt")) {
 						address += ".txt";
 
 						rulesField.setText(address);
