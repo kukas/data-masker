@@ -189,7 +189,11 @@ public class GUIFrame extends JFrame {
 				int res = chooser.showOpenDialog(GUIFrame.this);
 
 				if (res == JFileChooser.APPROVE_OPTION) {
-					outputField.setText(chooser.getSelectedFile().getAbsolutePath());
+					String address = chooser.getSelectedFile().getAbsolutePath();
+					if (!address.endsWith(".txt")) {
+						address += ".txt";
+					}
+					outputField.setText(address);
 
 					currentDir = chooser.getSelectedFile().getParent();
 				}
