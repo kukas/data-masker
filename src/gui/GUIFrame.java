@@ -337,6 +337,7 @@ public class GUIFrame extends JFrame {
 					cfg.write(cfg.config);
 
 					writ.write(address, table.getData());
+					logger.logGUI("Saved settings to "+address);
 				}
 
 			}
@@ -451,8 +452,16 @@ public class GUIFrame extends JFrame {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
+					logger.logGUI((offsets[0]+1)+" "+(offsets[0]+lengths[0]));
 					int linesMasked = 0;
-					logger.logGUI("File size: "+fReader.fileSize);
+					String maskingWith = "";
+					String[] columnDetails;
+					for(int i = 0; i < masker.maskerSettings.settingStrings.length; i++){
+						columnDetails = masker.maskerSettings.settingStrings[i].split(";");
+						maskingWith = "Masking column("+(Integer.parseInt(columnDetails[3])+1)+","+(Integer.parseInt(columnDetails[2])+Integer.parseInt(columnDetails[3]))+")";
+						maskingWith += " with "+columnDetails[4];
+						logger.logGUI(maskingWith);
+					};
 					int charsMasked = 0;
 					while ((input = fReader.readNLines(lines))[0] != null) {
 						charsMasked += (input[0].length()+1)*input.length;
@@ -463,7 +472,7 @@ public class GUIFrame extends JFrame {
 						try {
 							writer.append(database, input);
 							// writer.append(input, database);
-							logger.logGUI("Progress: "+Math.round((double)charsMasked*1000/(double) fReader.fileSize)/(double)10);
+							logger.logGUI("Progress: "+Math.round((double)charsMasked*1000/(double) fReader.fileSize)/(double)10 + " %");
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
