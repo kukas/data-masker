@@ -16,7 +16,7 @@ import javax.swing.table.TableModel;
 public class RulesTable extends JTable {
 	final static String[] OPERATIONS = { "do_nothing", "star", "random_number", "replace_from_seeds_file", "random_rc",
 			"random_phone_number", "replace_with_random_digits", "replace_with_random_characters", "IBAN" };
-	final static String[] COLUMNS = { "Name", "Type", "Length", "Offset", "Operation", "Parameters" };
+	final static String[] COLUMNS = { "Name", "Type", "Length", "Index", "Operation", "Parameters" };
 	final static int ROW_HEIGHT = 20;
 	DefaultTableModel tableModel = new DefaultTableModel(new Object[0][COLUMNS.length], COLUMNS);
 	TableColumnModel columnModel;
