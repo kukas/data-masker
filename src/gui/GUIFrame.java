@@ -126,6 +126,16 @@ public class GUIFrame extends JFrame {
 				"        //`        `\\\n" + // 
 				"       //\n" + //
 				"      `\\=\n");
+		
+		logger.logGUI("    /'._     _,\n"+ //
+				"    \\   ;__.'  }\n"+ //
+				"(`-._;-\" _.--.}'\n"+ //
+				"/_'    /`    _}\n"+ //
+				"  `.   \\_._.;\n"+ //
+				"    '-.__ /\n"+ //
+				"     _/  `\\\n"+ //
+				"     ^`   ^`\n");
+		
 		// input label
 		inputLabel = new JLabel("Input file");
 		placeComponent(inputLabel, 0, 0, 1, 1, GridBagConstraints.NONE, GridBagConstraints.LINE_END, 0, INPUT_HEIGHT);
