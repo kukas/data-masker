@@ -192,7 +192,7 @@ public class GUIFrame extends JFrame {
 
 				if (res == JFileChooser.APPROVE_OPTION) {
 					String address = chooser.getSelectedFile().getAbsolutePath();
-					if (!address.endsWith(".txt")) {
+					if (!address.contains(".") && !address.endsWith(".txt")) {
 						address += ".txt";
 					}
 					outputField.setText(address);
@@ -335,7 +335,7 @@ public class GUIFrame extends JFrame {
 				int res = chooser.showSaveDialog(GUIFrame.this);
 				if (res == JFileChooser.APPROVE_OPTION) {
 					String address = chooser.getSelectedFile().getAbsolutePath();
-					if (!address.endsWith(".txt")) {
+					if (!address.contains(".") && !address.endsWith(".txt")) {
 						address += ".txt";
 
 						rulesField.setText(address);
@@ -380,7 +380,7 @@ public class GUIFrame extends JFrame {
 				// display help
 				Desktop desktop = Desktop.getDesktop();
 				try {
-					File f = new File("User documentation.docx");
+					File f = new File("User documentation.pdf");
 					desktop.open(f);
 				} catch (Exception ex) {
 					displayMessage("Error: Documentation not found");
