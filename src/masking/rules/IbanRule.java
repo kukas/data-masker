@@ -10,11 +10,13 @@ public class IbanRule implements MaskingRule{
 	String countryCode ="";
 	boolean countryCodeSet = false;
 	String ibanFile  = "seeds/countryCodes.txt";
+	ReplaceRule replaceRule;
 	
 	public IbanRule() throws MaskingException{
 		if(!new File(ibanFile).exists()){
-			throw new MaskingException("Default seeds file for \"IBAN\" rule not found. Please specify seeds file in parameter.");
+			throw new MaskingException("Default seeds file for \"IBAN\" rule not found. Please specify the seeds file in the parameter.");
 		}
+		this.replaceRule = new ReplaceRule(ibanFile);
 	}
 	
 	public IbanRule(String in) throws MaskingException{
@@ -28,7 +30,7 @@ public class IbanRule implements MaskingRule{
 				throw new MaskingException("The \"IBAN\" rule was given an invalid parameter (takes the path to the seeds file or the country code) or the seeds file does not exist.");
 			}
 			this.ibanFile = in;
-			
+			this.replaceRule = new ReplaceRule(ibanFile);
 		}
 		
 	}
@@ -41,7 +43,7 @@ public class IbanRule implements MaskingRule{
 		//Logger.debug(accNumber);
 		
 		if(this.countryCode.length() != 2){
-			ReplaceRule country = new ReplaceRule(ibanFile);
+			ReplaceRule country = replaceRule;
 			countryCode = country.mask("00");
 		}
 		

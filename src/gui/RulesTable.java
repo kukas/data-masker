@@ -41,7 +41,7 @@ public class RulesTable extends JTable {
 	}
 
 	private void addRow(int i) {
-		int offset = 0;
+		int offset = 1;
 		if (tableModel.getRowCount() > 0) {
 			try {
 				offset = Integer.parseInt(tableModel.getValueAt(tableModel.getRowCount() - 1, 2).toString())

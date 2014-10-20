@@ -2,10 +2,16 @@ package masking.rules;
 
 import java.util.Random;
 public class RandomRCRule implements MaskingRule{
-	
+	public boolean addSplitter = false;
+	public boolean addSplitterAutomatic = true;
 	public RandomRCRule(){
 		
 		
+	}
+	
+	public RandomRCRule(boolean b){
+		this.addSplitter = b;
+		this.addSplitterAutomatic = false;
 	}
 	
 	@Override
@@ -34,6 +40,10 @@ public class RandomRCRule implements MaskingRule{
 		do{
 			lastFourDigits = rnd.nextInt(10000);
 		}while((restNumber+lastFourDigits)%11==0);
+		
+		if((this.addSplitterAutomatic&&s.length()>=11)||(!this.addSplitterAutomatic&&this.addSplitter)){
+			outString += "/";
+		}
 		
 		outString += fillForCorrectLength(Integer.toString(lastFourDigits),4,'0');
 		return outString;
