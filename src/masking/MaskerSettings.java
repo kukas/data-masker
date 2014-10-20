@@ -103,7 +103,7 @@ public class MaskerSettings extends Exception {
 					max = Integer.parseInt(arrParams[1]);
 					if (min < 0) {
 						throw new MaskingException(
-								"The first parameter of the \"random_number\" rule must be greater than or equal to zero.");
+								"The first parameter of the \"random_number\" rule must be greater than zero.");
 					}
 
 					if (min > max) {
