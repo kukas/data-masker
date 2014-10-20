@@ -23,7 +23,7 @@ public class FileReader {
 		path = file.toPath();
 		fileSize = file.length();
 		
-		charset = StandardCharsets.UTF_8;
+		charset = Charset.defaultCharset();
 		
 	}
 	

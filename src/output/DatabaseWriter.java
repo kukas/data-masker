@@ -69,7 +69,6 @@ public class DatabaseWriter {
 
 				newLine = newLine.substring(0, offset) + data[i][j] + newLine.substring(offset+length);
 			}
-
 			writer.println(newLine);
 		}
 	}
