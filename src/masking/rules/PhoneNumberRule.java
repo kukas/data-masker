@@ -10,7 +10,12 @@ import exception.MaskingException;
 public class PhoneNumberRule implements MaskingRule{
 	public String fileName;
 	public PhoneNumberRule()  throws MaskingException{
-		this("seeds/PhoneNumbers.txt");
+		String file = "seeds/PhoneNumbers.txt";
+		if(new File(file).exists()){
+			this.fileName = file;
+		}else{//soubor neexistuje
+			throw new MaskingException("Default seeds file for \"IBAN\" rule not found. Please specify seeds file in parameter.");
+		}
 	}
 	
 	public PhoneNumberRule(String file) throws MaskingException{

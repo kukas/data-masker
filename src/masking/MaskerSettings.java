@@ -82,7 +82,7 @@ public class MaskerSettings extends Exception {
 			} else {
 				try {
 					if (numOfParams == 1) {
-						return new StarsRule(0, Integer.parseInt(arrParams[0]));
+						return new StarsRule(1, Integer.parseInt(arrParams[0]));
 					} else if (numOfParams == 2) {
 						return new StarsRule(Integer.parseInt(arrParams[0]), Integer.parseInt(arrParams[1]));
 					} else {
@@ -103,7 +103,7 @@ public class MaskerSettings extends Exception {
 					max = Integer.parseInt(arrParams[1]);
 					if (min < 0) {
 						throw new MaskingException(
-								"The first parameter of the \"random_number\" rule must be greater than or equal to zero.");
+								"The first parameter of the \"random_number\" rule must be greater than zero.");
 					}
 
 					if (min > max) {
@@ -160,7 +160,7 @@ public class MaskerSettings extends Exception {
 				case 0:
 					return new RandomDigitRule(true);
 				case 1:
-					return new RandomDigitRule(0, Integer.parseInt(arrParams[0]));
+					return new RandomDigitRule(1, Integer.parseInt(arrParams[0]));
 				case 2:
 					return new RandomDigitRule(Integer.parseInt(arrParams[0]), Integer.parseInt(arrParams[1]));
 				default:

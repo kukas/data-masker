@@ -18,7 +18,7 @@ public class StarsRule implements MaskingRule {
 	public String mask(String in) throws MaskingException {
 		if (start < 0) {
 			throw new MaskingException(
-					"The first parameter of the \"star\" rule must be greater than or equal to zero.");
+					"The first parameter of the \"star\" rule must be greater than zero.");
 		}
 
 		if (start>end) {
