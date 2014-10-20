@@ -547,7 +547,7 @@ public class GUIFrame extends JFrame {
 					e.printStackTrace();
 				}
 			}
-			progressDialog.setVisible(false);
+			progressDialog.setModal(false);
 
 			writer.closeFile();
 			displayMessage("Done.");
@@ -558,6 +558,11 @@ public class GUIFrame extends JFrame {
 			JOptionPane.showMessageDialog(GUIFrame.this, e.getMessage());
 			//return;
 		}
-		progressDialog.setVisible(false);
+		t = new Thread(new Runnable() {
+			public void run() {
+				progressDialog.setVisible(false);
+			}
+		});
+		t.start();
 	}
 }
