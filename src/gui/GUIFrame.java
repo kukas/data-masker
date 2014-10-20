@@ -5,6 +5,7 @@ import input.FileReader;
 
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Desktop;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -20,6 +21,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
@@ -87,7 +89,7 @@ public class GUIFrame extends JFrame {
 		final JTextField inputField, outputField, rulesField;
 		JButton inputButton, outputButton, rulesButton, runButton, saveButton;
 		// postranni
-		JButton addButton, removeButton, upButton, downButton;
+		JButton addButton, removeButton, upButton, downButton, helpButton;
 
 		setSize(800, 600);
 		setTitle("Data Masking");
@@ -103,7 +105,7 @@ public class GUIFrame extends JFrame {
 		JScrollPane scroll = new JScrollPane(logs, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
 		final Logger logger = new Logger(logs, scroll);
-		placeComponent(scroll, 1, 10, 4, 4,  GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0, 0);
+		placeComponent(scroll, 0, 10, 4, 4,  GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0, 0);
 		
 		logger.logGUI(
 				"                  ,.\n" +
@@ -244,19 +246,20 @@ public class GUIFrame extends JFrame {
 				cfg.write(cfg.config);
 			}
 		});
-		// Masker masker = new Masker();
-		// table.setData(masker.getData());
-
+		// separator
+		JSeparator separator = new JSeparator(JSeparator.HORIZONTAL);
+		placeComponent(separator, 0, 3, 6, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_START, 1, 0);
+		
 		// big table
 
 		JScrollPane tablePane = new JScrollPane(table);
 
-		placeComponent(tablePane, 0, 3, 5, 6, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 1, 0.8);
+		placeComponent(tablePane, 0, 4, 5, 6, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 1, 0.8);
 		table.finishInit(); // graficke nastaveni tabulky se musi provest az po pridani dat
 
 		// side buttons
 		addButton = new JButton("+");
-		placeComponent(addButton, 5, 3, 1, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_END, 0, 0);
+		placeComponent(addButton, 5, 4, 1, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_END, 0, 0);
 		addButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -266,7 +269,7 @@ public class GUIFrame extends JFrame {
 		addButton.setToolTipText("Add a row to the table.");
 		
 		removeButton = new JButton("-");
-		placeComponent(removeButton, 5, 4, 1, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_END, 0, 0);
+		placeComponent(removeButton, 5, 5, 1, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_END, 0, 0);
 		removeButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -284,7 +287,7 @@ public class GUIFrame extends JFrame {
 		removeButton.setToolTipText("Remove the selected row from the table.");
 		
 		upButton = new JButton("Move up");
-		placeComponent(upButton, 5, 5, 1, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_END, 0, 0);
+		placeComponent(upButton, 5, 6, 1, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.LINE_END, 0, 0);
 		upButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -297,7 +300,7 @@ public class GUIFrame extends JFrame {
 		
 		
 		downButton = new JButton("Move down");
-		placeComponent(downButton, 5, 6, 1, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.FIRST_LINE_END, 0, 0);
+		placeComponent(downButton, 5, 7, 1, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.FIRST_LINE_END, 0, 0);
 		downButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -310,7 +313,7 @@ public class GUIFrame extends JFrame {
 		
 		// save button
 		saveButton = new JButton("Save Rules");
-		placeComponent(saveButton, 5, 7, 1, 1, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0, 0);
+		placeComponent(saveButton, 5, 8, 1, 1, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0, 0);
 		saveButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -342,7 +345,7 @@ public class GUIFrame extends JFrame {
 		
 		// run button
 		runButton = new JButton("Run");
-		placeComponent(runButton, 0, 9, 1, 2, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0, 0.3);
+		placeComponent(runButton, 5, 10, 1, 1, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0, 0.3);
 		runButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -473,6 +476,27 @@ public class GUIFrame extends JFrame {
 			}
 		});
 		runButton.setToolTipText("Deselect lines in the table and click to run the program. See output file for masked data.");
+		
+		helpButton = new JButton("Help");
+		placeComponent(helpButton, 5, 9, 1, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.FIRST_LINE_END, 0, 0);
+		helpButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				//display help
+				 Desktop desktop = Desktop.getDesktop();  
+		          try {
+		        	  Logger.debug("šít");
+		            File f = new File("User documentation.docx");
+		             desktop.open(f);
+		          }
+		          catch(Exception ex) {		
+		        	  Logger.debug("šít");
+		        	  
+		          }
+			}
+		});
+		helpButton.setToolTipText("Help! I'm stuck in a tooltip factory!");
+		
 		
 		inputField.setText(cfg.config[0]);
 		outputField.setText(cfg.config[1]);
