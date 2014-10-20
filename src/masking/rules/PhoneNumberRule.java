@@ -10,7 +10,7 @@ import exception.MaskingException;
 public class PhoneNumberRule implements MaskingRule{
 	public String fileName;
 	public PhoneNumberRule()  throws MaskingException{
-		String file = "seeds/PhoneNumbers.txt";
+		String file = "seeds/phoneNumbers.txt";
 		if(new File(file).exists()){
 			this.fileName = file;
 		}else{//soubor neexistuje
@@ -29,12 +29,12 @@ public class PhoneNumberRule implements MaskingRule{
 	@Override
 	public String mask(String in) throws MaskingException{
 		String noSpace = in.replaceAll(" ", "");
-		String firstThreeDigits = noSpace.substring(0,3);
+		String firstThreeDigits = noSpace.substring(0,2);
 		ReplaceRule prefix = new ReplaceRule(this.fileName);
 		firstThreeDigits = prefix.mask(firstThreeDigits);
 		String otherDigits = ((int)(Math.random() * 999999)) + "";
 		while(otherDigits.length()<6){
-			otherDigits = "0" + otherDigits;			
+			otherDigits = "0" + otherDigits;
 		}
 		String out = new String(firstThreeDigits  +" "+ otherDigits);
 		while(out.length()<in.length()){

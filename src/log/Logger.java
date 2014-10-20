@@ -31,7 +31,7 @@ public class Logger {
 	
 	public void scrollToBottom(){
 		Rectangle visibleRect = destination.getVisibleRect();
-		visibleRect.y = destination.getHeight() - visibleRect.height + destination.getFontMetrics(destination.getFont()).getHeight();
+		visibleRect.y = destination.getHeight() - visibleRect.height + destination.getFontMetrics(destination.getFont()).getHeight()*2;
 		destination.scrollRectToVisible(visibleRect);
 	};
 }
