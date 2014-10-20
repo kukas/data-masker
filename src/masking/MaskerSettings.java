@@ -140,10 +140,10 @@ public class MaskerSettings extends Exception {
 				case "no":
 					return new RandomRCRule(false);
 				default:
-					throw new MaskingException("The parametr for \""+funcName+"\" must be \"yes\" or \"no\".");
+					throw new MaskingException("Invalid parameter for the \"random_rc\" parameter (takes \"yes\" or \"no\", depending whether to generate with or without slash).");
 				}
 			}else{
-				throw new MaskingException("The \"random_rc\" rule takes one or no parameters ("+numOfParams+" given).");
+				throw new MaskingException("The \"random_rc\" rule takes no or one parameter ("+numOfParams+" given).");
 			}
 
 		case "random_phone_number":
