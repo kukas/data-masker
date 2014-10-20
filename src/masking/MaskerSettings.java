@@ -82,7 +82,11 @@ public class MaskerSettings extends Exception {
 			} else {
 				try {
 					if (numOfParams == 1) {
-						return new StarsRule(1, Integer.parseInt(arrParams[0]));
+						int lastIndex = Integer.parseInt(arrParams[0]);
+						if(lastIndex<1){
+							throw new MaskingException("The first parameter of the \""+funcName+"\" rule must be greater than zero.");
+						}
+						return new StarsRule(1, lastIndex);
 					} else if (numOfParams == 2) {
 						return new StarsRule(Integer.parseInt(arrParams[0]), Integer.parseInt(arrParams[1]));
 					} else {
