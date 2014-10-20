@@ -380,7 +380,7 @@ public class GUIFrame extends JFrame {
 				// display help
 				Desktop desktop = Desktop.getDesktop();
 				try {
-					File f = new File("User documentation.docx");
+					File f = new File("User documentation.pdf");
 					desktop.open(f);
 				} catch (Exception ex) {
 					displayMessage("Error: Documentation not found");
