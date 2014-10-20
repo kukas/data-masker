@@ -9,6 +9,7 @@ import exception.MaskingException;
 
 public class PhoneNumberRule implements MaskingRule{
 	public String fileName;
+	private ReplaceRule replaceRule;
 	public PhoneNumberRule()  throws MaskingException{
 		String file = "seeds/phoneNumbers.txt";
 		if(new File(file).exists()){
@@ -16,6 +17,7 @@ public class PhoneNumberRule implements MaskingRule{
 		}else{//soubor neexistuje
 			throw new MaskingException("Default seeds file for \"random_phone_number\" rule not found. Please specify the seeds file in the parameter.");
 		}
+		replaceRule = new ReplaceRule(this.fileName);
 	}
 	
 	public PhoneNumberRule(String file) throws MaskingException{
@@ -24,13 +26,15 @@ public class PhoneNumberRule implements MaskingRule{
 		}else{//soubor neexistuje
 			throw new MaskingException("The \"random_phone_number\" rule was given an invalid parameter (takes the path to the seeds file) or the seeds file does not exist.");
 		}
+		
+		replaceRule = new ReplaceRule(this.fileName);
 	}
 	
 	@Override
 	public String mask(String in) throws MaskingException{
 		String noSpace = in.replaceAll(" ", "");
 		String firstThreeDigits = noSpace.substring(0,2);
-		ReplaceRule prefix = new ReplaceRule(this.fileName);
+		ReplaceRule prefix = replaceRule;
 		firstThreeDigits = prefix.mask(firstThreeDigits);
 		String otherDigits = ((int)(Math.random() * 999999)) + "";
 		while(otherDigits.length()<6){
