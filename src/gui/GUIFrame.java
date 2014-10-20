@@ -7,6 +7,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Desktop;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -101,7 +102,7 @@ public class GUIFrame extends JFrame {
 	}
 
 	public GUIFrame() {
-
+		logs.setFont(new Font("courier new", Font.PLAIN, 12));
 		setSize(800, 650);
 		setTitle("Data Masking");
 		Container pane = this.getContentPane();
@@ -111,7 +112,7 @@ public class GUIFrame extends JFrame {
 		gbc.weighty = 0.5;
 		gbc.insets = new Insets(10, 10, 10, 10);
 
-		placeComponent(scroll, 0, 10, 4, 4, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0, 1);
+		placeComponent(scroll, 0, 10, 4, 4, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 0, 0.6);
 
 		logger.logGUI("                  ,.\n" + // komentare zachranuji slepici pri formatovani (ctrl+shift+f)
 				"                 (\\(\\)\n" + // 
@@ -260,7 +261,7 @@ public class GUIFrame extends JFrame {
 
 		JScrollPane tablePane = new JScrollPane(table);
 
-		placeComponent(tablePane, 0, 4, 5, 6, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 1, 0.1);
+		placeComponent(tablePane, 0, 4, 5, 6, GridBagConstraints.BOTH, GridBagConstraints.LINE_START, 1, 0.3);
 		table.finishInit(); // graficke nastaveni tabulky se musi provest az po pridani dat
 
 		// side buttons
@@ -438,20 +439,6 @@ public class GUIFrame extends JFrame {
 			}
 		}
 
-		JProgressBar progressBar = new JProgressBar(0, 100);
-		final JDialog progressDialog = new JDialog(GUIFrame.this, "Masking in progress", true);
-		progressDialog.add(BorderLayout.CENTER, progressBar);
-		progressDialog.setSize(300, 75);
-		progressDialog.setLocationRelativeTo(GUIFrame.this);
-		progressDialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-		// progressDialog.setVisible(true);
-
-		Thread t = new Thread(new Runnable() {
-			public void run() {
-				progressDialog.setVisible(true);
-			}
-		});
-		t.start();
 
 		int lines = 10000;
 
@@ -483,6 +470,21 @@ public class GUIFrame extends JFrame {
 			displayMessage("No masking rules specified. Masking aborted.");
 			return;
 		}
+
+		JProgressBar progressBar = new JProgressBar(0, 100);
+		final JDialog progressDialog = new JDialog(GUIFrame.this, "Masking in progress", true);
+		progressDialog.add(BorderLayout.CENTER, progressBar);
+		progressDialog.setSize(300, 75);
+		progressDialog.setLocationRelativeTo(GUIFrame.this);
+		progressDialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+		// progressDialog.setVisible(true);
+
+		Thread t = new Thread(new Runnable() {
+			public void run() {
+				progressDialog.setVisible(true);
+			}
+		});
+		t.start();
 
 		try {
 			Masker masker = new Masker(table.getData());
