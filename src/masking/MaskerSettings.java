@@ -143,7 +143,7 @@ public class MaskerSettings extends Exception {
 					throw new MaskingException("The parametr for \""+funcName+"\" must be \"yes\" or \"no\".");
 				}
 			}else{
-				throw new MaskingException("The \"random_rc\" rule takes no parameters ("+numOfParams+" given).");
+				throw new MaskingException("The \"random_rc\" rule takes one or no parameters ("+numOfParams+" given).");
 			}
 
 		case "random_phone_number":

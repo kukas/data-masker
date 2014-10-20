@@ -14,7 +14,7 @@ public class IbanRule implements MaskingRule{
 	
 	public IbanRule() throws MaskingException{
 		if(!new File(ibanFile).exists()){
-			throw new MaskingException("Default seeds file for \"IBAN\" rule not found. Please specify seeds file in parameter.");
+			throw new MaskingException("Default seeds file for \"IBAN\" rule not found. Please specify the seeds file in the parameter.");
 		}
 		this.replaceRule = new ReplaceRule(ibanFile);
 	}
