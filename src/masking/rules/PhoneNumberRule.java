@@ -14,7 +14,7 @@ public class PhoneNumberRule implements MaskingRule{
 		if(new File(file).exists()){
 			this.fileName = file;
 		}else{//soubor neexistuje
-			throw new MaskingException("Default seeds file for \"IBAN\" rule not found. Please specify seeds file in parameter.");
+			throw new MaskingException("Default seeds file for \"random_phone_number\" rule not found. Please specify seeds file in parameter.");
 		}
 	}
 	
