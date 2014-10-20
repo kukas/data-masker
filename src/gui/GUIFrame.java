@@ -5,6 +5,7 @@ import input.FileReader;
 
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Desktop;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -478,10 +479,20 @@ public class GUIFrame extends JFrame {
 		
 		helpButton = new JButton("Help");
 		placeComponent(helpButton, 5, 9, 1, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.FIRST_LINE_END, 0, 0);
-		addButton.addActionListener(new ActionListener() {
+		helpButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				//display help
+				 Desktop desktop = Desktop.getDesktop();  
+		          try {
+		        	  Logger.debug("šít");
+		            File f = new File("User documentation.docx");
+		             desktop.open(f);
+		          }
+		          catch(Exception ex) {		
+		        	  Logger.debug("šít");
+		        	  
+		          }
 			}
 		});
 		helpButton.setToolTipText("Help! I'm stuck in a tooltip factory!");
