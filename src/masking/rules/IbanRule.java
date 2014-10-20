@@ -32,7 +32,12 @@ public class IbanRule implements MaskingRule{
 		
 		//countryCode = "CZ";
 		String countryCodeConverted = (((int)countryCode.charAt(0)) - 55) + "";
-		countryCodeConverted += (((int)countryCode.charAt(1)) - 55) + "";
+		int cC1 = (((int)countryCode.charAt(0)) - 55);
+		int cC2 = (((int)countryCode.charAt(1)) - 55);
+		if(cC1 < 1 || cC2 < 1){
+			throw new MaskingException("Wrong Iban country code.");
+		}
+		countryCodeConverted = cC1 + "" + cC2;
 		//Logger.debug(countryCodeConverted);
 		BigInteger check = new BigInteger(accNumber + countryCodeConverted);
 		int mod = (check.mod(new BigInteger("97"))).intValue();
