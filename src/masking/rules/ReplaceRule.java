@@ -24,6 +24,10 @@ public class ReplaceRule implements MaskingRule {
 	
 	@Override
 	public String mask(String in) {
-		return seed[random.nextInt(seed.length)];
+		String jmeno = seed[random.nextInt(seed.length)];
+		if (jmeno.length() > in.length()){
+			jmeno = jmeno.substring(0, in.length());
+		}
+		return jmeno;
 	}
 }
