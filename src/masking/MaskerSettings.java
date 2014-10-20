@@ -145,9 +145,14 @@ public class MaskerSettings extends Exception {
 				throw new MaskingException("The \"random_rc\" rule takes no parameters ("+numOfParams+" given).");
 			}
 
-		case "random_phone_number":
-			return new PhoneNumberRule();
-			
+		case "random_phone_number":	
+			if(numOfParams== 0){
+				return new PhoneNumberRule();
+			}else if(numOfParams==1){
+				//return new PhoneNumberRule(arrParams[0]);
+			}else{
+				throw new MaskingException("Wrong number of parameters for "+funcName);
+			}
 			
 		case "IBAN":
 			if (numOfParams == 0) {

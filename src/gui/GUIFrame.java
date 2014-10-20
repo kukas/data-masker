@@ -225,7 +225,7 @@ public class GUIFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String dir = rulesField.getText();
-				if (outputField.getText().equals("")) {
+				if (rulesField.getText().equals("")) {
 					dir = currentDir;
 				}
 				
@@ -372,21 +372,19 @@ public class GUIFrame extends JFrame {
 				Vector<Vector<Object>> tableDATA = table.getData();
 				int[] lengths = new int[tableDATA.size()];
 				int[] offsets = new int[tableDATA.size()];
-
+				
 				for (int i = 0; i < tableDATA.size(); i++) {
 					try {
 						lengths[i] = Integer.parseInt((String) tableDATA.get(i).get(2));
 					} catch (NumberFormatException e) {
-						displayMessage("Invalid length argument at column " + (i + 1) + ": "
-								+ tableDATA.get(i).get(2).toString());
+						displayMessage("Invalid length argument at column " + (i + 1));
 						return;
 					}
 
 					try {
 						offsets[i] = Integer.parseInt((String) tableDATA.get(i).get(3));
 					} catch (NumberFormatException e) {
-						displayMessage("Invalid offset argument at column " + (i + 1) + ": "
-								+ tableDATA.get(i).get(3).toString());
+						displayMessage("Invalid offset argument at column " + (i + 1));
 						return;
 					}
 
@@ -453,7 +451,10 @@ public class GUIFrame extends JFrame {
 						e.printStackTrace();
 					}
 					int linesMasked = 0;
+					logger.logGUI("File size: "+fReader.fileSize);
+					int charsMasked = 0;
 					while ((input = fReader.readNLines(lines))[0] != null) {
+						charsMasked += (input[0].length()+1)*input.length;
 						linesMasked += input.length;
 						dReader.input = input;
 						database = dReader.read();
@@ -461,6 +462,7 @@ public class GUIFrame extends JFrame {
 						try {
 							writer.append(database, input);
 							// writer.append(input, database);
+							logger.logGUI("Progress: "+Math.round((double)charsMasked*1000/(double) fReader.fileSize)/(double)10);
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -485,13 +487,11 @@ public class GUIFrame extends JFrame {
 				//display help
 				 Desktop desktop = Desktop.getDesktop();  
 		          try {
-		        	  Logger.debug("šít");
-		            File f = new File("User documentation.docx");
-		             desktop.open(f);
+		        	  File f = new File("User documentation.docx");
+		        	  desktop.open(f);
 		          }
-		          catch(Exception ex) {		
-		        	  Logger.debug("šít");
-		        	  
+		          catch(Exception ex) {
+		        	  displayMessage("Error: Documentation not found");
 		          }
 			}
 		});

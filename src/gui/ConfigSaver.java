@@ -7,6 +7,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import log.Logger;
+
 public class ConfigSaver {
 	String[] config;
 	public ConfigSaver(){
@@ -36,7 +38,8 @@ public class ConfigSaver {
 		if(f.exists()){
 		FileReader fr = new FileReader("appSettings.txt","UTF-8");
 		String[] s = fr.read();
-		if(s.length <3){
+				
+		if(s.length <3 && s != null){
 			String[] o = new String[3];
 			for(int i = 0; i< 3; i++){
 				if(i > s.length - 1){
