@@ -374,7 +374,6 @@ public class GUIFrame extends JFrame {
 				int[] lengths = new int[tableDATA.size()];
 				int[] offsets = new int[tableDATA.size()];
 				
-				System.out.println(tableDATA.size());
 				for (int i = 0; i < tableDATA.size(); i++) {
 					try {
 						lengths[i] = Integer.parseInt((String) tableDATA.get(i).get(2));
@@ -497,13 +496,11 @@ public class GUIFrame extends JFrame {
 				//display help
 				 Desktop desktop = Desktop.getDesktop();  
 		          try {
-		        	  Logger.debug("šít");
-		            File f = new File("User documentation.docx");
-		             desktop.open(f);
+		        	  File f = new File("User documentation.docx");
+		        	  desktop.open(f);
 		          }
-		          catch(Exception ex) {		
-		        	  Logger.debug("šít");
-		        	  
+		          catch(Exception ex) {
+		        	  displayMessage("Error: Documentation not found");
 		          }
 			}
 		});
