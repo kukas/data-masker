@@ -225,7 +225,7 @@ public class GUIFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String dir = rulesField.getText();
-				if (outputField.getText().equals("")) {
+				if (rulesField.getText().equals("")) {
 					dir = currentDir;
 				}
 				
@@ -372,21 +372,20 @@ public class GUIFrame extends JFrame {
 				Vector<Vector<Object>> tableDATA = table.getData();
 				int[] lengths = new int[tableDATA.size()];
 				int[] offsets = new int[tableDATA.size()];
-
+				
+				System.out.println(tableDATA.size());
 				for (int i = 0; i < tableDATA.size(); i++) {
 					try {
 						lengths[i] = Integer.parseInt((String) tableDATA.get(i).get(2));
 					} catch (NumberFormatException e) {
-						displayMessage("Invalid length argument at column " + (i + 1) + ": "
-								+ tableDATA.get(i).get(2).toString());
+						displayMessage("Invalid length argument at column " + (i + 1));
 						return;
 					}
 
 					try {
 						offsets[i] = Integer.parseInt((String) tableDATA.get(i).get(3));
 					} catch (NumberFormatException e) {
-						displayMessage("Invalid offset argument at column " + (i + 1) + ": "
-								+ tableDATA.get(i).get(3).toString());
+						displayMessage("Invalid offset argument at column " + (i + 1));
 						return;
 					}
 
