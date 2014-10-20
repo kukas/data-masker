@@ -539,8 +539,11 @@ public class GUIFrame extends JFrame {
 			displayMessage("Done.");
 			logger.logGUI("Finished: Masked " + linesMasked + " lines");
 		} catch (MaskingException e) {
+			progressDialog.setVisible(false);
+			progressDialog.setModal(false);
 			JOptionPane.showMessageDialog(GUIFrame.this, e.getMessage());
-			return;
+			//return;
 		}
+		progressDialog.setVisible(false);
 	}
 }
