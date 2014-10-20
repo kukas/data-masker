@@ -435,7 +435,7 @@ public class GUIFrame extends JFrame {
 			}
 
 			try {
-				offsets[i] = Integer.parseInt((String) tableDATA.get(i).get(3));
+				offsets[i] = Integer.parseInt((String) tableDATA.get(i).get(3))-1;
 			} catch (NumberFormatException e) {
 				displayMessage("Invalid index argument at column " + (i + 1));
 				return;
