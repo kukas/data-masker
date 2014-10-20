@@ -4,11 +4,11 @@ import exception.MaskingException;
 
 public class StarsRule implements MaskingRule {
 	int start;
-	int length;
+	int end;
 	boolean all = false;
-	public StarsRule(int start, int length) {
+	public StarsRule(int start, int end) {
 		this.start = start-1;
-		this.length = length-1;
+		this.end= end-1;
 	}
 
 	public StarsRule() {
@@ -21,15 +21,15 @@ public class StarsRule implements MaskingRule {
 					"The first parameter of the \"star\" rule must be greater than or equal to zero.");
 		}
 
-		if (length<0) {
+		if (start>end) {
 			throw new MaskingException(
-					"The second parameter of the \"star\" rule must be greater than or equal to the second one.");
+					"The second parameter of the \"star\" rule must be greater than or equal to the first one.");
 		}
 
 		String out = new String("");
 
 		for (int i = 0; i < in.length(); i++) {	
-			if ((i >= start && i <= start+length) || all){
+			if ((i >= start && i <= end) || all){
 				out += "*";
 			}
 			else {

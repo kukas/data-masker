@@ -37,7 +37,7 @@ public class RandomDigitRule implements MaskingRule {
 		}
 		if (end < start) {
 			throw new MaskingException(
-					"The second parameter of the \"replace_with_random_digits\" rule must be greater than or equal to the second one.");
+					"The second parameter of the \"replace_with_random_digits\" rule must be greater than or equal to the first one.");
 		}
 
 		if (all) {
