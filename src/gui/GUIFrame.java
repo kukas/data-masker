@@ -455,8 +455,8 @@ public class GUIFrame extends JFrame {
 		}
 
 
-		int lines = 10000;
-
+		int lines = 1000;
+		logger.logGUI("------------------------------------------------");
 		FileReader fReader = new FileReader(inputFile);
 		DatabaseReader dReader = new DatabaseReader(lengths, offsets);
 		DatabaseWriter writer = new DatabaseWriter(outputFile, dReader.getHeader());
@@ -526,8 +526,8 @@ public class GUIFrame extends JFrame {
 			String[] columnDetails;
 			for (int i = 0; i < masker.maskerSettings.settingStrings.length; i++) {
 				columnDetails = masker.maskerSettings.settingStrings[i].split(";");
-				maskingWith = "Masking column(" + (Integer.parseInt(columnDetails[3]) + 1) + ","
-						+ (Integer.parseInt(columnDetails[2]) + Integer.parseInt(columnDetails[3])) + ")";
+				maskingWith = "Masking column(" + (Integer.parseInt(columnDetails[3])) + ","
+						+ (Integer.parseInt(columnDetails[2]) + Integer.parseInt(columnDetails[3]) - 1) + ")";
 				maskingWith += " with " + columnDetails[4];
 				logger.logGUI(maskingWith);
 			}
