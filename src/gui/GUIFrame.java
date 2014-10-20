@@ -334,6 +334,7 @@ public class GUIFrame extends JFrame {
 					cfg.write(cfg.config);
 
 					writ.write(address, table.getData());
+					logger.logGUI("Saved settings to "+address);
 				}
 
 			}
@@ -361,16 +362,15 @@ public class GUIFrame extends JFrame {
 		helpButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// display help
-				Desktop desktop = Desktop.getDesktop();
-				try {
-					Logger.debug("šít");
-					File f = new File("User documentation.docx");
-					desktop.open(f);
-				} catch (Exception ex) {
-					Logger.debug("šít");
-
-				}
+				//display help
+				 Desktop desktop = Desktop.getDesktop();  
+		          try {
+		        	  File f = new File("User documentation.docx");
+		        	  desktop.open(f);
+		          }
+		          catch(Exception ex) {
+		        	  displayMessage("Error: Documentation not found");
+		          }
 			}
 		});
 		helpButton.setToolTipText("Help! I'm stuck in a tooltip factory!");
