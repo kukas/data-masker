@@ -28,7 +28,7 @@ public class RandomCharacterRule implements MaskingRule {
 	@Override
 	public String mask(String in) throws MaskingException {
 		if(end>in.length()-1){
-			throw new MaskingException("Third parameter for \"replace_with_random_characters\" is greater than column length.");
+			throw new MaskingException("The third parameter of the \"replace_with_random_characters\" rule is greater than the column length.");
 		}
 		if (all) {
 			start = 0;

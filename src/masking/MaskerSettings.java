@@ -151,7 +151,7 @@ public class MaskerSettings extends Exception {
 			}else if(numOfParams==1){
 				//return new PhoneNumberRule(arrParams[0]);
 			}else{
-				throw new MaskingException("Wrong number of parameters for "+funcName);
+				throw new MaskingException("The \"random_phone_number\" rule takes no or one parameter.");
 			}
 			
 		case "IBAN":
@@ -177,7 +177,7 @@ public class MaskerSettings extends Exception {
 				}
 				
 			} catch (NumberFormatException e) {
-				throw new MaskingException("The \"replace_with_random_digits\" rule takes no, one or two integer parameters");
+				throw new MaskingException("The \"replace_with_random_digits\" rule takes no, one or two integer parameters.");
 			}
 		case "replace_with_random_characters":
 			try {
